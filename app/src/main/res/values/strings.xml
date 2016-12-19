@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Permarent</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="drawer_open">Menu opened</string>
+    <string name="drawer_close">Menu closed</string>
+    <string name="facebook_app_id">585262128335932</string>
+    <string name="Rs">\u20B9</string>
+
+    <string-array name="City">
+
+        <item>Gurgaon</item>
+        <item>Delhi</item>
+        <item>Greater Noida</item>
+        <item>Ghaziabad</item>
+        <item>Noida</item>
+    </string-array>
+</resources>

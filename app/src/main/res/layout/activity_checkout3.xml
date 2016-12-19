@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray5"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_normal" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                android:padding="8dp"
+                android:background="@color/white">
+
+                <com.furniture.appliances.rentals.util.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="Payable Amount"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    app:type="regular" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total"
+                        android:textColor="@color/cardtext"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:id="@+id/total"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:gravity="right"
+                        android:text="Confirmed"
+                        android:textColor="@color/cardtext"
+                        android:textSize="16dp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Coupon Applied"
+                        android:textColor="@color/cardtext"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:id="@+id/code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:gravity="right"
+                        android:text="None"
+                        android:textColor="@color/cardtext"
+                        android:textSize="16dp" />
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                android:padding="8dp"
+                android:background="@color/white">
+
+                <com.furniture.appliances.rentals.util.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="\u2022 Labour charges Rs 200/- per labour extra\n\u2022 Installation charges on TV and Split AC extra\n\u2022 Shipping charges Rs 250/- if total monthly rental is less than Rs 1000/-\n\u2022 All extra charges to be given at the time of delivery in cash\n\n"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    app:type="regular" />
+
+
+                <com.furniture.appliances.rentals.util.CustomTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="Payable Method"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    app:type="regular" />
+
+
+
+                <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:orientation="horizontal"
+                   android:layout_marginLeft="16dp"
+                   android:layout_marginRight="16dp"
+                   android:layout_marginTop="8dp"
+                   android:weightSum="2">
+
+                   <com.furniture.appliances.rentals.util.CustomTextView
+                       android:id="@+id/payNow"
+                       android:layout_width="0dp"
+                       android:layout_height="40dp"
+                       android:layout_weight="1"
+                       android:layout_marginRight="8dp"
+                       android:text="Pay Now"
+                       android:gravity="center"
+                       android:textColor="@color/white"
+                       android:background="@color/green"
+                       android:textSize="18sp"
+                       app:type="regular" />
+
+                   <com.furniture.appliances.rentals.util.CustomTextView
+                       android:id="@+id/cod"
+                       android:layout_width="0dp"
+                       android:layout_height="40dp"
+                       android:layout_weight="1"
+                       android:layout_marginLeft="8dp"
+                       android:gravity="center"
+                       android:textColor="@color/green"
+                       android:background="@drawable/border_bg"
+                       android:text="Cash On Delivery"
+                       android:textSize="18sp"
+                       app:type="regular" />
+
+               </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/submit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/button_selector"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="Place Order"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

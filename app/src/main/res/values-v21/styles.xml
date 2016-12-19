@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorNewPrimary</item>
+        <item name="colorPrimaryDark">@color/colorNewPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme2" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorNewPrimary</item>
+        <item name="colorPrimaryDark">@color/colorNewPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/colorNewPrimaryDark</item>
+    </style>
+    <!-- Base application theme. -->
+    <style name="AppTheme3" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorNewPrimary</item>
+        <item name="colorPrimaryDark">@color/colorNewSecondary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/black</item>
+    </style>
+</resources>

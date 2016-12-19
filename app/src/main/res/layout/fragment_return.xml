@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="PRIVACY POLICY"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:padding="5dp"
+            android:text="Welcome to our website. The domain name www.permarent.com (hereinafter referred to as Website) is owned by Exclusive Lifestyle Private Limited ('Company'), a company duly registered and incorporated under the Companies Act, 1956, whose address is at Sector 3, Plot No 471, Ward No 26, Malviya Nagar, Jaipur, Rajasthan, India. (herein after referred to as Permarent). By using our website, you are agreeing to the terms and conditions."/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="GENERAL"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:padding="5dp"
+            android:text="Your use of the Website and services and tools are governed by the following terms and conditions (Terms of Use) as applicable to the Website including the applicable policies which are incorporated herein by way of reference. If You transact on the Website, You shall be subject to the policies that are applicable to the Website for such transaction. By mere use of the Website, You shall be contracting with Exclusive Lifestyle Private Limited and these terms and conditions including the policies constitute Your binding obligations, with Permarent. This Terms of Use may be amended from time to time by us without specific notice to you. The latest Terms of Use will be posted on the Website, and you should review this Terms of Use prior to using the Website at each instance.
+
+For the purpose of these Terms of Use, wherever the context so requires You or User shall mean any natural or legal person who has agreed to become a customer/buyer on the Website by providing information on the Website using the computer systems. There is no registration process and Permarent allows the User to surf the Website without registering on the Website. The term We, Us, Our shall mean the Company.
+
+When You use any of the services provided by Us through the Website, You will be subject to the rules, guidelines, policies, terms, and conditions applicable to such service, and they shall be deemed to be incorporated into this Terms of Use and shall be considered as part and parcel of this Terms of Use. When you use the Website or send emails or other data, information or communication to us, you agree and understand that you are communicating with us through electronic records and you consent to receive communications via electronic records from us periodically and as and when required. We may communicate with you by email or by such other mode of communication, electronic or otherwise."/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:padding="5dp"
+            android:text="TRANSACTION/SERVICES"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:padding="5dp"
+            android:text="Through this Website, any User can meet and interact with a vendor for pre-defined solutions package consisting of home furniture, home décor, electronic appliances offered in various range by submitting the Subscription Programme Document and by signing a Subscription Form in the format provided by the Company for a chosen package by consenting to pay a monthly Subscription fee. The Transaction herein shall not be considered as sale but one of lease and for all purposes, the products/Experience offered/provided herein under the Subscription Programme Document shall remain as the property of the vendor.
+
+All commercial/contractual terms are offered by and agreed to between vendor and user alone. Permarent does not make any representation or Warranty as to specifics (such as quality, value, salability, etc) of the products or services proposed to be leased or offered to be leased on the Website.
+
+Permarent is not responsible for any non-performance or breach of any contract entered into between vendor and users. Permarent cannot and does not guarantee that the concerned vendor will perform any transaction concluded on the Website. Permarent does not make any representation or warranty as to the item-specifics (such as legal title, creditworthiness, identity, etc) of any of its Users.
+
+Permarent does not at any point of time during any transaction between Vendor and User on the Website come into or take possession of any of the products or services offered by Seller nor does it at any point gain title to or have any rights or claims over the products or services offered by Seller to Buyer.
+
+At no time shall Permarent hold any right, title or interest over the products nor shall Permarent have any obligations or liabilities in respect of such contract entered into between Vendors and users.
+
+The Website is only a platform that can be utilized by Users to reach a larger base to rent products or services. Permarent is only providing a platform for communication and it is agreed that the contract for sale of any of the products or services shall be a strictly bipartite contract between the Vendors and the Users.
+
+You release and indemnify Permarent and/or any of its officers and representatives from any cost, damage, liability or other consequence of any of the actions of the Users of the Website and specifically waive any claims that you may have in this behalf under any applicable law. Notwithstanding its reasonable efforts in that behalf, Permarent cannot take responsibility or control the information provided by other Users which is made available on the Website. Please use caution and practice safe trading when using the Website."/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:text="LEGAL NOTICE"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        android:text="All textual, graphical and other content appearing on this Website, unless otherwise noted, are the property of the Company.
+Copyright. No part of the Website and no Content may be copied, reproduced, republished, uploaded, posted, publicly displayed, encoded, translated, transmitted or distributed in any way (including mirroring) to any other computer, server, Website or other medium for publication or distribution or for any commercial enterprise, without Permarent’s express prior written consent.
+
+You may use information on the products and services purposely made available on the Website for downloading, provided that You (1) do not remove any proprietary notice language in all copies of such documents, (2) use such information only for your personal, non-commercial informational purpose and do not copy or post such information on any networked computer or broadcast it in any media, (3) make no modifications to any such information, and (4) do not make any additional representations or warranties relating to such documents.
+
+You shall be responsible for any notes, messages, emails, billboard postings, photos, drawings, profiles, opinions, ideas, images, videos, audio files or other materials or information posted or transmitted to the Website (collectively, Content). Such Content will become Our property and You grant Us the worldwide, perpetual and transferable rights in such Content. We shall be entitled to, consistent with Our Privacy Policy as adopted in accordance with applicable law, use the Content or any of its elements for any type of use forever, including but not limited to promotional and advertising purposes and in any media whether now known or hereafter devised, including the creation of derivative works that may include the Content You provide. You agree that any Content You post may be used by us, consistent with Our Privacy Policy and Rules of Conduct on Site as mentioned herein, and You are not entitled to any payment or other compensation for such use.
+
+You may view, copy, print and use content contained on this Website solely for your own personal use and provided that: (1) the content available from this Website is used for informational and non-commercial purposes only; (2) no text, graphics or other content available from this Website is modified in any way; (3) no graphics available from this Website are used, copied or distributed separate from accompanying text; (4) no content available from this Website may be used for any purpose which is offensive or which disparages, damages or otherwise negatively reflects upon Company, its products, its employees or its management. Nothing contained herein shall be construed as conferring by implication, estoppel or otherwise any license or other grant of right to use any patent, copyright, trademark or other intellectual property of Company or any third party, except as expressly provided herein.
+
+We reserve the right in our sole discretion to edit or delete any documents, information or other content appearing on the Website. Trademarks mentioned in the Website are either trademarks or registered trademarks of the Company.
+
+"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:text="USE OF WEBSITE"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        android:text="You agree, undertake and confirm that Your use of Website shall be strictly governed by the following binding principles: You shall not use any deep-link, page-scrape, robot, spider or other automatic device, program, algorithm or methodology, or any similar or equivalent manual process, to access, acquire, copy or monitor any portion of the Website or any Content, or in any way reproduce or circumvent the navigational structure or presentation of the Website or any Content, to obtain or attempt to obtain any materials, documents or information through any means not purposely made available through the Website. We reserve Our right to bar any such activity. You shall not probe, scan or test the vulnerability of the Website or any network connected to the Website nor breach the security or authentication measures on the Website or any network connected to the Website. You may not reverse look-up, trace or seek to trace any information on any other User of or visitor to Website, or any other customer, including any account on the Website not owned by You, to its source, or exploit the Website or any service or information made available or offered by or through the Website, in any way where the purpose is to reveal any information, including but not limited to personal identification or information, other than Your own information, as provided for by the Website. You shall not make any negative, denigrating or defamatory statement(s) or comment(s) about Us or the brand name or domain name used by Us including the terms Permarent, Exclusive, permarent.com, or otherwise engage in any conduct or action that might tarnish the image or reputation, of Permarent or otherwise tarnish or dilute any Permarent’s trade or service marks, trade name and/or goodwill associated with such trade or service marks, trade name as may be owned or used by us. You may not forge headers or otherwise manipulate identifiers in order to disguise the origin of any message or transmittal you send to us on or through the Website or any service offered on or through the Website. You may not pretend that you are, or that you represent, someone else, or impersonate any other individual or entity. You agree not to use any device, software or routine to interfere or attempt to interfere with the working of the Website or any transaction being conducted on the Website, or with any other person's use of the Website. You may not use the Website or any content for any purpose that is unlawful or prohibited by these Terms of Use, or to solicit the performance of any illegal activity or other activity which infringes the rights of the Company. You shall be responsible for maintaining the confidentiality of your Display Name and Password and You shall be responsible for all activities that occur under your Display Name and Password. You agree that if You provide any information that is untrue, inaccurate, not current or incomplete or We have reasonable grounds to suspect that such information is untrue, inaccurate, not current or incomplete, or not in accordance with the this Terms of Use, We shall have the right to indefinitely suspend or terminate or block access of your membership on the Website and refuse to provide You with access to the Website. You agree and understand that You are communicating with Us through electronic records and You consent to receive communications via electronic records from Us periodically and as and when required."/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:text="DISCLAIMER AND LIMITS"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        android:text="Proper efforts are taken to ensure the accuracy and integrity of information and related materials provided by the company on this website, but the company is not responsible for misprints, out-of-date information, technical or pricing inaccuracies, typographical or other errors appearing on this website. Information and related materials are subject to change without notice. The information from or through the website is provided ''as is,'' ''as available,'' and all warranties, express or implied, are disclaimed (including, but not limited to, the disclaimer of any implied warranties of merchantability and fitness for a particular purpose). The information and services may contain bugs, errors, problems or other limitations. We and our affiliated parties have no liability whatsoever for your use of any information or service. In particular, but not as a limitation thereof, we and our affiliated parties are not liable for any direct or indirect, special, incidental or consequential damages (including damages for loss of business, loss of profits, litigation, or the like). The negation of damages set forth above is a fundamental element of the basis of the bargain between us and you. No advice or information, whether oral or written, obtained by you from us through the website shall create any warranty, representation or guarantee not expressly stated in this terms of use. All responsibility or liability for any damages caused by viruses contained within the electronic filec ontaining the form or document is disclaimed. We will not be liable to you for any direct or incidental, special or consequential damages of any kind that may result from use of or inability to use our website or in connection with these terms of use, even if user has been informed in advance of the possibility of such damages. Our maximum liability to you under all circumstances will be equal to the purchase price you pay for any products, services or information. We view protection of your privacy as a very important principle. We understand clearly that you and your Personal Information is one of our most important assets. We store and process your information in accordance with Information Technology Act 2000 and Rules there under. Our current Privacy Policy is available at www.permarent.com/privacypolicy. If you object to your information being transferred or used in this way please do not use Website. You will be required to enter a valid phone number while placing an order on the Website. By registering Your phone number with us, You consent to be contacted by Us via phone calls and/or SMS notifications. Reference to any product, process, publication, service, or offering of any third party by trade name, trademark, and manufacturer or otherwise does not necessarily constitute or imply the endorsement or recommendation of such by Company. Access to this Website is monitored. The requesting URLs, the machine originating the request, and the time of the request are logged for access statistics and security purposes. Use of this Website constitutes consent to such monitoring. This Website may be unavailable from time to time due to mechanical, telecommunication, software, hardware and third-party vendor failures. Company cannot predict or control when such downtime may occur and cannot control the duration of such downtime."/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:text="ELIGIBILITY"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        android:text="The services are not available to persons under the age of 18 or to anyone previously suspended or removed from the services by Permarent. By accepting these Terms and Conditions or by otherwise using the Services or the Site, You represent that You are at least 18 years of age and have not been previously suspended or removed from the Services. You represent and warrant that you have the right, authority, and capacity to enter into this Agreement and to abide by all of the terms and conditions of this Agreement. You shall not impersonate any person or entity, or falsely state or otherwise misrepresent identity, age or affiliation with any person or entity."/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:text="INDEMNIFICATION"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        android:text="You agree to indemnify, save, and hold Permarent, its affiliates, contractors, employees, officers, directors, agents and its third party suppliers, licensors, and partners harmless from any and all claims, losses, damages, and liabilities, costs and expenses, including without limitation legal fees and expenses, arising out of or related to your use or misuse of the Services or of the Site, any violation by you of this Agreement, or any breach of the representations, warranties, and covenants made by you herein. Permarent reserves the right, at your expense, to assume the exclusive defense and control of any matter for which you are required to indemnify Permarent, including rights to settle, and you agree to cooperate with Permarent’s defense and settlement of these claims. Permarent will use reasonable efforts to notify you of any claim, action, or proceeding brought by a third party that is subject to the foregoing indemnification upon becoming aware of it. This paragraph shall survive termination of this Agreement."/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:text="PRODUCT DESCRIPTION"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        android:text="We do not warrant that Product description or other content of this Website is accurate, complete, reliable, current, or error-free and assumes no liability in this regard. Permarent does not make any representation or warranty as to specifics of the images displayed on the Website and the images have no bearing on the quality of the products displayed. The price indications on the Website may vary due to some technical issue, typographical error or difference in product information and the Company shall not be responsible for the changed prices during the transaction. The terms and conditions of delivery, payment, etc. shall be governed by the Subscription Agreement signed by the User/subscriber. Should any user of this Website send any feedback or data, such as ideas, comments, suggestions or questions regarding any Company product or service or the content of this Website, such information shall be deemed to be non-confidential, and Company shall have no obligation of any kind with respect to such information and shall be free to reproduce, use, disclose and distribute the information to others without limitation. Further, Company shall be free to use any ideas, concepts, know-how or techniques contained in such information for any purpose whatsoever, including but not limited to developing, manufacturing and marketing products incorporating such ideas, concepts, know-how or techniques We reserve the right, and you authorize us, to use and assign all information regarding Website uses by you and all information provided by you in any manner consistent with our Privacy Policy."/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:text="PAYMENTS"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        android:text="You represent and warrant that any credit, debit, net banking, cheque or any other mode of transfer information you supply is true and complete. Charges incurred by you will be honored by your credit card/debit card/banking company, and you will pay the charges incurred by you at the posted prices, including any applicable taxes. While availing the payment method/s available on the Website, we will not be responsible or assume any liability, whatsoever in respect of any loss or damage arising directly or indirectly to You due to Lack of authorization for any transaction/s, or Exceeding the preset limit mutually agreed by You and between Banks, or Any payment issues arising out of the transaction, or Decline of transaction for any other reasons. All payments made against the products/services on Website by you shall be compulsorily in Indian Rupees acceptable in the Republic of India. Website will not facilitate transaction with respect to any other form of currency with respect to the purchases made on Website. Transactions, Transaction Price and all commercial terms such as Delivery, Dispatch of products and/or services are as per principal to principal bipartite contractual obligations between Vendor and the Company and payment facility is merely used to facilitate the completion of the Transaction. Use of the payment facility shall not render the Company liable or responsible for the non-delivery, non-receipt, non-payment, damage, breach of representations and warranties, or warranty services or fraud as regards the products and /or services listed on the Website."/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:text="PAYMENT AND REFUND POLICY"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:text="PAYMENT POLICY"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        android:text="Advance is taken for booking subscription. The amount is non-refundable once the customer confirms the subscription upon the verification call by the Permarent customer care team. If the customer has paid deposit and has accepted furniture delivery, the deposit is non –refundable if the furniture is returned in less than 3 months. Rentals must be paid before the due date. Delayed payment of monthly rentals beyond due date shall attract a penal interest of 10% per day from the date of default till the time the monthly rentals is paid. Non-payment of monthly rentals within 7 days beyond due date could result in termination of subscription and removal of the furniture. Customers are required to ensure adequate funds in their bank account on the date of Auto Debit transaction. Non-payment of monthly rentals for consecutive two months could result in termination of subscription and removal of the furniture The Company will endeavour to debit the investor bank account on the due date, however if there is any delay all such transactions are debited subsequently The Company or its authorized banker or agent will initiate the Auto Debit form registrations/ debit transactions The Company / Sponsor Bank are not liable for the bank charges, if any debited from investor’s bank account by the destination bank, on account of payment. Customers are requested to hand over a cancelled cheque for the account to which the auto debit is being set up to the delivery personnel from the Company. All rights and remedies as applicable in case of dishonor of a cheque are available against dishonour of electronic funds transfer instructions / auto debit mandates under insufficiency of funds as are available under Section 138 of the Negotiable Instruments Act, 1881 CANCELLATION OF SUBSCRIPTION CAN BE DONE UNDER THE FOLLOWING CIRCUMSTANCES: During Initial Subscription Period - The Initial Subscription period for furniture and electronics vertical is for a minimum of 3 months. Customer can avail of all subscription benefits during this period. The Customer can also terminate his subscription during this period. However, in such an event the rent for the agreed tenure has to be paidand Permarent would refund the initial security deposit. Any other charges as applicable would be charged. After Initial Subscription Period - Post the Initial Subscription period, customer can terminate subscription with 15 days notice. In case, a 15 days notice is not given, Permarent would deduct rent of one month and refund the remaining amount. Other: The Company can terminate the Subscription after giving a 10 days written notice/email to the Subscriber. REFUND POLICIES Refund requests must include the name of the subscriber. Refunds will be credited back to the original card (credit or debit) used for payment. Refunds are issued under the following circumstances: Customer or Permarent terminating subscription after initial subscription period Customer or Permarent terminating subscription during initial subscription period Within 7 working days from the date of issue of Pick Up instructions, the Company shall process forrefund of Security Deposit, subject to deduction of damages, unpaid monthly rentals and any other deductions as applicable. Refund would be done through a NEFT transfer. Refunds would be tracked by Permarent’s in-house Customer Care and updates shared accordingly with customer."/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:text="DELIVERY AND PICK-UP POLICY"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        android:text="Currently we deliver at nominal charges to any point within Delhi-NCR. Customer would be intimated of delivery status and timings a day in advance by the Customer careteam. In case of partial, damaged or incorrect delivery, the replacement is done in next 48 hours. We adhere strictly to our delivery time lines confirmed earlier by our in-house Customer Care team.In rare instances when delivery is delayed, we inform our customers at least two hours in advance for any delay. During delivery, the customer or his/her spouse/parents or any relations can accept delivery after checking quality of furniture. QUALITY CHECKS DURING DELIVERY During time of delivery, the customer is requested to check and verify the quality and details of each piece of furniture being set up. This is to ensure that the customer receives exactly what has been ordered to his satisfaction."/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:text="POST DELIVERY"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        android:text="During setup or post-delivery, if the customer, for any reasons, is not completely satisfied with the product, due to it being damaged or defective, the particular piece can be replaced free of charge if company agrees."/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:text="PICK-UP POLICY"/>
+     <TextView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:textColor="@color/black"
+         android:padding="5dp"
+         android:text="Pick up of furniture from customer's house is done within 24-72 hours. Customer is updated by mail 24 hours prior of pick up time. The correspondence would also include balance payment and refund details. The pickup is done free of charges from the point of original invoice address. RENT-TO-OWN POLICY Rent-to-Own is a unique option offered by Permarent to its customers and users. Upon choosing this option, the transaction shall fall under a rental purchase agreement. The customer needs to make 18 payments, plus tax to acquire ownership of the rented goods. To calculate the cost of ownership before tax, multiply the monthly price as shown alongside the product(s) by 18. You do not acquire ownership rights unless the product is rented and paid for 18 payment periods. You may exercise an early payment option that is disclosed in the lease. On choosing of the rent to own option by the customer, the security deposit amount for 3 months rental shall become non-refundable, which is refundable otherwise. All other terms and conditions of your Rental Agreement remain in effect. Currently, Rent to Own option is applicable only on rentals under the “Furniture” category in Delhi-NCR."/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:text="DAMAGE POLICY"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        android:text="Minor scratches (below 1mm in width and depth, and 2cm in length) on wooden furniture will be ignored as they are considered ‘normal wear and tear’. Minor chips and breakage in timber (below 5mm in width, 1mm in depth and 1cm in length) will be ignored, while those above the said dimensions will be charged for. Any damage which is a result of raw material or manufacturing defects will not be chargeable to the lessee. Any damage that results in the product being unusable will result in the value of the product being charged to the lessee. Tear in upholstery will result in charge towards replacement of upholstery. Opening up of a stitched joint will not be chargeable. Stains on upholstery which are not removable via dry cleaning will result in a charge for upholstery replacement. The extent of damage will be ascertained by comparing against the quality control document signed by the lessee and the photographs taken on delivery and return pickup day. Any variation showing damages, if ascertained as not caused by normal wear and tear, will be charged and would have to be borne by the lessee. A QC report stating the damages if any or a clean chit will be created on the spot (during return pick up) and a copy of the same will be handed over to the lessee within 48 hours of pick-up of the products."/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:text="SECURITIES LAWS"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        android:text="This Website may include statements concerning our operations, prospects, strategies, financial condition, future economic performance and demand for our products or services, as well as our intentions, plans and objectives, which are forward-looking statements. These statements are based upon a number of assumptions and estimates which are subject to significant uncertainties, many of which are beyond our control. When used on our Website, words like ''anticipates,'' ''expects,'' ''believes,'' ''estimates,'' ''seeks,'' ''plans,'' ''intends'' and similar expressions are intended to identify forward-looking statements designed to fall within securities law safe harbors for forward-looking statements. The Website and the information contained herein do not constitute an offer or a solicitation of an offer for the sale of any securities. None of the information contained herein is intended to be, and shall not be deemed to be, incorporated into any of our securities-related filings or documents."/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:text="LINKS TO OTHER WEBSITES"/>
+     <TextView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:textColor="@color/black"
+         android:padding="5dp"
+         android:text="The Website may contain links to other websites. We are not responsible for any content, accuracy or opinions express in such websites, and such websites are not investigated, monitored or checked for accuracy or completeness by us. Inclusion of any linked website on our Website does not imply approval or endorsement of the linked website by us. If you decide to leave our Website and access these third-party sites, you do so at your own risk.
+
+This Website may be accessed by users internationally and may contain references or cross references to Company products, programs and services that are not available or are prohibited in your country. Such references do not imply that Company intends to make available in your country such products, programs or services or that such products may lawfully be used in your country. Company reserves the right without prior notice to discontinue models, parts and accessories, and other items or change specifications at any time without incurring any obligations."/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:text="COPYRIGHTS AND COPYRIGHT AGENTS"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        android:text="We respect the intellectual property of others, and we ask you to do the same. If you believe that your work has been copied in a way that constitutes copyright infringement, please provide our Copyright Agent with the following information: An electronic or physical signature of the person authorized to act on behalf of the owner of thecopyright interest; A description of the copyrighted work that you claim has been infringed; A description of where the material that you claim is infringing is located on the Website; Your address, telephone number, and e-mail address; A statement by you that you have a good faith belief that the disputed use is not authorized by the copyright owner, its agent, or the law; and A statement by you, made under penalty of perjury, that the above information in your Notice is accurate and that you are the copyright owner or authorized to act on the copyright owner's behalf. INFORMATION AND PRESS RELEASES The Website contains information and press releases about us. While this information was believed to be accurate as of the date prepared, we disclaim any duty or obligation to update this information or any press releases. Information about companies other than ours contained in the press release or otherwise, should not be relied upon as being provided or endorsed by us."/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:text="MISCELLANEOUS"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        android:text="Terms of Use shall be governed by and interpreted and construed in accordance with the laws of India. The place of jurisdiction shall be exclusively in Delhi. Should any part of this Terms of Use be held invalid or unenforceable, that portion shall be construed consistent with applicable law and the remaining portions shall remain in full force and effect. To the extent that anything in or associated with the Website is in conflict or inconsistent with this Terms of Use, this Terms of Use shall take precedence. Our failure to enforce any provision shall not be deemed a waiver of such provision nor of the right to enforce such provision.
+
+"/>
+     <TextView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:textColor="@color/black"
+         android:textStyle="bold"
+         android:padding="5dp"
+         android:text="CONTACT US"/>
+     <TextView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:padding="5dp"
+         android:textColor="@color/black"
+         android:text="Please contact us at support@permarent.com for any questions or comments regarding this Website."/>
+     <TextView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:textStyle="bold"
+         android:padding="5dp"
+         android:textColor="@color/black"
+         android:text="GRIEVANCE OFFICER"/>
+     <TextView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:textColor="@color/black"
+         android:padding="5dp"
+         android:text="In accordance with Information Technology Act 2000 and rules made there under, the name and contact details of the Grievance Officer are provided below:\n
+
+Lakshya Khurana\n
+C1C-095 Carlton Estate I DLF Phase V, Sector 53, Gurgaon-122002\n
+By phone: +91-997-111-8772\n
+By e-mail: lakshya@permarent.com"/>
+
+
+    </LinearLayout>
+
+</ScrollView>

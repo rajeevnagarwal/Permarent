@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar_normal" />
+
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:background="@color/white"
+        android:layout_height="match_parent">
+        <com.furniture.appliances.rentals.util.CustomTextView
+            android:id="@+id/emptyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:text="Thank you for placing your order. We will soon send you the order details."
+            app:type="medium"
+            android:textColor="@color/cardtext"
+            android:textSize="16sp"/>
+
+        <Button
+            android:id="@+id/continueShopping"
+            android:layout_below="@+id/emptyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/button_selector"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="Continue Shopping"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
+</LinearLayout>

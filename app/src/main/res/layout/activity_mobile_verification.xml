@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar_normal" />
+
+    <com.furniture.appliances.rentals.util.CustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center"
+        android:text="Please enter your mobile number."
+        app:type="bold"
+        android:textColor="@color/cardtext"
+        android:textSize="16sp"/>
+
+    <com.furniture.appliances.rentals.util.CustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center"
+        android:text="We need your mobile number to keep you updated on your order and delivery status."
+        app:type="medium"
+        android:textColor="@color/cardtext"
+        android:textSize="16sp"/>
+
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/mobile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Mobile Number"
+        android:inputType="phone"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="24dp"
+        android:singleLine="true"
+        android:textCursorDrawable="@drawable/text_cursor"
+        app:met_typeface="fonts/Roboto-Light.ttf"
+        app:met_floatingLabel="highlight"
+        app:met_primaryColor="@color/colorAccent" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/button_selector"
+        android:text="Submit"
+        android:textColor="@color/white" />
+
+</LinearLayout>

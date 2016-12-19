@@ -1,0 +1,77 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/layout_front"
+        android:layout_height="76dp">
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:gravity="center_vertical|center_horizontal" />
+        <com.furniture.appliances.rentals.util.CustomTextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:gravity="bottom"
+            android:singleLine="true"
+            android:layout_centerVertical="true"
+            android:orientation="vertical"
+            android:layout_toRightOf="@+id/image"
+            android:text="Name"
+            android:textColor="#212121"
+            android:textSize="16sp"
+            app:type="bold"
+            android:layout_toLeftOf="@+id/quantity"
+            android:layout_toStartOf="@+id/quantity" />
+
+
+    <com.furniture.appliances.rentals.util.CustomTextView
+        android:id="@+id/quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:gravity="bottom"
+        android:singleLine="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="16dp"
+        android:text="Pending"
+        android:textColor="@color/cardtext"
+        android:textSize="14sp"
+        app:type="regular"  />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="76dp"
+        android:id="@+id/layout_back"
+        android:background="@color/colorNewPrimary"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp"
+            android:textStyle="bold"
+            android:text="Raise Complaint"
+            android:textColor="@color/white"
+            />
+    </RelativeLayout>
+
+
+
+
+
+</RelativeLayout>

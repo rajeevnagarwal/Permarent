@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:windowBackground"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/emptyIocn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@mipmap/addresses_empty" />
+
+        <com.furniture.appliances.rentals.util.CustomTextView
+            android:id="@+id/emptyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/emptyIocn"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:text="No addresses saved yet."
+            android:textColor="@color/cardtext"
+            android:textSize="16sp"
+            app:type="medium" />
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/emptyText"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/button_selector"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="Login to view your addresses"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl2"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/lv"
+            android:layout_width="match_parent"
+            android:layout_margin="8dp"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:visibility="gone"
+            android:layout_height="match_parent"/>
+        <RelativeLayout
+            android:id="@+id/rl3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:id="@+id/emptyIocn2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:background="@mipmap/addresses_empty" />
+
+            <com.furniture.appliances.rentals.util.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/emptyIocn2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:text="No addresses saved yet."
+                android:textColor="@color/cardtext"
+                android:textSize="16sp"
+                app:type="medium" />
+        </RelativeLayout>
+            <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/add"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom|end"
+            android:onClick="onClickAdd"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp"
+            fab:fab_colorNormal="#F44336"
+            fab:fab_colorPressed="#D32F2F"
+            android:src="@mipmap/ic_add_white_24dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_normal" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.furniture.appliances.rentals.util.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:layout_margin="8dp"
+                android:text="Enter your locality"
+                android:textColor="#212121"
+                android:textSize="16sp"
+                app:type="medium" />
+
+            <com.furniture.appliances.rentals.util.ClearableAutoCompleteTextView
+                android:id="@+id/searchPlaces"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:hint="Enter your address"
+                android:paddingLeft="10dp"
+                android:paddingRight="16dp"
+                android:singleLine="true"
+                android:textColor="@color/cardtext"
+                android:textColorHint="@color/carddivider"
+                android:textCursorDrawable="@drawable/text_cursor"
+                android:textSize="18dp" />
+
+
+            <LinearLayout
+                android:id="@+id/placeDetails"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="16dp"
+                    android:hint="City"
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true"
+                    android:textCursorDrawable="@drawable/text_cursor"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="@color/colorAccent"
+                    app:met_typeface="fonts/Roboto-Light.ttf" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/area"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:hint="Area"
+                    android:singleLine="true"
+                    android:textCursorDrawable="@drawable/text_cursor"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="@color/colorAccent"
+                    app:met_typeface="fonts/Roboto-Light.ttf" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:orientation="horizontal">
+
+                    <com.rengwuxian.materialedittext.MaterialEditText
+                        android:id="@+id/house"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="1"
+                        android:hint="House/Flat No"
+                        android:singleLine="true"
+                        android:textCursorDrawable="@drawable/text_cursor"
+                        app:met_floatingLabel="highlight"
+                        app:met_primaryColor="@color/colorAccent"
+                        app:met_typeface="fonts/Roboto-Light.ttf" />
+
+                    <com.rengwuxian.materialedittext.MaterialEditText
+                        android:id="@+id/street"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_weight="1"
+                        android:hint="Street/Building"
+                        android:singleLine="true"
+                        android:textCursorDrawable="@drawable/text_cursor"
+                        app:met_floatingLabel="highlight"
+                        app:met_primaryColor="@color/colorAccent"
+                        app:met_typeface="fonts/Roboto-Light.ttf" />
+
+                </LinearLayout>
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/pincode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:hint="Pin Code"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:textCursorDrawable="@drawable/text_cursor"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="@color/colorAccent"
+                    app:met_typeface="fonts/Roboto-Light.ttf" />
+
+
+               <!-- <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:hint="Address Name"
+                    android:singleLine="true"
+                    android:textCursorDrawable="@drawable/text_cursor"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="@color/colorAccent"
+                    app:met_typeface="fonts/Roboto-Light.ttf" />-->
+
+
+                <Button
+                    android:id="@+id/submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="60dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="50dp"
+                    android:background="@drawable/button_selector"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="Save Address"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

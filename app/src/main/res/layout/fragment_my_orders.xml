@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="?android:windowBackground"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/emptyIocn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@mipmap/no_orders_icon"/>
+        <com.furniture.appliances.rentals.util.CustomTextView
+            android:id="@+id/emptyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/emptyIocn"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_centerHorizontal="true"
+            android:text="No orders yet."
+            app:type="medium"
+            android:textColor="@color/cardtext"
+            android:textSize="16sp"/>
+
+        <Button
+            android:id="@+id/login"
+            android:layout_below="@+id/emptyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/button_selector"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:text="Login to view your orders"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/lv_complaint"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:background="@color/colorNewPrimary"
+            android:paddingTop="20dp"
+            android:paddingBottom="10dp"
+            android:layout_alignParentTop="true">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="See Complaints"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+           />
+        </LinearLayout>
+        <ListView
+            android:id="@+id/lv"
+            android:layout_width="match_parent"
+            android:layout_margin="8dp"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:visibility="gone"
+            android:layout_below="@id/lv_complaint"
+            android:layout_height="match_parent">
+
+        </ListView>
+        <RelativeLayout
+            android:id="@+id/rl3"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/emptyIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:background="@mipmap/no_orders_icon"/>
+            <com.furniture.appliances.rentals.util.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/emptyIcon"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_centerHorizontal="true"
+                android:text="No orders yet."
+                app:type="medium"
+                android:textColor="@color/cardtext"
+                android:textSize="16sp"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>

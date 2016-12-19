@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splash"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_transparent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/logo" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="24dp"
+                android:hint="UserName"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textCursorDrawable="@drawable/text_cursor_white"
+                app:met_baseColor="@color/white"
+                app:met_floatingLabel="highlight"
+                app:met_primaryColor="@color/white"
+                app:met_typeface="fonts/Roboto-Light.ttf" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textCursorDrawable="@drawable/text_cursor_white"
+                app:met_baseColor="@color/white"
+                app:met_floatingLabel="highlight"
+                app:met_primaryColor="@color/white"
+                app:met_typeface="fonts/Roboto-Light.ttf" />
+
+            <com.furniture.appliances.rentals.util.CustomTextView
+                android:id="@+id/forget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Forgot Password?"
+                android:textColor="@color/gray10"
+                android:textSize="16sp"
+                app:type="medium" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/login"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:textAllCaps="false"
+                    android:background="@drawable/button_selector"
+                    android:text="Login"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/signUp"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:textAllCaps="false"
+                    android:background="@drawable/button_selector"
+                    android:text="SignUp"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_sign_in"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/layers_gplus_button_bg"
+                android:text="Log in with Google+"
+                android:textSize="14dp"
+                android:textAllCaps="false"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp" />
+
+
+            <Button
+                android:id="@+id/fbbutton"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:textAllCaps="false"
+                android:background="@drawable/layers_fb_button_bg"
+                android:textSize="14dp"
+                android:text="Log in with Facebook"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

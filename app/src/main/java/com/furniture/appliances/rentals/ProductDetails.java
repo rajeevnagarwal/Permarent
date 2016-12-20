@@ -82,6 +82,7 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         model = (ModelSubCategory) getIntent().getSerializableExtra("model");
+        modelCategory = (ModelCategory)getIntent().getSerializableExtra("category");
         setContentView(R.layout.activity_product_details);
         IMAGE_NAME[0] = model.big_img;
         IMAGE_NAME[1] = "singlebed000003_big.jpg";
@@ -170,14 +171,14 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
     }
 
     private void getDataFromDb() {
-        DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
-        modelCategory = dbInteraction.getCategoryByName(model.category_desc);
+        /*DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
+        modelCategory = dbInteraction.getCategoryByName(model.category_desc);*/
         String temp[] = modelCategory.subcategory.split(",");
         for(int i=0;i<temp.length;i++) {
             if(temp[i].equalsIgnoreCase(model.subcategory_desc))
                 defaultFragment=i;
         }
-        dbInteraction.close();
+       // dbInteraction.close();
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

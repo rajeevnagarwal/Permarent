@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.furniture.appliances.rentals.fragment.SubCategory;
+import com.furniture.appliances.rentals.model.ModelCategory;
 
 import java.util.ArrayList;
 
@@ -17,19 +18,22 @@ public class SubCategoryAdapter extends FragmentStatePagerAdapter {
     FragmentManager fragmentManager;
     ArrayList<String> titles = new ArrayList<String>();
     ArrayList<String> code = new ArrayList<String>();
+    ModelCategory category;
 
-    public SubCategoryAdapter(FragmentManager fm, ArrayList<String> titles,ArrayList<String> code) {
+    public SubCategoryAdapter(FragmentManager fm, ArrayList<String> titles, ArrayList<String> code, ModelCategory modelCategory) {
         super(fm);
         fragmentManager = fm;
         this.titles=titles;
         this.code = code;
         count = titles.size();
+        this.category = modelCategory;
     }
 
     public Fragment getItem(int num) {
         SubCategory dummyFragment = new SubCategory();
         dummyFragment.setTitle(titles.get(num));
-        //dummyFragment.setCode(code.get(num));
+        dummyFragment.setCode(code.get(num));
+        dummyFragment.setCategory(category);
         return dummyFragment;
 
     }

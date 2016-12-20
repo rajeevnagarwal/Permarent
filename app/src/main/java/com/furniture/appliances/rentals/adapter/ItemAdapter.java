@@ -26,6 +26,7 @@ import com.furniture.appliances.rentals.ProductDetails;
 import com.furniture.appliances.rentals.R;
 import com.furniture.appliances.rentals.database.DBInteraction;
 import com.furniture.appliances.rentals.model.ModelCart;
+import com.furniture.appliances.rentals.model.ModelCategory;
 import com.furniture.appliances.rentals.model.ModelSubCategory;
 import com.furniture.appliances.rentals.restApi.EndPonits;
 import com.furniture.appliances.rentals.util.AppPreferences;
@@ -49,12 +50,14 @@ public class ItemAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     AppPreferences apref = new AppPreferences();
     ArrayList<ModelSubCategory> modelSubCategoryArrayList = new ArrayList<>();
+    private ModelCategory category;
 
 
-    public ItemAdapter(Context context, ArrayList<ModelSubCategory> modelSubCategoryArrayList) {
+    public ItemAdapter(Context context, ArrayList<ModelSubCategory> modelSubCategoryArrayList,ModelCategory category) {
         this.mInflater = LayoutInflater.from(context);
         this.modelSubCategoryArrayList = modelSubCategoryArrayList;
         this.context = context;
+        this.category = category;
 
     }
 
@@ -193,11 +196,13 @@ public class ItemAdapter extends BaseAdapter {
                 RocqAnalytics.trackEvent(model.subcategory_desc, new ActionProperties(""), Position.LEFT);
                 if (model.category_desc.equals("Packages")) {
                     Intent i = new Intent(context, PackageProductDetails.class);
+                    i.putExtra("category",category);
                     i.putExtra("model", model);
                     context.startActivity(i);
                     ((Category)context).finish();
                 } else {
                     Intent i = new Intent(context, ProductDetails.class);
+                    i.putExtra("category",category);
                     i.putExtra("model", model);
                     context.startActivity(i);
                     ((Category)context).finish();

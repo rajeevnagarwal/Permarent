@@ -14,6 +14,7 @@ import com.dq.rocq.models.ActionProperties;
 import com.furniture.appliances.rentals.R;
 import com.furniture.appliances.rentals.adapter.ItemAdapter;
 import com.furniture.appliances.rentals.database.DBInteraction;
+import com.furniture.appliances.rentals.model.ModelCategory;
 import com.furniture.appliances.rentals.model.ModelSubCategory;
 import com.furniture.appliances.rentals.parser.ParseApi;
 import com.furniture.appliances.rentals.restApi.EndPonits;
@@ -39,6 +40,7 @@ public class SubCategory extends Fragment {
     public static boolean isFragmentOpened;
     private String title;
     private String code;
+    private ModelCategory category;
     public void setTitle(String title){
 
         this.title=title;
@@ -47,6 +49,12 @@ public class SubCategory extends Fragment {
     {
         this.code = code;
     }
+    public void setCategory(ModelCategory category)
+    {
+        this.category = category;
+
+    }
+
 
     @Nullable
     @Override
@@ -54,7 +62,8 @@ public class SubCategory extends Fragment {
         setHasOptionsMenu(true);
         View v = inflater.inflate(R.layout.fragment, container, false);
         initView(v);
-        getDataFromDb(title);
+        //getDataFromDb(title);
+        fetchproductdata(code);
         if(!title.equals("")) {
             RocqAnalytics.initialize(getActivity());
             RocqAnalytics.trackScreen(title, new ActionProperties());
@@ -66,6 +75,37 @@ public class SubCategory extends Fragment {
     {
         lv = (ListView)v.findViewById(R.id.lv);
     }
+    private void fetchproductdata(String code)
+    {
+        RequestParams params = new RequestParams();
+        params.put("subCategoryId",code);
+        EndPonits.listProducts(params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                System.out.println("Failure in product");
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                if (!responseString.equals("\"Sub Category Id Invalid\"")) {
+                    try {
+                        JSONArray array = new JSONArray(responseString);
+                        modelSubCategoryArrayList = new ParseApi().parselistproduct(getActivity(), array);
+                        for (int i = 0; i < modelSubCategoryArrayList.size(); i++) {
+                            System.out.println("Product " + modelSubCategoryArrayList.get(i).big_img);
+                        }
+                        addCarsToList(modelSubCategoryArrayList);
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+    }
+
 
     public void getDataFromDb(String category) {
 
@@ -75,7 +115,7 @@ public class SubCategory extends Fragment {
         addCarsToList(modelSubCategoryArrayList);
     }
     public void addCarsToList(ArrayList<ModelSubCategory> result) {
-        itemAdapter = new ItemAdapter(getActivity(), result);
+        itemAdapter = new ItemAdapter(getActivity(), result,category);
         lv.setAdapter(itemAdapter);
 
 

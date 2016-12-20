@@ -58,8 +58,8 @@ public class CategoryFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_category, container, false);
         ((MainActivity)getActivity()).changeToolbar("Categories",false);
         initialize(v);
-       // fetch_categories();
-        getDataFromDb();
+       fetch_categories();
+        //getDataFromDb();
 
         return v;
     }
@@ -196,6 +196,8 @@ public class CategoryFragment extends Fragment {
             for (int j = 0; j < array.length(); j++) {
                 JSONObject obj = array.getJSONObject(j);
                 list.add(new Subcategory(obj.getString("subCategoryName")));
+                modelCategoryArrayList.get(i).subcategory = modelCategoryArrayList.get(i).subcategory + obj.getString("subCategoryName")+",";
+                modelCategoryArrayList.get(i).subcategoryid = modelCategoryArrayList.get(i).subcategoryid + obj.getString("subCategoryId")+",";
 
 
             }

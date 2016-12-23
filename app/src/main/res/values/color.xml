@@ -86,6 +86,8 @@
     <color name = "colorNewPrimary">#28193B</color>
     <color name="colorNewPrimaryDark">#28194B</color>
     <color name="colorNewSecondary">#92D1BB</color>
+    <color name="darkerteal">#53BA96</color>
+    <color name="lighteal">#92D1BB</color>
 
     <color name="cyan">#00CCCC</color>
     <color name="cyan_dark">#E0FFFF</color>

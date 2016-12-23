@@ -2,12 +2,17 @@ package com.furniture.appliances.rentals.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -25,6 +30,7 @@ import com.furniture.appliances.rentals.adapter.OptionsAdapter;
 import com.furniture.appliances.rentals.database.DBInteraction;
 import com.furniture.appliances.rentals.model.ModelOptions;
 import com.furniture.appliances.rentals.restApi.EndPonits;
+import com.furniture.appliances.rentals.ui.RoundedBitmapView;
 import com.furniture.appliances.rentals.util.AppPreferences;
 import com.furniture.appliances.rentals.util.CheckInternetConnection;
 import com.furniture.appliances.rentals.util.Config;
@@ -50,6 +56,7 @@ public class Account extends Fragment {
     ListView list;
     ImageView user_image;
     TextView welcome_text;
+    TextView welcome_mail;
     private AppPreferences apref = new AppPreferences();
     GoogleApiClient mGoogleApiClient;
     private ArrayList<ModelOptions> options;
@@ -58,22 +65,38 @@ public class Account extends Fragment {
         setHasOptionsMenu(true);
         View v = inflater.inflate(R.layout.fragment_account, container, false);
         ((MainActivity)getActivity()).changeToolbar("Account",false);
+        getActivity().setTitle("Account");
             initialize(v);
-            if(apref.IsLoginedByFb(getActivity())||apref.IsLoginedByGoogle(getActivity())||apref.IsLoginedByEmail(getActivity()))
+            if(apref.IsLoginedByFb(getActivity()))
             {
+                System.out.println("Facebook");
                 String name = apref.readString(getActivity(),"name","");
                 if(name!=null) {
-                    welcome_text.setText("Hi "+name);
+                    welcome_text.setText(name);
+                    welcome_mail.setText(apref.readString(getActivity(),"email",""));
                 }
                 else {
-                    welcome_text.setText("Hi Please Login!!");
+                    welcome_text.setText("Please Login!!");
                 }
+                System.out.println("Image"+apref.readString(getActivity(),"image",null));
                 if (apref.readString(getActivity(), "image", null).contains("http") || apref.readString(getActivity(), "image", null).contains("https")) {
                     Picasso.with(context)
                             .load(apref.readString(getActivity(), "image", null))
                             .placeholder(R.drawable.user)
                             .error(R.drawable.user)
-                            .into(user_image);
+                            .into(user_image,new com.squareup.picasso.Callback() {
+                                @Override
+                                public void onSuccess() {
+                                    Bitmap bitmap = ((BitmapDrawable)user_image.getDrawable()).getBitmap();
+                                    user_image.setImageDrawable(new RoundedBitmapView(getActivity()).createRoundedBitmapDrawableWithBorder(bitmap));
+
+                                }
+
+                                @Override
+                                public void onError() {
+
+                                }
+                            });
                 } else {
                     user_image.setImageResource(R.drawable.user);
                 }
@@ -81,7 +104,7 @@ public class Account extends Fragment {
             }
             else
                 {
-                    welcome_text.setText("Hi Please Login!!");
+                    welcome_text.setText("Please Login!!");
                     user_image.setImageResource(R.drawable.user);
 
                 }
@@ -92,6 +115,8 @@ public class Account extends Fragment {
     {
         list = (ListView)v.findViewById(R.id.list_account);
         welcome_text = (TextView)v.findViewById(R.id.text_welcome);
+        welcome_mail = (TextView)v.findViewById(R.id.welcome_mail);
+        welcome_mail.setText("");
         user_image = (ImageView)v.findViewById(R.id.user_image);
         options = new ArrayList<ModelOptions>();
         options.add(new ModelOptions("My Orders",R.mipmap.drawer_order_icon));
@@ -331,6 +356,11 @@ public class Account extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.ab_cart).setVisible(false).setEnabled(false);
+    }
+
 }
 
 

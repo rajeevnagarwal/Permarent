@@ -156,13 +156,13 @@ public class MainActivity extends AppCompatActivity implements /*NavigationDrawe
         View tabview1 = getLayoutInflater().inflate(R.layout.custom_tabview,tabhost,false);
         ((TextView)tabview1.findViewById(R.id.tab_text)).setText("Categories");
         ((ImageView)tabview1.findViewById(R.id.tab_image)).setImageDrawable(getResources().getDrawable(R.drawable.category_tab_drawable));
-        tabview1.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT,1.0f));
+        tabview1.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT,1.5f));
         tabhost.addTab(tabhost.newTabSpec("Categories").setIndicator(tabview1),CategoryFragment.class,null);
         View tabview2 = getLayoutInflater().inflate(R.layout.custom_tabview,tabhost,false);
-        ((TextView)tabview2.findViewById(R.id.tab_text)).setText("Services");
+        ((TextView)tabview2.findViewById(R.id.tab_text)).setText("Rent-to-Own");
         ((ImageView)tabview2.findViewById(R.id.tab_image)).setImageDrawable(getResources().getDrawable(R.drawable.service_tab_drawable));
-        tabview2.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT,1.0f));
-        tabhost.addTab(tabhost.newTabSpec("Services").setIndicator(tabview2),OurServices.class,null);
+        tabview2.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT,1.5f));
+        tabhost.addTab(tabhost.newTabSpec("Rent-to-own").setIndicator(tabview2),OurServices.class,null);
         View tabview3 = getLayoutInflater().inflate(R.layout.custom_tabview,tabhost,false);
         ((TextView)tabview3.findViewById(R.id.tab_text)).setText("WishList");
         ((ImageView)tabview3.findViewById(R.id.tab_image)).setImageDrawable(getResources().getDrawable(R.drawable.heart_tab_drawable));

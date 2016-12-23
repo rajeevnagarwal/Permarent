@@ -122,6 +122,16 @@ public class EndPonits {
     {
         getClient().get(Config.listProducts,params,asyncHttpResponseHandler);
     }
+    public static void regNewUser(RequestParams params,AsyncHttpResponseHandler asyncHttpResponseHandler)
+    {
+        getClient().get(Config.regNewUser,params,asyncHttpResponseHandler);
+    }
+    public static void checkUser(RequestParams params, AsyncHttpResponseHandler asyncHttpResponseHandler)
+    {
+        getClient().get(Config.checkUser,params,asyncHttpResponseHandler);
+    }
+
+
 
 
 

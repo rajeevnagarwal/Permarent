@@ -82,7 +82,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:background="@drawable/button_selector"
+        android:background="@drawable/add_drawable"
         android:padding="8dp"
         android:text="Add"
         android:textColor="@color/white" />

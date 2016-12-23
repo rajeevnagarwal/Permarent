@@ -48,7 +48,7 @@ public class SyncService extends Service {
     {
         RequestParams params = new RequestParams();
         params.put("email", email);
-        EndPonits.getUser(params, new JsonHttpResponseHandler() {
+        EndPonits.getUserInfo(params, new JsonHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -80,7 +80,7 @@ public class SyncService extends Service {
         modelUser.password="";
         modelUser.address="";
         modelUser.pincode="";
-        modelUser.image="";
+        modelUser.image=apref.readString(getApplicationContext(),"image",null);
         if(apref.IsLoginedByFb(getApplicationContext()))
             modelUser.source = "facebook";
         if(apref.IsLoginedByGoogle(getApplicationContext()))

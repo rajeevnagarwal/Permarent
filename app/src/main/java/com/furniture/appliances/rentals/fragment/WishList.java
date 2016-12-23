@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -72,7 +74,7 @@ public class WishList extends Fragment {
     }
     private void setView(RecyclerView view,ArrayList<ModelProduct> list)
     {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(),3,LinearLayoutManager.VERTICAL,false);
         view.setLayoutManager(layoutManager);
         adapter = new WishListAdapter(list,getActivity());
         view.setAdapter(adapter);
@@ -93,7 +95,7 @@ public class WishList extends Fragment {
         result = result.trim();
         String[] p = result.split(" ");
         for(int i=0;i<p.length;i++) {
-            System.out.println(p[i]);
+            //System.out.println(p[i]);
             RequestParams params = new RequestParams();
         params.put("productId",p[i]);
         EndPonits.getProductDetails(params, new TextHttpResponseHandler() {
@@ -142,7 +144,8 @@ public class WishList extends Fragment {
                 {
                     available = "Not Available";
                 }
-                list.add(new ModelProduct(obj.getString("productName"),obj.getString("minRentalDuration"),String.valueOf(obj.getInt("newRating")),available,String.valueOf(obj.getInt("securityAmount")),String.valueOf(obj.getInt("retailPrice")),String.valueOf(obj.getInt("productUserLikesCount"))));
+                String dimen = obj.getJSONArray("productDesc").getJSONObject(0).getString("dimensions");
+                list.add(new ModelProduct(obj.getString("productName"),obj.getString("minRentalDuration"),String.valueOf(obj.getInt("newRating")),available,String.valueOf(obj.getInt("securityAmount")),String.valueOf(obj.getInt("retailPrice")),String.valueOf(obj.getInt("productUserLikesCount")),dimen));
 
             }
         }
@@ -152,6 +155,11 @@ public class WishList extends Fragment {
         }
         return list;
 
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.ab_cart).setVisible(true).setEnabled(true);
     }
 
 }

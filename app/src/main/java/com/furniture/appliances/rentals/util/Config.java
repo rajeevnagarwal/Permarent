@@ -44,6 +44,8 @@ public class Config {
     public static String insertRating = newUrl+"insertRating";
     public static String getPopularProducts = newUrl+"getPopularProducts";
     public static String getCategories = newUrl+"getCategories";
+    public static String regNewUser = newUrl+"regNewUser";
+    public static String checkUser = newUrl+"checkUser";
 
 
 

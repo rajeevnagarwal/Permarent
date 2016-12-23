@@ -16,4 +16,6 @@ public class ModelUser implements Serializable {
     public String password;
     public String image;
     public String source;
+    public String sex;
+    public String userReferralCode;
 }

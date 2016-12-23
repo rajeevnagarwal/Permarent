@@ -15,6 +15,7 @@ import com.furniture.appliances.rentals.R;
 import com.furniture.appliances.rentals.model.ModelOptions;
 import com.furniture.appliances.rentals.model.ModelSubCategory;
 import com.furniture.appliances.rentals.util.Config;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -68,7 +69,18 @@ public class OptionsAdapter extends BaseAdapter {
         holder.name.setText(data.get(position).name);
         Picasso.with(holder.image.getContext())
                .load(data.get(position).image)
-                .into(holder.image);
+                .into(holder.image, new Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
+
 
 
         return view;

@@ -21,6 +21,7 @@ import com.dq.rocq.models.ActionProperties;
 import com.dq.rocq.models.Position;
 import com.furniture.appliances.rentals.Cart;
 import com.furniture.appliances.rentals.Category;
+import com.furniture.appliances.rentals.MainActivity;
 import com.furniture.appliances.rentals.PackageProductDetails;
 import com.furniture.appliances.rentals.ProductDetails;
 import com.furniture.appliances.rentals.R;
@@ -205,7 +206,7 @@ public class ItemAdapter extends BaseAdapter {
                     i.putExtra("category",category);
                     i.putExtra("model", model);
                     context.startActivity(i);
-                    ((Category)context).finish();
+                    ((MainActivity)context).finish();
                 }
             }
         });

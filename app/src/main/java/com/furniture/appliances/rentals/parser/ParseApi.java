@@ -247,7 +247,8 @@ public class ParseApi {
 
     public boolean parseInsertUserData(Context context, String response) {
         try {
-            if (response.equals("New record created successfully"))
+            JSONObject obj = new JSONObject(response);
+            if (obj.getString("message").equals("Registered Successfully"))
                 return true;
             else
                 return false;
@@ -271,7 +272,8 @@ public class ParseApi {
 
     public boolean parseSignInData(Context context, String response) {
         try {
-            return response.equals("success");
+            JSONObject obj = new JSONObject(response);
+            return obj.get("message").equals("correct");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -288,77 +290,63 @@ public class ParseApi {
     }
 
     public boolean parseGetUserData(Context context, JSONObject response) {
+        System.out.println(response);
         try {
             final AppPreferences apref = new AppPreferences();
             ModelUser modelUser = new ModelUser();
-            ArrayList<ModelAddress> modelAddressArrayList = new ArrayList<>();
-            modelUser.firstname = response.getString("firstname");
-            modelUser.lastname = response.getString("lastname");
+            modelUser.firstname = response.getString("firstName");
+            modelUser.lastname = response.getString("lastName");
             modelUser.email = response.getString("email");
-            String mobile = response.getString("mobileno");
-            String address = response.getString("address");
-            String pincode = response.getString("pincode");
-            if (address.contains("{")) {
-                JSONObject temp_address = new JSONObject(address.substring(address.indexOf("{"), address.lastIndexOf("}") + 1));
-                JSONObject temp_mobile = new JSONObject(mobile.substring(address.indexOf("{"), mobile.lastIndexOf("}") + 1));
-                JSONObject temp_pincode = new JSONObject(pincode.substring(address.indexOf("{"), pincode.lastIndexOf("}") + 1));
-                for (int i = 0; i < temp_address.length(); i++) {
-                    String temp_a = temp_address.getString(String.valueOf(i));
-                    String temp_aa[] = temp_a.split(",");
-                    String temp_p = temp_pincode.getString(String.valueOf(i));
-                    String temp_m = temp_mobile.getString(String.valueOf(i));
-                    ModelAddress modelAddress = new ModelAddress();
-                    if (temp_aa.length == 1) {
-                        modelAddress.name = "";
-                        modelAddress.detail = temp_a;
-                        modelAddress.city = "";
-                        modelAddress.house = "";
-                        modelAddress.street = "";
-                        modelAddress.area = "";
-                        modelAddress.mobile_no=temp_m;
-                        modelAddress.pincode = temp_p;
-                        modelAddressArrayList.add(modelAddress);
-                    } else {
-                        modelAddress.name = temp_aa[0];
-                        modelAddress.detail = temp_a;
-                        modelAddress.city = "";
-                        modelAddress.house = "";
-                        modelAddress.street = "";
-                        modelAddress.area = "";
-                        modelAddress.mobile_no=temp_m;
-                        modelAddress.pincode = temp_p;
-                        modelAddressArrayList.add(modelAddress);
-                    }
+            modelUser.sex = response.getString("sex");
+            modelUser.source = response.getString("source");
+            modelUser.mobileno = response.getJSONArray("contactNos").toString();
+            ArrayList<ModelAddress> modelAddresses = new ArrayList<>();
+            if(response.has("userPhotos"))
+            {
+                modelUser.image = response.getJSONArray("userPhotos").toString();
+            }
+            if(response.has("shippingAddress")) {
+                JSONArray array = new JSONArray("shippingAddress");
+
+                for(int i=0;i<array.length();i++)
+                {
+                    JSONObject obj = array.getJSONObject(i);
+                    ModelAddress address = new ModelAddress();
+                    address.city = obj.getString("city");
+                    address.house = obj.getString("houseNo");
+                    address.pincode = obj.getString("pincode");
+                    address.area = obj.getString("localityName");
+                    address.street = obj.getString("location");
+                    address.name = obj.getString("state");
+                    address.detail = obj.getString("others");
+                    modelAddresses.add(address);
 
                 }
-                modelUser.mobileno = "";
-            } else {
-                modelUser.mobileno = mobile;
-                modelUser.address = "";
-                modelUser.pincode = "";
-                modelUser.image = "";
-                ModelAddress modelAddress = new ModelAddress();
-                modelAddress.name = "Home";
-                modelAddress.detail = address;
-                modelAddress.city = "";
-                modelAddress.house = "";
-                modelAddress.street = "";
-                modelAddress.area = "";
-                modelAddress.mobile_no=modelUser.mobileno;
-                modelAddress.pincode = pincode;
-                if(!address.equals(""))
-                modelAddressArrayList.add(modelAddress);
+
+            }
+            else
+            {
+                ModelAddress address = new ModelAddress();
+                address.city = "";
+                address.house = "";
+                address.pincode ="";
+                address.area = "";
+                address.street = "";
+                address.name = "";
+                address.detail = "";
+                modelAddresses.add(address);
+
             }
             RocqAnalytics.initialize(context);
             RocqAnalytics.identity(modelUser.firstname+" "+modelUser.lastname, new
                     ActionProperties("Email",modelUser.email));
-            apref.writeString(context, "name", modelUser.firstname + "" + modelUser.lastname);
+            apref.writeString(context, "name", modelUser.firstname + " " + modelUser.lastname);
             apref.writeString(context, "image", "");
             apref.writeString(context, "email", modelUser.email);
             DBInteraction dbInteraction = new DBInteraction(context);
             dbInteraction.insertUserDetail(modelUser);
-            for (int i = 0; i < modelAddressArrayList.size(); i++)
-                dbInteraction.insertAddressDetail(modelAddressArrayList.get(i));
+            for (int i = 0; i < modelAddresses.size(); i++)
+                dbInteraction.insertAddressDetail(modelAddresses.get(i));
             dbInteraction.close();
             return true;
         } catch (Exception e) {

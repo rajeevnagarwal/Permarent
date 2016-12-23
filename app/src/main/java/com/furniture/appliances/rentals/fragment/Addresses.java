@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -88,7 +90,7 @@ public class Addresses extends Fragment {
         lv = (ListView)v.findViewById(R.id.lv);
         login = (Button )v.findViewById(R.id.login);
         add = (FloatingActionButton) v.findViewById(R.id.add);
-        if(apref.IsLoginedByGoogle(getActivity()) || apref.IsLoginedByEmail(getActivity()) || apref.IsLoginedByFb(getActivity()))
+        if(apref.IsLoginedByFb(getActivity()))
         {
             rl1.setVisibility(View.GONE);
             rl2.setVisibility(View.VISIBLE);
@@ -109,5 +111,9 @@ public class Addresses extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.ab_cart).setVisible(true).setEnabled(true);
     }
 }

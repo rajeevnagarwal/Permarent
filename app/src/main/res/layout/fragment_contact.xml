@@ -34,7 +34,7 @@
                 android:textAlignment="center"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:background="@drawable/textview_drawable"
+                android:background="@drawable/add_drawable"
                 android:drawableStart="@drawable/ic_business"
                 android:drawableLeft="@drawable/ic_business"
                 android:textColor="@color/black"
@@ -63,7 +63,7 @@
                     android:textAlignment="center"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:background="@drawable/textview_drawable"
+                    android:background="@drawable/add_drawable"
                     android:drawableStart="@drawable/ic_business"
                     android:drawableLeft="@drawable/ic_business"
                     android:textColor="@color/black"
@@ -90,7 +90,7 @@
                 android:padding="5dp"
                 android:drawableLeft="@drawable/ic_mail"
                 android:drawableStart="@drawable/ic_mail"
-                android:background="@drawable/textview_drawable"
+                android:background="@drawable/add_drawable"
                 android:textColor="@color/black"
                 android:text="Email*"/>
             <EditText
@@ -112,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:drawableLeft="@drawable/ic_mobile"
-                android:background="@drawable/textview_drawable"
+                android:background="@drawable/add_drawable"
                 android:drawableStart="@drawable/ic_mobile"
                 android:textColor="@color/black"
                 android:text="Mobile*"/>
@@ -135,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:padding="5dp"
-                android:background="@drawable/textview_drawable"
+                android:background="@drawable/add_drawable"
                 android:drawableStart="@drawable/ic_comment"
                 android:drawableLeft="@drawable/ic_comment"
                 android:text="Your Comment"/>
@@ -154,7 +154,7 @@
             android:layout_margin="20dp">
             <Button
                 android:layout_width="100dp"
-                android:background="@color/gray20"
+                android:background="@drawable/add_drawable"
                 android:layout_height="wrap_content"
                 android:id="@+id/submit"
                 android:onClick="onSubmit"

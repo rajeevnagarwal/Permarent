@@ -100,6 +100,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
                             public void onCompleted(
                                     JSONObject json,
                                     GraphResponse response) {
+                                System.out.println(json);
+                                System.out.println(response);
                                 try {
                                     System.out.println("Hello");
                                     System.out.println(json);
@@ -113,14 +115,19 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
                                     modelUser.password = "";
                                     modelUser.address = "";
                                     modelUser.pincode = "";
-                                    modelUser.image = "";
+                                    modelUser.image = "https://graph.facebook.com/"+json.getString("id")+"/picture?type=large";
                                     modelUser.source = "facebook";
                                     apref.setIsLoginedByFb(Login.this, true);
                                     apref.writeString(Login.this, "name", modelUser.firstname);
-                                    apref.writeString(Login.this, "image", "");
+                                    apref.writeString(Login.this, "image", modelUser.image);
                                     apref.writeString(Login.this, "email", modelUser.email);
+                                    Intent serviceIntent = new Intent(Login.this, SyncService.class);
+                                    (Login.this).startService(serviceIntent);
+                                    Intent i = new Intent(Login.this, MainActivity.class);
+                                    startActivity(i);
+                                    finish();
                                     if (new CheckInternetConnection(Login.this).isConnectedToInternet()) {
-                                        getUserData(apref.readString(getApplicationContext(), "email", null));
+                                       // getUserData(apref.readString(getApplicationContext(), "email", null));
                                     } else {
                                         LoginManager.getInstance().logOut();
                                     }
@@ -152,7 +159,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
     public boolean getUserData(final String email) {
         RequestParams params = new RequestParams();
         params.put("email", email);
-        EndPonits.getUser(params, new TextHttpResponseHandler() {
+        EndPonits.getUserInfo(params, new TextHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -190,7 +197,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
                         e.printStackTrace();
                     }
                     result = new ParseApi().parseGetUserData(getApplicationContext(), json);
-                    getPreviousOrders(email);
+                    //getPreviousOrders(email);
                 }
 
 
@@ -264,14 +271,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
 
     private void initView() {
         login = (Button) findViewById(R.id.login);
-        signUp = (Button) findViewById(R.id.signUp);
-        mSignInButton = (Button) findViewById(R.id.btn_sign_in);
+       /* signUp = (Button) findViewById(R.id.signUp);
+        mSignInButton = (Button) findViewById(R.id.btn_sign_in);*/
         fbbutton = (Button) findViewById(R.id.fbbutton);
-        username = (MaterialEditText) findViewById(R.id.username);
+        //username = (MaterialEditText) findViewById(R.id.username);
         password = (MaterialEditText) findViewById(R.id.password);
-        mSignInButton.setOnClickListener(this);
-        login.setOnClickListener(this);
-        signUp.setOnClickListener(this);
+       // mSignInButton.setOnClickListener(this);
+        //login.setOnClickListener(this);
+        //signUp.setOnClickListener(this);
         fbbutton.setOnClickListener(this);
     }
 
@@ -299,7 +306,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_sign_in:
+           /* case R.id.btn_sign_in:
                 if (new CheckInternetConnection(Login.this).isConnectedToInternet()) {
                     System.out.println("Hello1");
                     signInWithGplus();
@@ -307,7 +314,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
                     System.out.println("Hello2");
                     new CheckInternetConnection(Login.this).showDialog();
                 }
-                break;
+                break;*/
             case R.id.login:
                 if (validations()) {
                     if (new CheckInternetConnection(Login.this).isConnectedToInternet()) {
@@ -319,11 +326,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
                     }
                 }
                 break;
-            case R.id.signUp:
+           /* case R.id.signUp:
                 Intent i2 = new Intent(Login.this, SignUp.class);
                 startActivity(i2);
                 finish();
-                break;
+                break;*/
             case R.id.fbbutton:
                 if (new CheckInternetConnection(Login.this).isConnectedToInternet()) {
                     System.out.println("Hello");

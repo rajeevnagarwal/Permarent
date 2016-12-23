@@ -92,6 +92,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             modelUser.pincode = "";
             modelUser.image = "";
             modelUser.source = "permarent";
+            modelUser.sex = "";
             return true;
         }
         return false;

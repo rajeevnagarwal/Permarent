@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ListView;
 
 import com.dq.rocq.RocqAnalytics;
 import com.dq.rocq.models.ActionProperties;
+import com.furniture.appliances.rentals.MainActivity;
 import com.furniture.appliances.rentals.R;
 import com.furniture.appliances.rentals.adapter.ItemAdapter;
 import com.furniture.appliances.rentals.database.DBInteraction;
@@ -61,6 +63,8 @@ public class SubCategory extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View v = inflater.inflate(R.layout.fragment, container, false);
+        System.out.println("SubCategory"+code+title);
+        ((MainActivity)getActivity()).changeToolbar("Products",false);
         initView(v);
         //getDataFromDb(title);
         fetchproductdata(code);
@@ -87,6 +91,7 @@ public class SubCategory extends Fragment {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                System.out.println("Success"+responseString);
                 if (!responseString.equals("\"Sub Category Id Invalid\"")) {
                     try {
                         JSONArray array = new JSONArray(responseString);
@@ -145,6 +150,11 @@ public class SubCategory extends Fragment {
         super.onPause();
         isFragmentOpened = false;
         Config.OPENED_FRAGMENT = null;
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.ab_cart).setVisible(true).setEnabled(true);
     }
 
 }

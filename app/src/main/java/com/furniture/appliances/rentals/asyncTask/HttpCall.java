@@ -123,7 +123,7 @@ public class HttpCall {
         RequestParams params = new RequestParams();
         params.put("email", email);
         params.put("password",password);
-        EndPonits.signIn(params, new TextHttpResponseHandler() {
+        EndPonits.checkUser(params, new TextHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -158,7 +158,7 @@ public class HttpCall {
         final AppPreferences apref = new AppPreferences();
         RequestParams params = new RequestParams();
         params.put("email", email);
-        EndPonits.getUser(params, new JsonHttpResponseHandler() {
+        EndPonits.getUserInfo(params, new JsonHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -169,6 +169,8 @@ public class HttpCall {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+               System.out.println(responseString);
+
 
             }
 
@@ -239,15 +241,16 @@ public class HttpCall {
         final AppPreferences apref = new AppPreferences();
         final ProgressDialog  progressDialog = new ProgressDialog(context);
         RequestParams params = new RequestParams();
-        params.put("firstname", modelUser.firstname);
-        params.put("lastname", modelUser.lastname);
+        params.put("firstName", modelUser.firstname);
+        params.put("lastName", modelUser.lastname);
         params.put("email", modelUser.email);
         params.put("password", modelUser.password);
         params.put("address", modelUser.address);
         params.put("pincode", modelUser.pincode);
         params.put("mobileno", modelUser.mobileno);
         params.put("source", modelUser.source);
-        EndPonits.insertUserData(params, new TextHttpResponseHandler() {
+        params.put("sex",modelUser.sex);
+        EndPonits.regNewUser(params, new TextHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -265,6 +268,7 @@ public class HttpCall {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String response) {
+                System.out.println(response);
                 if (progressDialog != null && progressDialog.isShowing())
                     progressDialog.dismiss();
                 if (response.contains("Error: INSERT INTO")) {

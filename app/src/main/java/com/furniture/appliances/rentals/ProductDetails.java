@@ -70,7 +70,7 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
     int defaultFragment;
     Boolean liked=false;
     ListView lv;
-    public static final String[] IMAGE_NAME = new String[2];
+    public static String[] IMAGE_NAME;
     ArrayList<ModelReviews> reviews;
     private RatingBar ratingbar;
     private TextView rating_text;
@@ -82,16 +82,35 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         model = (ModelSubCategory) getIntent().getSerializableExtra("model");
-        modelCategory = (ModelCategory)getIntent().getSerializableExtra("category");
+        //modelCategory = (ModelCategory)getIntent().getSerializableExtra("category");
         setContentView(R.layout.activity_product_details);
-        IMAGE_NAME[0] = model.big_img;
-        IMAGE_NAME[1] = "singlebed000003_big.jpg";
+        parseImages(model.big_img);
+        //IMAGE_NAME[0] = model.big_img;
+        System.out.println("Image"+model.big_img);
+        //IMAGE_NAME[1] = "singlebed000003_big.jpg";
         initView();
         fetchproduct(model.prod_id);
         setData();
         getDataFromDb();
         setUpToolbar();
         viewPager.setAdapter(imageFragmentPagerAdapter);
+    }
+    private void parseImages(String json)
+    {
+        try
+        {
+            JSONArray array = new JSONArray(json);
+            IMAGE_NAME = new String[array.length()];
+            for(int i = 0;i<array.length();i++)
+            {
+                IMAGE_NAME[i] = array.getString(i);
+                System.out.println("IMG"+IMAGE_NAME[i]);
+            }
+
+        }
+        catch(Exception e) {
+
+        }
     }
     private void fetchproduct(String id)
     {
@@ -173,24 +192,26 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
     private void getDataFromDb() {
         /*DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
         modelCategory = dbInteraction.getCategoryByName(model.category_desc);*/
-        String temp[] = modelCategory.subcategory.split(",");
+        /*String temp[] = modelCategory.subcategory.split(",");
         for(int i=0;i<temp.length;i++) {
             if(temp[i].equalsIgnoreCase(model.subcategory_desc))
                 defaultFragment=i;
-        }
+        }*/
        // dbInteraction.close();
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == android.R.id.home) {
-            if(!model.category_desc.equals("Packages")) {
+       if (id == android.R.id.home) {
+           /* if(!model.category_desc.equals("Packages")) {
                 Intent i = new Intent(ProductDetails.this, Category.class);
                 i.putExtra("modelCategory", modelCategory);
                 i.putExtra("defaultFragment",defaultFragment);
                 startActivity(i);
                 finish();
-            }
+            }*/
+           Intent i = new Intent(ProductDetails.this,MainActivity.class);
+           startActivity(i);
 
         }
         return super.onOptionsItemSelected(item);
@@ -326,7 +347,7 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
             DBInteraction db = new DBInteraction(this);
             System.out.println(apref.readString(this, "email", ""));
             System.out.println(apref.readString(this, "name", ""));
-            if (db.insertWishItem("P05", apref.readString(this, "email", ""), apref.readString(this, "name", ""))) {
+            if (db.insertWishItem(model.prod_id, apref.readString(this, "email", ""), apref.readString(this, "name", ""))) {
                 //Toast.makeText(this, "Product added to wishlist", Toast.LENGTH_SHORT).show();
                 Picasso.with(this).load(R.drawable.ic_heart_disable).into(wish);
                 wish.setClickable(false);
@@ -856,7 +877,7 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
 
         @Override
         public int getCount() {
-            return 2;
+            return IMAGE_NAME.length;
         }
 
         @Override

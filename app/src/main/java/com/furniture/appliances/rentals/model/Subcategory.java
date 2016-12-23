@@ -9,10 +9,12 @@ import java.io.Serializable;
 public class Subcategory implements Serializable {
     private String name;
     private String image;
-    public Subcategory(String name)
+    private String id;
+    public Subcategory(String name,String id)
     {
         this.name = name;
         this.image = "";
+        this.id = id;
     }
     public String getName()
     {
@@ -30,6 +32,8 @@ public class Subcategory implements Serializable {
     {
         this.image = image;
     }
+    public String getId(){return this.id;}
+    public void setId(String id){this.id = id;}
 
 
 

@@ -1,16 +1,21 @@
 package com.furniture.appliances.rentals.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.furniture.appliances.rentals.R;
 import com.furniture.appliances.rentals.fragment.WishList;
 import com.furniture.appliances.rentals.model.ModelProduct;
 import com.furniture.appliances.rentals.model.Subcategory;
+import com.furniture.appliances.rentals.ui.RoundedBitmapView;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -27,18 +32,15 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.MyView
         this.context =ctx;
     }
     public static class MyViewHolder extends RecyclerView.ViewHolder{
+        public ImageView wish_img;
         public TextView wish_name;
-        public TextView wish_price;
-        public TextView wish_security;
-        public TextView wish_period;
+        public TextView wish_dimen;
         public MyViewHolder(View v)
         {
             super(v);
             wish_name= (TextView)v.findViewById(R.id.wish_name);
-            wish_price= (TextView)v.findViewById(R.id.wish_price);
-            wish_security= (TextView)v.findViewById(R.id.wish_security);
-
-            wish_period= (TextView)v.findViewById(R.id.wish_period);
+            wish_img = (ImageView)v.findViewById(R.id.wish_img);
+            wish_dimen = (TextView)v.findViewById(R.id.wish_dimen);
 
 
 
@@ -51,12 +53,25 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.MyView
         WishListAdapter.MyViewHolder vh = new WishListAdapter.MyViewHolder(v);
         return vh;
     }
-    public void onBindViewHolder(WishListAdapter.MyViewHolder holder, int position)
+    public void onBindViewHolder(final WishListAdapter.MyViewHolder holder, int position)
     {
         holder.wish_name.setText(list.get(position).pname);
-        holder.wish_period.setText("Minimum Rental Duration: "+list.get(position).minRentalDuration);
-        holder.wish_security.setText("Security: "+"₹"+list.get(position).sec_amount);
-        holder.wish_price.setText("MRP: "+"₹"+list.get(position).retail_price);
+        holder.wish_dimen.setText(list.get(position).dimensions);
+        System.out.println(list.get(position).pname);
+        System.out.println(list.get(position).dimensions);
+        Picasso.with(context).load(R.drawable.user).into(holder.wish_img,new com.squareup.picasso.Callback() {
+            @Override
+            public void onSuccess() {
+                Bitmap bitmap = ((BitmapDrawable)holder.wish_img.getDrawable()).getBitmap();
+                holder.wish_img.setImageDrawable(new RoundedBitmapView(context).createRoundedBitmapDrawableWithBorder(bitmap));
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
 
     }
     public int getItemCount()

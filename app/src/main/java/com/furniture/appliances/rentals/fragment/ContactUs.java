@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -118,6 +119,10 @@ public class ContactUs extends Fragment {
         edit_message = (EditText)v.findViewById(R.id.edit_message);
         edit_mail = (EditText)v.findViewById(R.id.edit_mail);
 
+    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.ab_cart).setVisible(true).setEnabled(true);
     }
 
 }

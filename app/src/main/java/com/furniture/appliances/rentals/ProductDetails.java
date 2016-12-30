@@ -84,14 +84,14 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
         model = (ModelSubCategory) getIntent().getSerializableExtra("model");
         //modelCategory = (ModelCategory)getIntent().getSerializableExtra("category");
         setContentView(R.layout.activity_product_details);
-        parseImages(model.big_img);
+        parseImages(model.largeImages);
         //IMAGE_NAME[0] = model.big_img;
-        System.out.println("Image"+model.big_img);
+        System.out.println("Image"+model.largeImages);
         //IMAGE_NAME[1] = "singlebed000003_big.jpg";
         initView();
-        fetchproduct(model.prod_id);
+        fetchproduct(model.productId);
         setData();
-        getDataFromDb();
+       // getDataFromDb();
         setUpToolbar();
         viewPager.setAdapter(imageFragmentPagerAdapter);
     }
@@ -189,16 +189,16 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private void getDataFromDb() {
+    /*private void getDataFromDb() {
         /*DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
         modelCategory = dbInteraction.getCategoryByName(model.category_desc);*/
         /*String temp[] = modelCategory.subcategory.split(",");
         for(int i=0;i<temp.length;i++) {
             if(temp[i].equalsIgnoreCase(model.subcategory_desc))
                 defaultFragment=i;
-        }*/
+        }
        // dbInteraction.close();
-    }
+    }*/
 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -305,7 +305,7 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
             final String r = rating_text.getText().toString();
             final String rev = edit_review.getText().toString();
             RequestParams params = new RequestParams();
-            params.put("productId",model.prod_id);
+            params.put("productId",model.productId);
             params.put("firstName",apref.readString(this,"name",""));
             params.put("lastName","");
             params.put("email",apref.readString(this,"email",""));
@@ -347,7 +347,7 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
             DBInteraction db = new DBInteraction(this);
             System.out.println(apref.readString(this, "email", ""));
             System.out.println(apref.readString(this, "name", ""));
-            if (db.insertWishItem(model.prod_id, apref.readString(this, "email", ""), apref.readString(this, "name", ""))) {
+            if (db.insertWishItem(model.productId, apref.readString(this, "email", ""), apref.readString(this, "name", ""))) {
                 //Toast.makeText(this, "Product added to wishlist", Toast.LENGTH_SHORT).show();
                 Picasso.with(this).load(R.drawable.ic_heart_disable).into(wish);
                 wish.setClickable(false);
@@ -364,7 +364,7 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
     public void onLike(View v)
     {
         RequestParams params = new RequestParams();
-        params.put("productId",model.prod_id);
+        params.put("productId",model.productId);
         params.put("firstName",apref.readString(this,"name",""));
         params.put("lastName","");
         params.put("email",apref.readString(this,"email",""));
@@ -403,7 +403,7 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
 
     private void setData() {
         DBInteraction db = new DBInteraction(this);
-        if(db.checkWishProduct(model.prod_id))
+        if(db.checkWishProduct(model.productId))
         {
             Picasso.with(this).load(R.drawable.ic_heart_disable).into(wish);
             wish.setClickable(false);
@@ -414,21 +414,21 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
             Picasso.with(this).load(R.drawable.ic_heart_selected).into(wish);
             wish.setClickable(true);
         }
-        System.out.println(model.big_img);
+        //System.out.println(model.big_img);
        /* Picasso.with(ProductDetails.this)
                 .load(Config.subCategoryImage + model.big_img)
                         //.placeholder(R.drawable.dummy)
                         //.error(R.drawable.dummy)
                 .into(image);*/
-        rent_amount.setText(" " + model.rent_amount+"/"+model.rent_duration);
-        security_deposit.setText(" " + model.security_deposit + "/" + model.rent_duration);
-        System.out.println("Period"+model.min_rent_period);
-        if(model.min_rent_period.equals("month"))
-        min_rent_period.setText(model.min_rent_period+" months");
-        else
-            min_rent_period.setText(model.min_rent_period+" "+model.rent_duration);
-        if(!model.rent_to_own.equals("0"))
-        rto.setText(18+" months");
+        rent_amount.setText(" " + model.getTwelve()+"/month");
+        security_deposit.setText(" " + model.securityAmount);
+       // System.out.println("Period"+model.min_rent_period);
+        //if(model.min_rent_period.equals("month"))
+        min_rent_period.setText(model.minRentalDuration +" months");
+        //else
+        //    min_rent_period.setText(model.min_rent_period+" "+model.rent_duration);
+        if(!model.rentToOwn.equals("0"))
+            rto.setText(24+" months");
         else
             rto.setText("NA");
         if (model.material.equals(""))
@@ -451,10 +451,10 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
             rl_brand.setVisibility(View.GONE);
         else
             brand.setText(model.brand);
-        if (model.other_description.equals(""))
+        if (model.otherDesc.equals(""))
             rl_other.setVisibility(View.GONE);
         else
-            other_description.setText(model.other_description);
+            other_description.setText(model.otherDesc);
     }
 
     @Override
@@ -462,22 +462,22 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.add:
                 DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
-                ModelSubCategory temp = dbInteraction.getSubCategoryItemById(model.prod_id);
-                dbInteraction.close();
-                if(temp.quantity ==0 && temp.quantity_quarterly==0 && temp.quantity_monthly==0) {
-                    RocqAnalytics.initialize(ProductDetails.this);
-                    RocqAnalytics.trackEvent("6 month added", new ActionProperties(""), Position.LEFT);
-                    temp.quantity_quarterly++;
-                    model.quantity_quarterly++;
-                    dbInteraction.updateSubCategoryDetail(temp.prod_id, temp.quantity_quarterly, 1);
-                    dbInteraction.updateCartDetail(temp.prod_id + 1, temp.quantity_quarterly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(temp.prod_id + 1);
+                /*ModelSubCategory temp = dbInteraction.getSubCategoryItemById(model.prod_id);
+                dbInteraction.close();*/
+                ModelSubCategory temp = model;
+                if(temp.quantity_threeMo == 0 && temp.quantity_sixMo == 0 && temp.quantity_nineMo == 0 && temp.quantity_twelveMo == 0) {
+                    /*RocqAnalytics.initialize(ProductDetails.this);
+                    RocqAnalytics.trackEvent("6 month added", new ActionProperties(""), Position.LEFT);*/
+                    temp.quantity_sixMo++;
+                    model.quantity_sixMo++;
+                    //dbInteraction.updateSubCategoryDetail(temp.prod_id, temp.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(temp.productId + 1, temp.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(temp.productId + 1);
                     dbInteraction.close();
                     Cart.QUANTITY++;
                     Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
                     Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
                     menu_quantity.setText(String.valueOf(Cart.QUANTITY));
-
                 }
                 showAddView(temp);
                 break;
@@ -486,10 +486,10 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
 
     private void showAddView(final ModelSubCategory modelSubCategory)
     {
-        final TextView quantity_3,quantity_6,quantity_12,price_3,price_6,price_12;
-        final RadioButton radio_3,radio_6,radio_12;
-        ImageButton plus_3,minus_3,plus_6,minus_6,plus_12,minus_12;
-        final LinearLayout btn_3,btn_6,btn_12;
+        final TextView quantity_3,quantity_6,quantity_9,quantity_12,price_3,price_6,price_9,price_12;
+        final RadioButton radio_3,radio_6,radio_9,radio_12;
+        ImageButton plus_3,minus_3,plus_6,minus_6,plus_9,minus_9,plus_12,minus_12;
+        final LinearLayout btn_3,btn_6,btn_9,btn_12;
 
 
         MaterialDialog dialog = new MaterialDialog.Builder(ProductDetails.this)
@@ -500,68 +500,107 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
 
         btn_3 = (LinearLayout)dialog.getCustomView().findViewById(R.id.btn_3);
         btn_6 = (LinearLayout)dialog.getCustomView().findViewById(R.id.btn_6);
+        btn_9 = (LinearLayout)dialog.getCustomView().findViewById(R.id.btn_9);
         btn_12 = (LinearLayout)dialog.getCustomView().findViewById(R.id.btn_12);
         radio_3 = (RadioButton)dialog.getCustomView().findViewById(R.id.radio_3);
         radio_6 = (RadioButton)dialog.getCustomView().findViewById(R.id.radio_6);
+        radio_9 = (RadioButton)dialog.getCustomView().findViewById(R.id.radio_9);
         radio_12 = (RadioButton)dialog.getCustomView().findViewById(R.id.radio_12);
         quantity_3 = (TextView) dialog.getCustomView().findViewById(R.id.quantity_3);
         quantity_6 = (TextView) dialog.getCustomView().findViewById(R.id.quantity_6);
+        quantity_9 = (TextView) dialog.getCustomView().findViewById(R.id.quantity_9);
         quantity_12 = (TextView) dialog.getCustomView().findViewById(R.id.quantity_12);
         price_3 = (TextView) dialog.getCustomView().findViewById(R.id.price_3);
         price_6 = (TextView) dialog.getCustomView().findViewById(R.id.price_6);
+        price_9 = (TextView) dialog.getCustomView().findViewById(R.id.price_9);
         price_12 = (TextView) dialog.getCustomView().findViewById(R.id.price_12);
         plus_3 = (ImageButton)dialog.getCustomView().findViewById(R.id.plus_3);
         plus_6 = (ImageButton)dialog.getCustomView().findViewById(R.id.plus_6);
+        plus_9 = (ImageButton)dialog.getCustomView().findViewById(R.id.plus_9);
         plus_12 = (ImageButton)dialog.getCustomView().findViewById(R.id.plus_12);
         minus_3 = (ImageButton)dialog.getCustomView().findViewById(R.id.minus_3);
         minus_6 = (ImageButton)dialog.getCustomView().findViewById(R.id.minus_6);
+        minus_9 = (ImageButton)dialog.getCustomView().findViewById(R.id.minus_9);
         minus_12 = (ImageButton)dialog.getCustomView().findViewById(R.id.minus_12);
-        quantity_3.setText(String.valueOf(modelSubCategory.quantity));
-        quantity_6.setText(String.valueOf(modelSubCategory.quantity_quarterly));
-        quantity_12.setText(String.valueOf(modelSubCategory.quantity_monthly));
-        int temp = Integer.parseInt(modelSubCategory.rent_amount);
-        price_6.setText(ProductDetails.this.getResources().getString(R.string.Rs)+" " +String.valueOf(temp));
-        temp = Integer.parseInt(modelSubCategory.rent_amount);
+        quantity_3.setText(String.valueOf(modelSubCategory.quantity_threeMo));
+        quantity_6.setText(String.valueOf(modelSubCategory.quantity_sixMo));
+        quantity_9.setText(String.valueOf(modelSubCategory.quantity_nineMo));
+        quantity_12.setText(String.valueOf(modelSubCategory.quantity_twelveMo));
+        //int temp = Integer.parseInt(modelSubCategory.rental);
+        price_3.setText(ProductDetails.this.getResources().getString(R.string.Rs)+" " +String.valueOf(modelSubCategory.getThree()));
+        price_6.setText(ProductDetails.this.getResources().getString(R.string.Rs)+" " +String.valueOf(modelSubCategory.getSix()));
+        price_9.setText(ProductDetails.this.getResources().getString(R.string.Rs)+" " +String.valueOf(modelSubCategory.getNine()));
+        price_12.setText(ProductDetails.this.getResources().getString(R.string.Rs)+" " +String.valueOf(modelSubCategory.getTwelve()));
+        /*temp = Integer.parseInt(modelSubCategory.rent_amount);
         temp=temp+(temp*(Config.DISCOUNT_HALF_YEARLY)/100);
         price_3.setText(ProductDetails.this.getResources().getString(R.string.Rs) + " " + String.valueOf(temp));
         temp = Integer.parseInt(modelSubCategory.rent_amount);
         temp=temp-(temp*(Config.DISCOUNT_YEARLY)/100);
-        price_12.setText(ProductDetails.this.getResources().getString(R.string.Rs) + " " + String.valueOf(temp));
-        if(modelSubCategory.quantity>0) {
+        price_12.setText(ProductDetails.this.getResources().getString(R.string.Rs) + " " + String.valueOf(temp));*/
+        if(modelSubCategory.quantity_threeMo>0) {
             radio_3.setChecked(true);
             btn_3.setVisibility(View.VISIBLE);
             radio_6.setChecked(false);
             btn_6.setVisibility(View.GONE);
+            radio_9.setChecked(false);
+            btn_9.setVisibility(View.GONE);
             radio_12.setChecked(false);
             btn_12.setVisibility(View.GONE);
         }
-        else if(modelSubCategory.quantity_quarterly>0) {
+        else if(modelSubCategory.quantity_sixMo>0) {
             radio_3.setChecked(false);
             btn_3.setVisibility(View.GONE);
             radio_6.setChecked(true);
             btn_6.setVisibility(View.VISIBLE);
+            radio_9.setChecked(false);
+            btn_9.setVisibility(View.GONE);
             radio_12.setChecked(false);
             btn_12.setVisibility(View.GONE);
         }
-        else if(modelSubCategory.quantity_monthly>0) {
+        else if(modelSubCategory.quantity_nineMo>0) {
             radio_3.setChecked(false);
             btn_3.setVisibility(View.GONE);
             radio_6.setChecked(false);
             btn_6.setVisibility(View.GONE);
+            radio_9.setChecked(true);
+            btn_9.setVisibility(View.VISIBLE);
+            radio_12.setChecked(false);
+            btn_12.setVisibility(View.GONE);
+        }
+        else if(modelSubCategory.quantity_twelveMo>0) {
+            radio_3.setChecked(false);
+            btn_3.setVisibility(View.GONE);
+            radio_6.setChecked(false);
+            btn_6.setVisibility(View.GONE);
+            radio_9.setChecked(false);
+            btn_9.setVisibility(View.GONE);
             radio_12.setChecked(true);
             btn_12.setVisibility(View.VISIBLE);
         }
+
         radio_3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (Integer.parseInt(quantity_3.getText().toString()) == 0) {
+                    DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
+                    modelSubCategory.quantity_threeMo++;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
+                    dbInteraction.close();
+                    quantity_3.setText(String.valueOf(modelCart.quantity));
+                    Cart.QUANTITY++;
+                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
+                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
+                    menu_quantity.setText(String.valueOf(Cart.QUANTITY));
+                }
                 if (Integer.parseInt(quantity_6.getText().toString()) > 0) {
                     int temp = Integer.parseInt(quantity_6.getText().toString());
                     DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
-                    modelSubCategory.quantity_quarterly = 0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 1, modelSubCategory.quantity_quarterly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 1);
+                    modelSubCategory.quantity_sixMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
                     dbInteraction.close();
                     quantity_6.setText("0");
                     for (int i = 0; i < temp; i++) {
@@ -570,15 +609,30 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
                         Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
                     }
                     menu_quantity.setText(String.valueOf(Cart.QUANTITY));
-
+                }
+                if (Integer.parseInt(quantity_9.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_9.getText().toString());
+                    DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
+                    modelSubCategory.quantity_nineMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
+                    dbInteraction.close();
+                    quantity_9.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    menu_quantity.setText(String.valueOf(Cart.QUANTITY));
                 }
                 if (Integer.parseInt(quantity_12.getText().toString()) > 0) {
                     int temp = Integer.parseInt(quantity_12.getText().toString());
                     DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
-                    modelSubCategory.quantity_monthly=0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 2, modelSubCategory.quantity_monthly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 2);
+                    modelSubCategory.quantity_twelveMo=0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 3, modelSubCategory.quantity_twelveMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
                     dbInteraction.close();
                     quantity_12.setText("0");
                     for (int i = 0; i < temp; i++) {
@@ -588,27 +642,14 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
                     }
                     menu_quantity.setText(String.valueOf(Cart.QUANTITY));
                 }
-                if (Integer.parseInt(quantity_3.getText().toString()) == 0) {
-                    DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
-                    modelSubCategory.quantity++;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 0, modelSubCategory.quantity);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 0);
-                    dbInteraction.close();
-                    quantity_3.setText(String.valueOf(modelCart.quantity));
-                    Cart.QUANTITY++;
-                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
-                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
 
-
-                    menu_quantity.setText(String.valueOf(Cart.QUANTITY));
-
-                }
 
                 radio_3.setChecked(true);
                 btn_3.setVisibility(View.VISIBLE);
                 radio_6.setChecked(false);
                 btn_6.setVisibility(View.GONE);
+                radio_9.setChecked(false);
+                btn_9.setVisibility(View.GONE);
                 radio_12.setChecked(false);
                 btn_12.setVisibility(View.GONE);
 
@@ -617,13 +658,64 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
         radio_6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (Integer.parseInt(quantity_3.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_3.getText().toString());
+                    /*RocqAnalytics.initialize(ProductDetails.this);
+                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);*/
+                    DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
+                    modelSubCategory.quantity_threeMo=0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
+                    dbInteraction.close();
+                    quantity_3.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    menu_quantity.setText(String.valueOf(Cart.QUANTITY));
+                }
+                if (Integer.parseInt(quantity_6.getText().toString()) == 0) {
+                    /*RocqAnalytics.initialize(ProductDetails.this);
+                    RocqAnalytics.trackEvent("6 month added", new ActionProperties(""), Position.LEFT);*/
+                    DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
+                    modelSubCategory.quantity_sixMo++;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
+                    dbInteraction.close();
+                    quantity_6.setText(String.valueOf(modelCart.quantity));
+                    Cart.QUANTITY++;
+                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
+                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
+                    menu_quantity.setText(String.valueOf(Cart.QUANTITY));
+                }
+                if (Integer.parseInt(quantity_9.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_9.getText().toString());
+                    /*RocqAnalytics.initialize(ProductDetails.this);
+                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);*/
+                    DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
+                    modelSubCategory.quantity_nineMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
+                    dbInteraction.close();
+                    quantity_9.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    menu_quantity.setText(String.valueOf(Cart.QUANTITY));
+                }
                 if (Integer.parseInt(quantity_12.getText().toString()) > 0) {
                     int temp = Integer.parseInt(quantity_12.getText().toString());
                     DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
-                    modelSubCategory.quantity_monthly=0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 2, modelSubCategory.quantity_monthly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 2);
+                    modelSubCategory.quantity_twelveMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 3 , modelSubCategory.quantity_twelveMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
                     dbInteraction.close();
                     quantity_12.setText("0");
                     for (int i = 0; i < temp; i++) {
@@ -633,15 +725,29 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
                     }
                     menu_quantity.setText(String.valueOf(Cart.QUANTITY));
                 }
+
+                radio_3.setChecked(false);
+                btn_3.setVisibility(View.GONE);
+                radio_6.setChecked(true);
+                btn_6.setVisibility(View.VISIBLE);
+                radio_9.setChecked(false);
+                btn_9.setVisibility(View.GONE);
+                radio_12.setChecked(false);
+                btn_12.setVisibility(View.GONE);
+            }
+        });
+        radio_9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if (Integer.parseInt(quantity_3.getText().toString()) > 0) {
                     int temp = Integer.parseInt(quantity_3.getText().toString());
-                    RocqAnalytics.initialize(ProductDetails.this);
-                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);
+                    /*RocqAnalytics.initialize(ProductDetails.this);
+                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);*/
                     DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
-                    modelSubCategory.quantity=0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 0, modelSubCategory.quantity);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 0);
+                    modelSubCategory.quantity_threeMo=0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
                     dbInteraction.close();
                     quantity_3.setText("0");
                     for (int i = 0; i < temp; i++) {
@@ -650,44 +756,14 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
                         Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
                     }
                     menu_quantity.setText(String.valueOf(Cart.QUANTITY));
-
-
                 }
-                if (Integer.parseInt(quantity_6.getText().toString()) == 0) {
-                    RocqAnalytics.initialize(ProductDetails.this);
-                    RocqAnalytics.trackEvent("6 month added", new ActionProperties(""), Position.LEFT);
-                    DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
-                    modelSubCategory.quantity_quarterly++;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 1, modelSubCategory.quantity_quarterly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 1);
-                    dbInteraction.close();
-                    quantity_6.setText(String.valueOf(modelCart.quantity));
-                    Cart.QUANTITY++;
-                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
-                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
-
-                    menu_quantity.setText(String.valueOf(Cart.QUANTITY));
-
-                }
-                radio_3.setChecked(false);
-                btn_3.setVisibility(View.GONE);
-                radio_6.setChecked(true);
-                btn_6.setVisibility(View.VISIBLE);
-                radio_12.setChecked(false);
-                btn_12.setVisibility(View.GONE);
-            }
-        });
-        radio_12.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 if (Integer.parseInt(quantity_6.getText().toString()) > 0) {
                     int temp = Integer.parseInt(quantity_6.getText().toString());
                     DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
-                    modelSubCategory.quantity_quarterly = 0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 1, modelSubCategory.quantity_quarterly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 1);
+                    modelSubCategory.quantity_sixMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
                     dbInteraction.close();
                     quantity_6.setText("0");
                     for (int i = 0; i < temp; i++) {
@@ -696,17 +772,61 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
                         Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
                     }
                     menu_quantity.setText(String.valueOf(Cart.QUANTITY));
-
                 }
+                if (Integer.parseInt(quantity_9.getText().toString()) == 0) {
+                    /*RocqAnalytics.initialize(ProductDetails.this);
+                    RocqAnalytics.trackEvent("6 month added", new ActionProperties(""), Position.LEFT);*/
+                    DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
+                    modelSubCategory.quantity_nineMo++;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
+                    dbInteraction.close();
+                    quantity_9.setText(String.valueOf(modelCart.quantity));
+                    Cart.QUANTITY++;
+                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
+                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
+                    menu_quantity.setText(String.valueOf(Cart.QUANTITY));
+                }
+                if (Integer.parseInt(quantity_12.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_12.getText().toString());
+                    DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
+                    modelSubCategory.quantity_twelveMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 3 , modelSubCategory.quantity_twelveMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
+                    dbInteraction.close();
+                    quantity_12.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    menu_quantity.setText(String.valueOf(Cart.QUANTITY));
+                }
+
+                radio_3.setChecked(false);
+                btn_3.setVisibility(View.GONE);
+                radio_6.setChecked(false);
+                btn_6.setVisibility(View.GONE);
+                radio_9.setChecked(true);
+                btn_9.setVisibility(View.VISIBLE);
+                radio_12.setChecked(false);
+                btn_12.setVisibility(View.GONE);
+            }
+        });
+        radio_12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if (Integer.parseInt(quantity_3.getText().toString()) > 0) {
                     int temp = Integer.parseInt(quantity_3.getText().toString());
-                    RocqAnalytics.initialize(ProductDetails.this);
-                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);
+                    /*RocqAnalytics.initialize(ProductDetails.this);
+                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);*/
                     DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
-                    modelSubCategory.quantity=0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 0, modelSubCategory.quantity);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 0);
+                    modelSubCategory.quantity_threeMo=0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
                     dbInteraction.close();
                     quantity_3.setText("0");
                     for (int i = 0; i < temp; i++) {
@@ -715,15 +835,47 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
                         Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
                     }
                     menu_quantity.setText(String.valueOf(Cart.QUANTITY));
-
-
+                }
+                if (Integer.parseInt(quantity_6.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_6.getText().toString());
+                    DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
+                    modelSubCategory.quantity_sixMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
+                    dbInteraction.close();
+                    quantity_6.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    menu_quantity.setText(String.valueOf(Cart.QUANTITY));
+                }
+                if (Integer.parseInt(quantity_9.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_9.getText().toString());
+                    /*RocqAnalytics.initialize(ProductDetails.this);
+                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);*/
+                    DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
+                    modelSubCategory.quantity_nineMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
+                    dbInteraction.close();
+                    quantity_9.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    menu_quantity.setText(String.valueOf(Cart.QUANTITY));
                 }
                 if (Integer.parseInt(quantity_12.getText().toString()) == 0) {
                     DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
-                    modelSubCategory.quantity_monthly++;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 2, modelSubCategory.quantity_monthly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 2);
+                    modelSubCategory.quantity_twelveMo++;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 3, modelSubCategory.quantity_twelveMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
                     dbInteraction.close();
                     quantity_12.setText(String.valueOf(modelCart.quantity));
                     Cart.QUANTITY++;
@@ -738,40 +890,40 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
                 btn_3.setVisibility(View.GONE);
                 radio_6.setChecked(false);
                 btn_6.setVisibility(View.GONE);
+                radio_9.setChecked(false);
+                btn_9.setVisibility(View.GONE);
                 radio_12.setChecked(true);
                 btn_12.setVisibility(View.VISIBLE);
             }
         });
-               plus_3.setOnClickListener(new View.OnClickListener() {
+
+        plus_3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
-                modelSubCategory.quantity++;
-                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
-                dbInteraction.updateCartDetail(modelSubCategory.prod_id + 0, modelSubCategory.quantity);
-                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 0);
+                modelSubCategory.quantity_threeMo++;
+                //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
                 dbInteraction.close();
-                quantity_3.setText(String.valueOf(modelSubCategory.quantity));
+                quantity_3.setText(String.valueOf(modelSubCategory.quantity_threeMo));
                 Cart.QUANTITY++;
                 Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
                 Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
                 menu_quantity.setText(String.valueOf(Cart.QUANTITY));
-
-
             }
         });
-
         minus_3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Integer.parseInt(quantity_3.getText().toString()) > 0) {
                     DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
-                    modelSubCategory.quantity--;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 0, modelSubCategory.quantity);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 0);
+                    modelSubCategory.quantity_threeMo--;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
                     dbInteraction.close();
-                    quantity_3.setText(String.valueOf(modelSubCategory.quantity));
+                    quantity_3.setText(String.valueOf(modelSubCategory.quantity_threeMo));
                     Cart.QUANTITY--;
                     Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
                     Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
@@ -784,32 +936,29 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(View v) {
                 DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
-                modelSubCategory.quantity_quarterly++;
-                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
-                dbInteraction.updateCartDetail(modelSubCategory.prod_id + 1, modelSubCategory.quantity_quarterly);
-                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 1);
+                modelSubCategory.quantity_sixMo++;
+//                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
                 dbInteraction.close();
-                quantity_6.setText(String.valueOf(modelSubCategory.quantity_quarterly));
+                quantity_6.setText(String.valueOf(modelSubCategory.quantity_sixMo));
                 Cart.QUANTITY++;
                 Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
                 Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
                 menu_quantity.setText(String.valueOf(Cart.QUANTITY));
-
-
             }
         });
-
         minus_6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Integer.parseInt(quantity_6.getText().toString()) > 0) {
                     DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
-                    modelSubCategory.quantity_quarterly--;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 1, modelSubCategory.quantity_quarterly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 1);
+                    modelSubCategory.quantity_sixMo--;
+//                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
                     dbInteraction.close();
-                    quantity_6.setText(String.valueOf(modelSubCategory.quantity_quarterly));
+                    quantity_6.setText(String.valueOf(modelSubCategory.quantity_sixMo));
                     Cart.QUANTITY--;
                     Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
                     Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
@@ -817,36 +966,69 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
                 }
             }
         });
-        plus_12.setOnClickListener(new View.OnClickListener() {
+
+        plus_9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
-                modelSubCategory.quantity_monthly++;
-                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
-                dbInteraction.updateCartDetail(modelSubCategory.prod_id + 2, modelSubCategory.quantity_monthly);
-                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 2);
+                modelSubCategory.quantity_nineMo++;
+//                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
                 dbInteraction.close();
-                quantity_12.setText(String.valueOf(modelSubCategory.quantity_monthly));
+                quantity_9.setText(String.valueOf(modelSubCategory.quantity_nineMo));
                 Cart.QUANTITY++;
                 Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
                 Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
                 menu_quantity.setText(String.valueOf(Cart.QUANTITY));
-
-
+            }
+        });
+        minus_9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Integer.parseInt(quantity_9.getText().toString()) > 0) {
+                    DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
+                    modelSubCategory.quantity_nineMo--;
+//                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
+                    dbInteraction.close();
+                    quantity_9.setText(String.valueOf(modelSubCategory.quantity_sixMo));
+                    Cart.QUANTITY--;
+                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    menu_quantity.setText(String.valueOf(Cart.QUANTITY));
+                }
             }
         });
 
+        plus_12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
+                modelSubCategory.quantity_twelveMo++;
+//                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                dbInteraction.updateCartDetail(modelSubCategory.productId + 3, modelSubCategory.quantity_twelveMo);
+                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
+                dbInteraction.close();
+                quantity_12.setText(String.valueOf(modelSubCategory.quantity_twelveMo));
+                Cart.QUANTITY++;
+                Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
+                Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
+                menu_quantity.setText(String.valueOf(Cart.QUANTITY));
+            }
+        });
         minus_12.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Integer.parseInt(quantity_12.getText().toString()) > 0) {
                     DBInteraction dbInteraction = new DBInteraction(ProductDetails.this);
-                    modelSubCategory.quantity_monthly--;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 2, modelSubCategory.quantity_monthly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 2);
+                    modelSubCategory.quantity_twelveMo--;
+//                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 3, modelSubCategory.quantity_twelveMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
                     dbInteraction.close();
-                    quantity_12.setText(String.valueOf(modelSubCategory.quantity_monthly));
+                    quantity_12.setText(String.valueOf(modelSubCategory.quantity_twelveMo));
                     Cart.QUANTITY--;
                     Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
                     Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
@@ -860,15 +1042,15 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onStart() {
         super.onStart();
-        RocqAnalytics.startScreen(this);
+        /*RocqAnalytics.startScreen(this);
         RocqAnalytics.initialize(this);
-        RocqAnalytics.trackScreen("Product Details "+model.subcategory_desc, new ActionProperties());
+        RocqAnalytics.trackScreen("Product Details "+model.subcategory_desc, new ActionProperties());*/
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        RocqAnalytics.stopScreen(this);
+//        RocqAnalytics.stopScreen(this);
     }
     public static class ImageFragmentPagerAdapter extends FragmentPagerAdapter {
         public ImageFragmentPagerAdapter(FragmentManager fm) {

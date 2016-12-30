@@ -23,6 +23,7 @@ import com.dq.rocq.models.ActionProperties;
 import com.dq.rocq.models.Position;
 import com.furniture.appliances.rentals.Cart;
 import com.furniture.appliances.rentals.PackageProductDetails;
+import com.furniture.appliances.rentals.ProductDetails;
 import com.furniture.appliances.rentals.R;
 import com.furniture.appliances.rentals.database.DBInteraction;
 import com.furniture.appliances.rentals.model.ModelCart;
@@ -117,13 +118,13 @@ public class PackageProduct extends Fragment implements View.OnClickListener{
     private void setData()
     {
         Picasso.with(getActivity())
-                .load(Config.subCategoryImage+modelSubCategory.big_img)
+                .load(Config.subCategoryImage+modelSubCategory.firstLarge())
                         //.placeholder(R.drawable.dummy)
                         //.error(R.drawable.dummy)
                 .into(image);
-        rent_amount.setText(" " + modelSubCategory.rent_amount+"/"+modelSubCategory.rent_duration);
-        security_deposit.setText(" "+modelSubCategory.security_deposit);
-        min_rent_period.setText(modelSubCategory.min_rent_period+" months");
+        rent_amount.setText(" " + modelSubCategory.getTwelve()+"/month");
+        security_deposit.setText(" "+modelSubCategory.securityAmount);
+        min_rent_period.setText(modelSubCategory.minRentalDuration+" months");
         quantity_package.setText(" "+modelSubCategory.max_quantity);
         if(modelSubCategory.material.equals(""))
             rl_material.setVisibility(View.GONE);
@@ -145,10 +146,10 @@ public class PackageProduct extends Fragment implements View.OnClickListener{
             rl_brand.setVisibility(View.GONE);
         else
             brand.setText(modelSubCategory.brand);
-        if(modelSubCategory.other_description.equals(""))
+        if(modelSubCategory.otherDesc.equals(""))
             rl_other.setVisibility(View.GONE);
         else
-            other_description.setText(modelSubCategory.other_description);
+            other_description.setText(modelSubCategory.otherDesc);
     }
 
     @Override
@@ -156,22 +157,21 @@ public class PackageProduct extends Fragment implements View.OnClickListener{
         switch (v.getId()) {
             case R.id.add:
                 DBInteraction dbInteraction = new DBInteraction(getActivity());
-                ModelSubCategory temp = dbInteraction.getSubCategoryItemById(modelSubCategory.prod_id);
+                //ModelSubCategory temp = dbInteraction.getSubCategoryItemById(modelSubCategory.prod_id);
+                ModelSubCategory temp = modelSubCategory;
                 dbInteraction.close();
-                if(temp.quantity ==0 && temp.quantity_quarterly==0 && temp.quantity_monthly==0) {
-                    RocqAnalytics.initialize(getActivity());
-                    RocqAnalytics.trackEvent("6 month added", new ActionProperties(""), Position.LEFT);
-                    temp.quantity_quarterly++;
-                    modelSubCategory.quantity_quarterly++;
-                    dbInteraction.updateSubCategoryDetail(temp.prod_id, temp.quantity_quarterly, 1);
-                    dbInteraction.updateCartDetail(temp.prod_id + 1, temp.quantity_quarterly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(temp.prod_id + 1);
+                if(temp.quantity_threeMo == 0 && temp.quantity_sixMo == 0 && temp.quantity_nineMo == 0 && temp.quantity_twelveMo == 0) {
+                    /*RocqAnalytics.initialize(getActivity());
+                    RocqAnalytics.trackEvent("6 month added", new ActionProperties(""), Position.LEFT);*/
+                    temp.quantity_sixMo++;
+                    modelSubCategory.quantity_sixMo++;
+                    //dbInteraction.updateSubCategoryDetail(temp.prod_id, temp.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(temp.productId + 1, temp.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(temp.productId + 1);
                     dbInteraction.close();
                     Cart.QUANTITY++;
                     Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
                     Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
-                    ((PackageProductDetails)getActivity()).updateMenu();
-
                 }
                 showAddView(temp);
                 break;
@@ -182,10 +182,11 @@ public class PackageProduct extends Fragment implements View.OnClickListener{
 
     private void showAddView(final ModelSubCategory modelSubCategory)
     {
-        final TextView quantity_3,quantity_6,quantity_12,price_3,price_6,price_12;
-        final RadioButton radio_3,radio_6,radio_12;
-        ImageButton plus_3,minus_3,plus_6,minus_6,plus_12,minus_12;
-        final LinearLayout btn_3,btn_6,btn_12;
+        final TextView quantity_3,quantity_6,quantity_9,quantity_12,price_3,price_6,price_9,price_12;
+        final RadioButton radio_3,radio_6,radio_9,radio_12;
+        ImageButton plus_3,minus_3,plus_6,minus_6,plus_9,minus_9,plus_12,minus_12;
+        final LinearLayout btn_3,btn_6,btn_9,btn_12;
+
 
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                 .title("Add products")
@@ -193,72 +194,116 @@ public class PackageProduct extends Fragment implements View.OnClickListener{
                 .positiveText("Done")
                 .build();
 
+
         btn_3 = (LinearLayout)dialog.getCustomView().findViewById(R.id.btn_3);
         btn_6 = (LinearLayout)dialog.getCustomView().findViewById(R.id.btn_6);
+        btn_9 = (LinearLayout)dialog.getCustomView().findViewById(R.id.btn_9);
         btn_12 = (LinearLayout)dialog.getCustomView().findViewById(R.id.btn_12);
         radio_3 = (RadioButton)dialog.getCustomView().findViewById(R.id.radio_3);
         radio_6 = (RadioButton)dialog.getCustomView().findViewById(R.id.radio_6);
+        radio_9 = (RadioButton)dialog.getCustomView().findViewById(R.id.radio_9);
         radio_12 = (RadioButton)dialog.getCustomView().findViewById(R.id.radio_12);
         quantity_3 = (TextView) dialog.getCustomView().findViewById(R.id.quantity_3);
         quantity_6 = (TextView) dialog.getCustomView().findViewById(R.id.quantity_6);
+        quantity_9 = (TextView) dialog.getCustomView().findViewById(R.id.quantity_9);
         quantity_12 = (TextView) dialog.getCustomView().findViewById(R.id.quantity_12);
         price_3 = (TextView) dialog.getCustomView().findViewById(R.id.price_3);
         price_6 = (TextView) dialog.getCustomView().findViewById(R.id.price_6);
+        price_9 = (TextView) dialog.getCustomView().findViewById(R.id.price_9);
         price_12 = (TextView) dialog.getCustomView().findViewById(R.id.price_12);
         plus_3 = (ImageButton)dialog.getCustomView().findViewById(R.id.plus_3);
         plus_6 = (ImageButton)dialog.getCustomView().findViewById(R.id.plus_6);
+        plus_9 = (ImageButton)dialog.getCustomView().findViewById(R.id.plus_9);
         plus_12 = (ImageButton)dialog.getCustomView().findViewById(R.id.plus_12);
         minus_3 = (ImageButton)dialog.getCustomView().findViewById(R.id.minus_3);
         minus_6 = (ImageButton)dialog.getCustomView().findViewById(R.id.minus_6);
+        minus_9 = (ImageButton)dialog.getCustomView().findViewById(R.id.minus_9);
         minus_12 = (ImageButton)dialog.getCustomView().findViewById(R.id.minus_12);
-        quantity_3.setText(String.valueOf(modelSubCategory.quantity));
-        quantity_6.setText(String.valueOf(modelSubCategory.quantity_quarterly));
-        quantity_12.setText(String.valueOf(modelSubCategory.quantity_monthly));
-        int temp = Integer.parseInt(modelSubCategory.rent_amount);
-        price_6.setText(getActivity().getResources().getString(R.string.Rs)+" " +String.valueOf(temp));
-        temp = Integer.parseInt(modelSubCategory.rent_amount);
-        temp=temp+(temp*(Config.DISCOUNT_HALF_YEARLY)/100);
-        price_3.setText(getActivity().getResources().getString(R.string.Rs) + " " + String.valueOf(temp));
-        temp = Integer.parseInt(modelSubCategory.rent_amount);
-        temp=temp-(temp*(Config.DISCOUNT_YEARLY)/100);
-        price_12.setText(getActivity().getResources().getString(R.string.Rs) + " " + String.valueOf(temp));
-        if(modelSubCategory.quantity>0) {
+        quantity_3.setText(String.valueOf(modelSubCategory.quantity_threeMo));
+        quantity_6.setText(String.valueOf(modelSubCategory.quantity_sixMo));
+        quantity_9.setText(String.valueOf(modelSubCategory.quantity_nineMo));
+        quantity_12.setText(String.valueOf(modelSubCategory.quantity_twelveMo));
+        if(modelSubCategory.quantity_threeMo>0) {
             radio_3.setChecked(true);
             btn_3.setVisibility(View.VISIBLE);
             radio_6.setChecked(false);
             btn_6.setVisibility(View.GONE);
+            radio_9.setChecked(false);
+            btn_9.setVisibility(View.GONE);
             radio_12.setChecked(false);
             btn_12.setVisibility(View.GONE);
         }
-        else if(modelSubCategory.quantity_quarterly>0) {
+        else if(modelSubCategory.quantity_sixMo>0) {
             radio_3.setChecked(false);
             btn_3.setVisibility(View.GONE);
             radio_6.setChecked(true);
             btn_6.setVisibility(View.VISIBLE);
+            radio_9.setChecked(false);
+            btn_9.setVisibility(View.GONE);
             radio_12.setChecked(false);
             btn_12.setVisibility(View.GONE);
         }
-        else if(modelSubCategory.quantity_monthly>0) {
+        else if(modelSubCategory.quantity_nineMo>0) {
             radio_3.setChecked(false);
             btn_3.setVisibility(View.GONE);
             radio_6.setChecked(false);
             btn_6.setVisibility(View.GONE);
+            radio_9.setChecked(true);
+            btn_9.setVisibility(View.VISIBLE);
+            radio_12.setChecked(false);
+            btn_12.setVisibility(View.GONE);
+        }
+        else if(modelSubCategory.quantity_twelveMo>0) {
+            radio_3.setChecked(false);
+            btn_3.setVisibility(View.GONE);
+            radio_6.setChecked(false);
+            btn_6.setVisibility(View.GONE);
+            radio_9.setChecked(false);
+            btn_9.setVisibility(View.GONE);
             radio_12.setChecked(true);
             btn_12.setVisibility(View.VISIBLE);
         }
         radio_3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (Integer.parseInt(quantity_3.getText().toString()) == 0) {
+                    DBInteraction dbInteraction = new DBInteraction(getActivity());
+                    modelSubCategory.quantity_threeMo++;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
+                    dbInteraction.close();
+                    quantity_3.setText(String.valueOf(modelCart.quantity));
+                    Cart.QUANTITY++;
+                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
+                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
+                    ((PackageProductDetails)getActivity()).updateMenu();
+                }
                 if (Integer.parseInt(quantity_6.getText().toString()) > 0) {
                     int temp = Integer.parseInt(quantity_6.getText().toString());
                     DBInteraction dbInteraction = new DBInteraction(getActivity());
-                    modelSubCategory.quantity_quarterly = 0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 1, modelSubCategory.quantity_quarterly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 1);
+                    modelSubCategory.quantity_sixMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
                     dbInteraction.close();
                     quantity_6.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    ((PackageProductDetails)getActivity()).updateMenu();
+                }
+                if (Integer.parseInt(quantity_9.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_9.getText().toString());
+                    DBInteraction dbInteraction = new DBInteraction(getActivity());
+                    modelSubCategory.quantity_nineMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
+                    dbInteraction.close();
+                    quantity_9.setText("0");
                     for (int i = 0; i < temp; i++) {
                         Cart.QUANTITY--;
                         Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
@@ -269,10 +314,10 @@ public class PackageProduct extends Fragment implements View.OnClickListener{
                 if (Integer.parseInt(quantity_12.getText().toString()) > 0) {
                     int temp = Integer.parseInt(quantity_12.getText().toString());
                     DBInteraction dbInteraction = new DBInteraction(getActivity());
-                    modelSubCategory.quantity_monthly=0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 2, modelSubCategory.quantity_monthly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 2);
+                    modelSubCategory.quantity_twelveMo=0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 3, modelSubCategory.quantity_twelveMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
                     dbInteraction.close();
                     quantity_12.setText("0");
                     for (int i = 0; i < temp; i++) {
@@ -282,26 +327,14 @@ public class PackageProduct extends Fragment implements View.OnClickListener{
                     }
                     ((PackageProductDetails)getActivity()).updateMenu();
                 }
-                if (Integer.parseInt(quantity_3.getText().toString()) == 0) {
-                    DBInteraction dbInteraction = new DBInteraction(getActivity());
-                    modelSubCategory.quantity++;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 0, modelSubCategory.quantity);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 0);
-                    dbInteraction.close();
-                    quantity_3.setText(String.valueOf(modelCart.quantity));
-                    Cart.QUANTITY++;
-                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
-                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
 
-
-                    ((PackageProductDetails)getActivity()).updateMenu();
-                }
 
                 radio_3.setChecked(true);
                 btn_3.setVisibility(View.VISIBLE);
                 radio_6.setChecked(false);
                 btn_6.setVisibility(View.GONE);
+                radio_9.setChecked(false);
+                btn_9.setVisibility(View.GONE);
                 radio_12.setChecked(false);
                 btn_12.setVisibility(View.GONE);
 
@@ -310,31 +343,15 @@ public class PackageProduct extends Fragment implements View.OnClickListener{
         radio_6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Integer.parseInt(quantity_12.getText().toString()) > 0) {
-                    int temp = Integer.parseInt(quantity_12.getText().toString());
-                    DBInteraction dbInteraction = new DBInteraction(getActivity());
-                    modelSubCategory.quantity_monthly=0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 2, modelSubCategory.quantity_monthly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 2);
-                    dbInteraction.close();
-                    quantity_12.setText("0");
-                    for (int i = 0; i < temp; i++) {
-                        Cart.QUANTITY--;
-                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
-                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
-                    }
-                    ((PackageProductDetails)getActivity()).updateMenu();
-                }
                 if (Integer.parseInt(quantity_3.getText().toString()) > 0) {
                     int temp = Integer.parseInt(quantity_3.getText().toString());
-                    RocqAnalytics.initialize(getActivity());
-                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);
+                    /*RocqAnalytics.initialize(getActivity());
+                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);*/
                     DBInteraction dbInteraction = new DBInteraction(getActivity());
-                    modelSubCategory.quantity=0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 0, modelSubCategory.quantity);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 0);
+                    modelSubCategory.quantity_threeMo=0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
                     dbInteraction.close();
                     quantity_3.setText("0");
                     for (int i = 0; i < temp; i++) {
@@ -343,42 +360,96 @@ public class PackageProduct extends Fragment implements View.OnClickListener{
                         Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
                     }
                     ((PackageProductDetails)getActivity()).updateMenu();
-
                 }
                 if (Integer.parseInt(quantity_6.getText().toString()) == 0) {
-                    RocqAnalytics.initialize(getActivity());
-                    RocqAnalytics.trackEvent("6 month added", new ActionProperties(""), Position.LEFT);
+                    /*RocqAnalytics.initialize(getActivity());
+                    RocqAnalytics.trackEvent("6 month added", new ActionProperties(""), Position.LEFT);*/
                     DBInteraction dbInteraction = new DBInteraction(getActivity());
-                    modelSubCategory.quantity_quarterly++;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 1, modelSubCategory.quantity_quarterly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 1);
+                    modelSubCategory.quantity_sixMo++;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
                     dbInteraction.close();
                     quantity_6.setText(String.valueOf(modelCart.quantity));
                     Cart.QUANTITY++;
                     Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
                     Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
-
                     ((PackageProductDetails)getActivity()).updateMenu();
                 }
+                if (Integer.parseInt(quantity_9.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_9.getText().toString());
+                    /*RocqAnalytics.initialize(getActivity());
+                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);*/
+                    DBInteraction dbInteraction = new DBInteraction(getActivity());
+                    modelSubCategory.quantity_nineMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
+                    dbInteraction.close();
+                    quantity_9.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    ((PackageProductDetails)getActivity()).updateMenu();
+                }
+                if (Integer.parseInt(quantity_12.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_12.getText().toString());
+                    DBInteraction dbInteraction = new DBInteraction(getActivity());
+                    modelSubCategory.quantity_twelveMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 3 , modelSubCategory.quantity_twelveMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
+                    dbInteraction.close();
+                    quantity_12.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    ((PackageProductDetails)getActivity()).updateMenu();
+
+            }
+
                 radio_3.setChecked(false);
                 btn_3.setVisibility(View.GONE);
                 radio_6.setChecked(true);
                 btn_6.setVisibility(View.VISIBLE);
+                radio_9.setChecked(false);
+                btn_9.setVisibility(View.GONE);
                 radio_12.setChecked(false);
                 btn_12.setVisibility(View.GONE);
             }
         });
-        radio_12.setOnClickListener(new View.OnClickListener() {
+        radio_9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (Integer.parseInt(quantity_3.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_3.getText().toString());
+                    /*RocqAnalytics.initialize(getActivity());
+                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);*/
+                    DBInteraction dbInteraction = new DBInteraction(getActivity());
+                    modelSubCategory.quantity_threeMo=0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
+                    dbInteraction.close();
+                    quantity_3.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    ((PackageProductDetails)getActivity()).updateMenu();
+                }
                 if (Integer.parseInt(quantity_6.getText().toString()) > 0) {
                     int temp = Integer.parseInt(quantity_6.getText().toString());
                     DBInteraction dbInteraction = new DBInteraction(getActivity());
-                    modelSubCategory.quantity_quarterly = 0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 1, modelSubCategory.quantity_quarterly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 1);
+                    modelSubCategory.quantity_sixMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
                     dbInteraction.close();
                     quantity_6.setText("0");
                     for (int i = 0; i < temp; i++) {
@@ -388,15 +459,60 @@ public class PackageProduct extends Fragment implements View.OnClickListener{
                     }
                     ((PackageProductDetails)getActivity()).updateMenu();
                 }
+                if (Integer.parseInt(quantity_9.getText().toString()) == 0) {
+                    /*RocqAnalytics.initialize(getActivity());
+                    RocqAnalytics.trackEvent("6 month added", new ActionProperties(""), Position.LEFT);*/
+                    DBInteraction dbInteraction = new DBInteraction(getActivity());
+                    modelSubCategory.quantity_nineMo++;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
+                    dbInteraction.close();
+                    quantity_9.setText(String.valueOf(modelCart.quantity));
+                    Cart.QUANTITY++;
+                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
+                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
+                    ((PackageProductDetails)getActivity()).updateMenu();
+                }
+                if (Integer.parseInt(quantity_12.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_12.getText().toString());
+                    DBInteraction dbInteraction = new DBInteraction(getActivity());
+                    modelSubCategory.quantity_twelveMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 3 , modelSubCategory.quantity_twelveMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
+                    dbInteraction.close();
+                    quantity_12.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    ((PackageProductDetails)getActivity()).updateMenu();
+                }
+
+                radio_3.setChecked(false);
+                btn_3.setVisibility(View.GONE);
+                radio_6.setChecked(false);
+                btn_6.setVisibility(View.GONE);
+                radio_9.setChecked(true);
+                btn_9.setVisibility(View.VISIBLE);
+                radio_12.setChecked(false);
+                btn_12.setVisibility(View.GONE);
+            }
+        });
+        radio_12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if (Integer.parseInt(quantity_3.getText().toString()) > 0) {
                     int temp = Integer.parseInt(quantity_3.getText().toString());
-                    RocqAnalytics.initialize(getActivity());
-                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);
+                    /*RocqAnalytics.initialize(getActivity());
+                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);*/
                     DBInteraction dbInteraction = new DBInteraction(getActivity());
-                    modelSubCategory.quantity=0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 0, modelSubCategory.quantity);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 0);
+                    modelSubCategory.quantity_threeMo=0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
                     dbInteraction.close();
                     quantity_3.setText("0");
                     for (int i = 0; i < temp; i++) {
@@ -405,27 +521,62 @@ public class PackageProduct extends Fragment implements View.OnClickListener{
                         Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
                     }
                     ((PackageProductDetails)getActivity()).updateMenu();
-
+                }
+                if (Integer.parseInt(quantity_6.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_6.getText().toString());
+                    DBInteraction dbInteraction = new DBInteraction(getActivity());
+                    modelSubCategory.quantity_sixMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
+                    dbInteraction.close();
+                    quantity_6.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    ((PackageProductDetails)getActivity()).updateMenu();
+                }
+                if (Integer.parseInt(quantity_9.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_9.getText().toString());
+                    /*RocqAnalytics.initialize(getActivity());
+                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);*/
+                    DBInteraction dbInteraction = new DBInteraction(getActivity());
+                    modelSubCategory.quantity_nineMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
+                    dbInteraction.close();
+                    quantity_9.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    ((PackageProductDetails)getActivity()).updateMenu();
                 }
                 if (Integer.parseInt(quantity_12.getText().toString()) == 0) {
                     DBInteraction dbInteraction = new DBInteraction(getActivity());
-                    modelSubCategory.quantity_monthly++;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 2, modelSubCategory.quantity_monthly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 2);
+                    modelSubCategory.quantity_twelveMo++;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 3, modelSubCategory.quantity_twelveMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
                     dbInteraction.close();
                     quantity_12.setText(String.valueOf(modelCart.quantity));
                     Cart.QUANTITY++;
                     Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
                     Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
-
                     ((PackageProductDetails)getActivity()).updateMenu();
+
                 }
 
                 radio_3.setChecked(false);
                 btn_3.setVisibility(View.GONE);
                 radio_6.setChecked(false);
                 btn_6.setVisibility(View.GONE);
+                radio_9.setChecked(false);
+                btn_9.setVisibility(View.GONE);
                 radio_12.setChecked(true);
                 btn_12.setVisibility(View.VISIBLE);
             }
@@ -434,33 +585,33 @@ public class PackageProduct extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(View v) {
                 DBInteraction dbInteraction = new DBInteraction(getActivity());
-                modelSubCategory.quantity++;
-                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
-                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 0);
+                modelSubCategory.quantity_threeMo++;
+                //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
                 dbInteraction.close();
-                quantity_3.setText(String.valueOf(modelSubCategory.quantity));
+                quantity_3.setText(String.valueOf(modelSubCategory.quantity_threeMo));
                 Cart.QUANTITY++;
                 Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
                 Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
                 ((PackageProductDetails)getActivity()).updateMenu();
 
-
             }
         });
-
         minus_3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Integer.parseInt(quantity_3.getText().toString()) > 0) {
                     DBInteraction dbInteraction = new DBInteraction(getActivity());
-                    modelSubCategory.quantity--;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 0);
+                    modelSubCategory.quantity_threeMo--;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
                     dbInteraction.close();
-                    quantity_3.setText(String.valueOf(modelSubCategory.quantity));
+                    quantity_3.setText(String.valueOf(modelSubCategory.quantity_threeMo));
                     Cart.QUANTITY--;
-                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
-                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
+                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
                     ((PackageProductDetails)getActivity()).updateMenu();
 
                 }
@@ -471,71 +622,107 @@ public class PackageProduct extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(View v) {
                 DBInteraction dbInteraction = new DBInteraction(getActivity());
-                modelSubCategory.quantity_quarterly++;
-                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
-                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 1);
+                modelSubCategory.quantity_sixMo++;
+//                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
                 dbInteraction.close();
-                quantity_6.setText(String.valueOf(modelSubCategory.quantity_quarterly));
+                quantity_6.setText(String.valueOf(modelSubCategory.quantity_sixMo));
                 Cart.QUANTITY++;
                 Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
                 Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
                 ((PackageProductDetails)getActivity()).updateMenu();
 
-
-
             }
         });
-
         minus_6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Integer.parseInt(quantity_6.getText().toString()) > 0) {
                     DBInteraction dbInteraction = new DBInteraction(getActivity());
-                    modelSubCategory.quantity_quarterly--;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 1);
+                    modelSubCategory.quantity_sixMo--;
+//                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
                     dbInteraction.close();
-                    quantity_6.setText(String.valueOf(modelSubCategory.quantity_quarterly));
+                    quantity_6.setText(String.valueOf(modelSubCategory.quantity_sixMo));
                     Cart.QUANTITY--;
-                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
-                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
+                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
                     ((PackageProductDetails)getActivity()).updateMenu();
 
                 }
             }
         });
-        plus_12.setOnClickListener(new View.OnClickListener() {
+
+        plus_9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DBInteraction dbInteraction = new DBInteraction(getActivity());
-                modelSubCategory.quantity_monthly++;
-                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
-                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 2);
+                modelSubCategory.quantity_nineMo++;
+//                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
                 dbInteraction.close();
-                quantity_12.setText(String.valueOf(modelSubCategory.quantity_monthly));
+                quantity_9.setText(String.valueOf(modelSubCategory.quantity_nineMo));
                 Cart.QUANTITY++;
                 Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
                 Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
                 ((PackageProductDetails)getActivity()).updateMenu();
 
+            }
+        });
+        minus_9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Integer.parseInt(quantity_9.getText().toString()) > 0) {
+                    DBInteraction dbInteraction = new DBInteraction(getActivity());
+                    modelSubCategory.quantity_nineMo--;
+//                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
+                    dbInteraction.close();
+                    quantity_9.setText(String.valueOf(modelSubCategory.quantity_sixMo));
+                    Cart.QUANTITY--;
+                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    ((PackageProductDetails)getActivity()).updateMenu();
 
-
+                }
             }
         });
 
+        plus_12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DBInteraction dbInteraction = new DBInteraction(getActivity());
+                modelSubCategory.quantity_twelveMo++;
+//                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                dbInteraction.updateCartDetail(modelSubCategory.productId + 3, modelSubCategory.quantity_twelveMo);
+                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
+                dbInteraction.close();
+                quantity_12.setText(String.valueOf(modelSubCategory.quantity_twelveMo));
+                Cart.QUANTITY++;
+                Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
+                Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
+                ((PackageProductDetails)getActivity()).updateMenu();
+
+            }
+        });
         minus_12.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Integer.parseInt(quantity_12.getText().toString()) > 0) {
                     DBInteraction dbInteraction = new DBInteraction(getActivity());
-                    modelSubCategory.quantity_monthly--;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 2);
+                    modelSubCategory.quantity_twelveMo--;
+//                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 3, modelSubCategory.quantity_twelveMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
                     dbInteraction.close();
-                    quantity_12.setText(String.valueOf(modelSubCategory.quantity_monthly));
+                    quantity_12.setText(String.valueOf(modelSubCategory.quantity_twelveMo));
                     Cart.QUANTITY--;
-                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
-                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
+                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
                     ((PackageProductDetails)getActivity()).updateMenu();
 
                 }

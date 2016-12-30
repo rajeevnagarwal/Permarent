@@ -126,6 +126,32 @@
                     app:met_floatingLabel="highlight"
                     app:met_primaryColor="@color/colorAccent"
                     app:met_typeface="fonts/Roboto-Light.ttf" />
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/add_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:hint="State"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:textCursorDrawable="@drawable/text_cursor"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="@color/colorAccent"
+                    app:met_typeface="fonts/Roboto-Light.ttf" />
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/add_other"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:hint="Other Description"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:textCursorDrawable="@drawable/text_cursor"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="@color/colorAccent"
+                    app:met_typeface="fonts/Roboto-Light.ttf" />
 
 
                <!-- <com.rengwuxian.materialedittext.MaterialEditText

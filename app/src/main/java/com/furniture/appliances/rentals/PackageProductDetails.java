@@ -44,9 +44,9 @@ public class PackageProductDetails extends AppCompatActivity {
         setContentView(R.layout.activity_package_product_details);
         model = (ModelSubCategory) getIntent().getSerializableExtra("model");
         setUpToolbar();
-        getDataFromDb();
+//        getDataFromDb();
         initView();
-        String temp_big_img[] = model.big_img.substring(0, model.big_img.length()).split(",");
+        String temp_big_img[] = model.largeImages.substring(0, model.largeImages.length()).split(",");
         //temp_big_img = model.big_img.substring(0, model.big_img.length()-1).split(",");
         String temp_material[] = new String[Integer.parseInt(model.package_products)];
         String temp_dimensions[] =new String[Integer.parseInt(model.package_products)];
@@ -101,7 +101,7 @@ public class PackageProductDetails extends AppCompatActivity {
         }
         else
             temp_brand=temp;
-        temp = model.other_description.substring(0, model.other_description.length() - 1).split("%");
+        temp = model.otherDesc.substring(0, model.otherDesc.length() - 1).split("%");
         if(temp.length!=Integer.parseInt(model.package_products)) {
             for (int i = 0; i < temp.length; i++)
                 temp_other_description[i] = temp[i];
@@ -122,15 +122,15 @@ public class PackageProductDetails extends AppCompatActivity {
             temp_quantity=temp;
         for (int i = 0; i < Integer.parseInt(model.package_products); i++) {
             ModelSubCategory modelSubCategory = new ModelSubCategory();
-            modelSubCategory.prod_code = model.prod_code;
-            modelSubCategory.prod_id = model.prod_id;
-            modelSubCategory.vendor_code = model.vendor_code;
-            modelSubCategory.category_code = model.category_code;
-            modelSubCategory.category_desc =  model.category_desc;
-            modelSubCategory.subcategory_code = model.subcategory_code;
-            modelSubCategory.subcategory_desc =  model.subcategory_desc;
-            modelSubCategory.small_img = model.small_img;
-            modelSubCategory.big_img = temp_big_img[i];
+//            modelSubCategory.prod_code = model.prod_code;
+            modelSubCategory.productId = model.productId;
+            modelSubCategory.vendorId = model.vendorId;
+            modelSubCategory.categoryId = model.categoryId;
+            modelSubCategory.categoryName =  model.categoryName;
+            modelSubCategory.subCategoryId = model.subCategoryId;
+            modelSubCategory.subCategoryName =  model.subCategoryName;
+            modelSubCategory.smallImages = model.smallImages;
+            modelSubCategory.largeImages = temp_big_img[i];
             if (temp_material.length != 0)
                 modelSubCategory.material = temp_material[i];
             else
@@ -152,17 +152,20 @@ public class PackageProductDetails extends AppCompatActivity {
             else
                 modelSubCategory.brand = "";
             if (temp_other_description.length != 0)
-            modelSubCategory.other_description = temp_other_description[i];
+            modelSubCategory.otherDesc = temp_other_description[i];
             else
-                modelSubCategory.other_description = "";
+                modelSubCategory.otherDesc = "";
             modelSubCategory.max_quantity = temp_quantity[i];
-            modelSubCategory.rent_amount = model.rent_amount;
-            modelSubCategory.rent_duration = model.rent_duration;
-            modelSubCategory.security_deposit = model.security_deposit;
-            modelSubCategory.min_rent_period = model.min_rent_period;
-            modelSubCategory.shipping_charges = model.shipping_charges;
-            modelSubCategory.created_on = model.created_on ;
-            modelSubCategory.quantity = model.quantity;
+            modelSubCategory.rentalAmount = model.rentalAmount;
+//            modelSubCategory.rent_duration = model.rent_duration;
+            modelSubCategory.securityAmount = model.securityAmount;
+            modelSubCategory.minRentalDuration = model.minRentalDuration;
+//            modelSubCategory.shipping_charges = model.shipping_charges;
+//            modelSubCategory.created_on = model.created_on ;
+            modelSubCategory.quantity_threeMo = model.quantity_threeMo;
+            modelSubCategory.quantity_sixMo = model.quantity_sixMo;
+            modelSubCategory.quantity_nineMo = model.quantity_nineMo;
+            modelSubCategory.quantity_twelveMo = model.quantity_twelveMo;
             modelSubCategoryArrayList.add(modelSubCategory);
         }
 
@@ -193,16 +196,16 @@ public class PackageProductDetails extends AppCompatActivity {
         }
     }
 
-    private void getDataFromDb() {
+    /*private void getDataFromDb() {
         DBInteraction dbInteraction = new DBInteraction(PackageProductDetails.this);
-        modelCategory = dbInteraction.getCategoryByName(model.category_desc);
+//        modelCategory = dbInteraction.getCategoryByName(model.category_desc);
         String temp[] = modelCategory.subcategory.split(",");
         for(int i=0;i<temp.length;i++) {
-            if(temp[i].equalsIgnoreCase(model.subcategory_desc))
+            if(temp[i].equalsIgnoreCase(model.subcategory))
                 defaultFragment=i;
         }
         dbInteraction.close();
-    }
+    }*/
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
@@ -262,7 +265,7 @@ public class PackageProductDetails extends AppCompatActivity {
         super.onStart();
         RocqAnalytics.startScreen(this);
         RocqAnalytics.initialize(this);
-        RocqAnalytics.trackScreen("Product Details " + model.subcategory_desc, new ActionProperties());
+        RocqAnalytics.trackScreen("Product Details " + model.subCategoryName, new ActionProperties());
     }
 
     @Override

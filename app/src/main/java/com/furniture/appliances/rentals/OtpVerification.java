@@ -16,8 +16,15 @@ import com.dq.rocq.models.ActionProperties;
 import com.furniture.appliances.rentals.asyncTask.HttpCall;
 import com.furniture.appliances.rentals.model.ModelAddress;
 import com.furniture.appliances.rentals.model.ModelUser;
+import com.furniture.appliances.rentals.restApi.EndPonits;
+import com.furniture.appliances.rentals.util.AppPreferences;
 import com.furniture.appliances.rentals.util.CheckInternetConnection;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.rengwuxian.materialedittext.MaterialEditText;
+
+import org.apache.http.Header;
+import org.json.JSONObject;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,8 +39,10 @@ public class OtpVerification extends AppCompatActivity {
    static MaterialEditText code;
     TextView mobile;
     ModelAddress modelAddress = new ModelAddress();
+    AppPreferences apref = new AppPreferences();
     ModelUser modelUser = new ModelUser();
     String otp;
+    String value_mobile;
     static ProgressDialog mProgressDialog;
 
 
@@ -48,7 +57,8 @@ public class OtpVerification extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         modelAddress = (ModelAddress) getIntent().getSerializableExtra("modelAddress");
-        modelUser = (ModelUser) getIntent().getSerializableExtra("modelUser");
+        value_mobile = getIntent().getStringExtra("mobile");
+       // modelUser = (ModelUser) getIntent().getSerializableExtra("modelUser");
         otp = getIntent().getStringExtra("otp");
         setContentView(R.layout.activity_otp_cerification);
         setUpToolbar();
@@ -81,7 +91,61 @@ public class OtpVerification extends AppCompatActivity {
                 if(otp.equals(code.getText().toString()))
                 {
                     if (new CheckInternetConnection(OtpVerification.this).isConnectedToInternet()) {
-                        new HttpCall().insertAddress(OtpVerification.this,modelAddress,modelUser,false);
+                        RequestParams params = new RequestParams();
+                        params.put("email",apref.readString(getApplicationContext(),"email",null));
+                        params.put("location",modelAddress.location);
+                        params.put("city",modelAddress.city);
+                        params.put("state",modelAddress.state);
+                        params.put("others",modelAddress.others);
+                        params.put("pincode",modelAddress.pincode);
+                        params.put("locality",modelAddress.localityName);
+                        params.put("houseNo",modelAddress.houseNo);
+                        EndPonits.addAddress(params, new TextHttpResponseHandler() {
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                System.out.println("Failure in Address");
+                            }
+
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                                System.out.println("Success in Address");
+                                try {
+                                    JSONObject obj = new JSONObject(responseString);
+                                    if(obj.getString("message").equals("Added Successfully")) {
+                                        Boolean isNoVerified = true;
+
+                                        if (apref.IsReadyForCheckout2(getApplicationContext())) {
+                                            Intent i = new Intent(getApplicationContext(), Checkout2.class);
+                                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            getApplicationContext().startActivity(i);
+                                            if (getApplicationContext() instanceof OtpVerification)
+                                                ((OtpVerification) getApplicationContext()).finish();
+                                        } else {
+                                            if (isNoVerified) {
+                                                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                getApplicationContext().startActivity(i);
+                                                if (getApplicationContext() instanceof AddNewAddress)
+                                                    ((AddNewAddress) getApplicationContext()).finish();
+                                            } else {
+                                                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                getApplicationContext().startActivity(i);
+                                                if (getApplicationContext() instanceof OtpVerification)
+                                                    ((OtpVerification) getApplicationContext()).finish();
+                                            }
+                                        }
+                                    }
+
+                                }catch(Exception e)
+                                {
+                                    e.printStackTrace();
+                                }
+                            }
+
+
+                        });
+
                     }
                     else {
                         new CheckInternetConnection(OtpVerification.this).showDialog();
@@ -115,7 +179,7 @@ public class OtpVerification extends AppCompatActivity {
         verify = (Button) findViewById(R.id.verify);
         code = (MaterialEditText)findViewById(R.id.code);
         mobile = (TextView)findViewById(R.id.mobile);
-        mobile.setText("We've sent an OTP via sms to " + modelUser.mobileno);
+        mobile.setText("We've sent an OTP via sms to " + value_mobile);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -123,7 +187,7 @@ public class OtpVerification extends AppCompatActivity {
         if (id == android.R.id.home) {
             Intent i = new Intent(OtpVerification.this, MobileVerification.class);
             i.putExtra("modelAddress",modelAddress);
-            i.putExtra("modelUser",modelUser);
+            //i.putExtra("modelUser",modelUser);
             startActivity(i);
             finish();
         }

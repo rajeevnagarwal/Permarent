@@ -14,9 +14,16 @@ import com.dq.rocq.models.ActionProperties;
 import com.furniture.appliances.rentals.asyncTask.HttpCall;
 import com.furniture.appliances.rentals.model.ModelAddress;
 import com.furniture.appliances.rentals.model.ModelUser;
+import com.furniture.appliances.rentals.restApi.EndPonits;
+import com.furniture.appliances.rentals.util.AppPreferences;
 import com.furniture.appliances.rentals.util.CheckInternetConnection;
 import com.furniture.appliances.rentals.util.Miscellaneous;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.rengwuxian.materialedittext.MaterialEditText;
+
+import org.apache.http.Header;
+import org.json.JSONObject;
 
 /**
  * Created by Infinia on 21-09-2015.
@@ -29,11 +36,13 @@ public class MobileVerification extends AppCompatActivity {
     String value_mobile;
     ModelAddress modelAddress = new ModelAddress();
     ModelUser modelUser = new ModelUser();
+    AppPreferences apref = new AppPreferences();
+    public Integer flag = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         modelAddress = (ModelAddress) getIntent().getSerializableExtra("modelAddress");
-        modelUser = (ModelUser) getIntent().getSerializableExtra("modelUser");
+       // modelUser = (ModelUser) getIntent().getSerializableExtra("modelUser");
         setContentView(R.layout.activity_mobile_verification);
         //Setting up toolbar
         setUpToolbar();
@@ -43,7 +52,7 @@ public class MobileVerification extends AppCompatActivity {
             public void onClick(View v) {
                 if (new CheckInternetConnection(MobileVerification.this).isConnectedToInternet()) {
                     if(createUser())
-                    new HttpCall().verifyNumber(MobileVerification.this, modelUser,modelAddress);
+                    new HttpCall().verifyNumber(MobileVerification.this,value_mobile,modelAddress);
                 } else {
                     new CheckInternetConnection(MobileVerification.this).showDialog();
                 }
@@ -72,10 +81,53 @@ public class MobileVerification extends AppCompatActivity {
     private boolean createUser()
     {
         if (validations()) {
-           modelUser.mobileno=value_mobile;
+            RequestParams params = new RequestParams();
+            params.put("email",apref.readString(this,"email",null));
+            params.put("contactNo",value_mobile);
+            EndPonits.addContactNo(params, new TextHttpResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    System.out.println("Failure");
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString)
+                {
+                    try {
+                        JSONObject obj = new JSONObject(responseString);
+                        if(obj.getString("message").equals("Added Successfully"))
+                        {
+                            System.out.println("Contact Added");
+                            flag = 1;
+
+                        }
+                        else
+                        {
+                            flag = 0;
+
+                        }
+
+
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+
+                    }
+
+                }
+            });
+
+          // modelUser.mobileno=value_mobile;
+
+        }
+        if(flag==0) {
+            return false;
+        }
+        else
+        {
             return true;
         }
-        return false;
     }
 
     private boolean validations() {
@@ -95,7 +147,7 @@ public class MobileVerification extends AppCompatActivity {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             Intent i = new Intent(MobileVerification.this, AddNewAddress.class);
-            i.putExtra("modelAddress",modelAddress);
+            //i.putExtra("modelAddress",modelAddress);
             i.putExtra("modelUser",modelUser);
             startActivity(i);
             finish();

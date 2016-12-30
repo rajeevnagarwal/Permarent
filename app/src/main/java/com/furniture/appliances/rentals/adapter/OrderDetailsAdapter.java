@@ -67,17 +67,19 @@ public class OrderDetailsAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         final ModelSubCategory model = modelSubCategoryArrayList.get(position);
-        holder.name.setText(model.prod_name);
+        holder.name.setText(model.productName);
         String quantity="";
-        if(model.quantity!=0)
-            quantity = String.valueOf(model.quantity);
-        if(model.quantity_monthly!=0)
-            quantity = String.valueOf(model.quantity_monthly);
-        if(model.quantity_quarterly!=0)
-            quantity = String.valueOf(model.quantity_quarterly);
+        if(model.quantity_threeMo!=0)
+            quantity = String.valueOf(model.quantity_threeMo);
+        if(model.quantity_sixMo!=0)
+            quantity = String.valueOf(model.quantity_sixMo);
+        if(model.quantity_nineMo!=0)
+            quantity = String.valueOf(model.quantity_nineMo);
+        if(model.quantity_twelveMo!=0)
+            quantity = String.valueOf(model.quantity_twelveMo);
         holder.quantity.setText("Quantity: "+quantity);
         Picasso.with(holder.image.getContext())
-                .load(Config.subCategoryImage + model.small_img)
+                .load(Config.subCategoryImage + model.firstSmall())
                         //.placeholder(R.drawable.dummy)
                         //.error(R.drawable.dummy)
                 .into(holder.image);

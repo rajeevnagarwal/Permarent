@@ -81,17 +81,19 @@ public class ComplaintActivity extends AppCompatActivity {
         item = (ModelSubCategory) getIntent().getSerializableExtra("item");
         orderId = (String)getIntent().getStringExtra("orderId");
         Picasso.with(this)
-                .load(Config.subCategoryImage + item.small_img)
+                .load(Config.subCategoryImage + item.firstSmall())
                 .into(img_item);
-        prod_name = (item.prod_name);
+        prod_name = (item.productName);
         item_name.setText(prod_name);
-        System.out.println(item.small_img);
-        if(item.quantity!=0)
-            quantity= (String.valueOf(item.quantity));
-        if(item.quantity_monthly!=0)
-            quantity = (String.valueOf(item.quantity_monthly));
-        if(item.quantity_quarterly!=0)
-            quantity = (String.valueOf(item.quantity_quarterly));
+        //System.out.println(item.small_i);
+        if(item.quantity_threeMo!=0)
+            quantity= (String.valueOf(item.quantity_threeMo));
+        if(item.quantity_sixMo!=0)
+            quantity = (String.valueOf(item.quantity_sixMo));
+        if(item.quantity_nineMo!=0)
+            quantity = (String.valueOf(item.quantity_nineMo));
+        if(item.quantity_twelveMo!=0)
+            quantity = (String.valueOf(item.quantity_twelveMo));
        counter = Integer.parseInt(quantity);
         final String[] arr = new String[Integer.parseInt(quantity)];
         if(quantity.equals("1")) {
@@ -101,7 +103,7 @@ public class ComplaintActivity extends AppCompatActivity {
         else {
 
             for (int i = 0; i <= Integer.parseInt(quantity)-1; i++) {
-                arr[i] = String.valueOf(i)+1;
+                arr[i] = String.valueOf(i+1);
             }
         }
         ArrayAdapter<String> quantity_adapter = new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line,arr);
@@ -110,6 +112,7 @@ public class ComplaintActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 def_quantity = arr[position];
+                counter = Integer.parseInt(def_quantity);
 
             }
             @Override

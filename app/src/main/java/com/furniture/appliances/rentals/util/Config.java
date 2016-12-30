@@ -3,6 +3,10 @@ package com.furniture.appliances.rentals.util;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 
+import com.furniture.appliances.rentals.model.ModelAddress;
+
+import java.util.ArrayList;
+
 /**
  * Created by Infinia on 30-06-2015.
  */
@@ -19,7 +23,7 @@ public class Config {
     public static String insertUserData = mainUrl+"/connection/insertUserData.php";
     public static String getUserData = mainUrl+"/connection/getUserData.php";
     public static String insertAddress = mainUrl+"/connection/insertAddress.php";
-    public static String insertOrderDetails = mainUrl+"/connection/insertOrderDetails.php";
+    //public static String insertOrderDetails = mainUrl+"/connection/insertOrderDetails.php";
     public static String getPreviousOrders = mainUrl+"/connection/getOrders.php";
     public static String headingImage= mainUrl+"img/rentals/";
     public static String verifyNumber= "https://alerts.sinfini.com/api/v3/index.php";
@@ -46,6 +50,9 @@ public class Config {
     public static String getCategories = newUrl+"getCategories";
     public static String regNewUser = newUrl+"regNewUser";
     public static String checkUser = newUrl+"checkUser";
+    public static String addContactNo = newUrl+"addContactNo";
+    public static String addAddress = newUrl+"addAddress";
+    public static String insertOrderDetails = newUrl+"insertOrderDetails";
 
 
 
@@ -65,5 +72,8 @@ public class Config {
     public static String playStoreUrl ="market://details?id=com.furniture.appliances.rentals";
     public static String contactNo="+919587334056";
     public static String adminNo = "9971118772,7353982196,7022014310";
+
+    public static ArrayList<ModelAddress> Addresses = new ArrayList<ModelAddress>();
+    public static String AppName="Permarent";
 
 }

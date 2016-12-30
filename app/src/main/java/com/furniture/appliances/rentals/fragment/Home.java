@@ -99,7 +99,7 @@ public class Home extends Fragment {
 
     private void getDataFromDb() {
         DBInteraction dbInteraction = new DBInteraction(getActivity());
-        modelCategoryArrayList = dbInteraction.getAllCategories();
+        //modelCategoryArrayList = dbInteraction.getAllCategories();
         dbInteraction.close();
     }
 

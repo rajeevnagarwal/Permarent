@@ -21,8 +21,16 @@ import com.furniture.appliances.rentals.adapter.CheckOutAdapter;
 import com.furniture.appliances.rentals.database.DBInteraction;
 import com.furniture.appliances.rentals.model.ModelAddress;
 import com.furniture.appliances.rentals.model.ModelCart;
+import com.furniture.appliances.rentals.model.ModelOffer;
+import com.furniture.appliances.rentals.restApi.EndPonits;
 import com.furniture.appliances.rentals.util.AppPreferences;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.rengwuxian.materialedittext.MaterialEditText;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -41,7 +49,10 @@ public class Checkout1 extends AppCompatActivity implements View.OnClickListener
     MaterialEditText code;
     ArrayList<ModelCart> modelCartArrayList = new ArrayList<ModelCart>();
     ArrayList<ModelAddress> modelAddressArrayList = new ArrayList<>();
+    ArrayList<ModelOffer> offers = new ArrayList<ModelOffer>();
+    ArrayList<String> stroffer = new ArrayList<String>();
     AppPreferences apref = new AppPreferences();
+    int pos = 0;
     boolean isCouponApplied;
 
 
@@ -52,35 +63,95 @@ public class Checkout1 extends AppCompatActivity implements View.OnClickListener
         setUpToolbar();
         initView();
         getDataFromDb();
-        setText();
+        fetchCoupons();
+        //setText();
         lv.setAdapter(checkOutAdapter);
     }
+    private void fetchCoupons()
+    {
+        EndPonits.getCoupons(null, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                System.out.println("Failure in Coupons");
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                System.out.println("Success"+responseString);
+                try {
+                    JSONArray array = new JSONArray(responseString);
+                    for(int i=0;i<array.length();i++)
+                    {
+                        JSONObject obj = array.getJSONObject(i);
+                        ModelOffer offer = new ModelOffer();
+                        offer.offerId =   obj.getString("offerId");
+                        offer.couponCode = obj.getString("couponCode");
+                        stroffer.add(offer.couponCode);
+                        offer.discountApplicable = obj.getJSONObject("discountApplicable").toString();
+                        offer.offerStartDate = obj.getString("offerStartDate");
+                        offer.offerEndDate = obj.getString("offerEndDate");
+                        offers.add(offer);
+
+                    }
+                    setText();
+
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+    }
+
 
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.submit:
-                if (modelAddressArrayList.size() != 0) {
-                    Intent i = new Intent(Checkout1.this, Checkout2.class);
-                    startActivity(i);
-                } else {
-                    apref.setIsReadyForCheckout2(Checkout1.this, true);
-                    Intent i = new Intent(Checkout1.this, AddNewAddress.class);
-                    startActivity(i);
-                    finish();
+                if(apref.readString(this,"email",null)!=null) {
+                    if (modelAddressArrayList.size() != 0) {
+                        if(!isCouponApplied) {
+                            Intent i = new Intent(Checkout1.this, Checkout2.class);
+                            i.putExtra("cartarray", modelCartArrayList);
+                            i.putExtra("arrayList", modelAddressArrayList);
+                            startActivity(i);
+                        }
+                        else
+                        {
+                            Intent i = new Intent(Checkout1.this, Checkout2.class);
+                            i.putExtra("cartarray", modelCartArrayList);
+                            i.putExtra("arrayList", modelAddressArrayList);
+                            i.putExtra("position",pos);
+                            i.putExtra("offers",offers);
+                            startActivity(i);
+
+                        }
+                    } else {
+                        apref.setIsReadyForCheckout2(Checkout1.this, true);
+                        Intent i = new Intent(Checkout1.this, AddNewAddress.class);
+                        startActivity(i);
+                        finish();
+                    }
+                }
+                else
+                {
+                    Toast.makeText(this,"Please Login first!!",Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.apply:
                 String temp = code.getText().toString();
                 if(temp.equals(""))
                     Toast.makeText(Checkout1.this, "Enter coupon code to apply.", Toast.LENGTH_SHORT).show();
-                else if(temp.equalsIgnoreCase("PERMA20"))
+                else if(stroffer.contains(temp))
                 {
-                   /* Toast.makeText(Checkout1.this, "Coupon code applied successfully.", Toast.LENGTH_SHORT).show();
+                   Toast.makeText(Checkout1.this, "Coupon code applied successfully.", Toast.LENGTH_SHORT).show();
+                    pos = stroffer.indexOf(temp);
                     isCouponApplied = true;
-                    setText();*/
-                    Toast.makeText(Checkout1.this, "Coupon code not valid.", Toast.LENGTH_SHORT).show();
+                    /*setText();*/
+                   // Toast.makeText(Checkout1.this, "Coupon code not valid.", Toast.LENGTH_SHORT).show();
 
 
                 }
@@ -132,9 +203,100 @@ public class Checkout1 extends AppCompatActivity implements View.OnClickListener
 
         DBInteraction dbInteraction = new DBInteraction(Checkout1.this);
         modelCartArrayList = dbInteraction.getCart();
-        modelAddressArrayList = dbInteraction.getAllAddress();
+        //modelAddressArrayList = dbInteraction.getAllAddress();
+        fetchAddresses(apref.readString(this,"email",null));
         dbInteraction.close();
         refreshAdapter(modelCartArrayList);
+    }
+    private void fetchAddresses(String mail)
+    {
+        if(mail!=null)
+        {
+            RequestParams params = new RequestParams();
+            params.put("email",mail);
+            EndPonits.getUserInfo(params, new TextHttpResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    System.out.println("Failure in Addresses");
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    String mobile="";
+                    System.out.println("Success"+responseString);
+                    try {
+                        JSONArray array = new JSONArray(responseString);
+                        for(int i=0;i<array.length();i++)
+                        {
+
+                            JSONObject obj = array.getJSONObject(i);
+                            if(obj.has("contactNos"))
+                            {
+                                System.out.println("Contact");
+                                JSONArray contacts = obj.getJSONArray("contactNos");
+                                mobile = String.valueOf(contacts.getLong(0));
+
+                            }
+                            if(obj.has("shippingAddresses"))
+                            {
+                                System.out.println("Found");
+
+                                JSONArray add = obj.getJSONArray("shippingAddresses");
+                                for(int j=0;j<add.length();j++)
+                                {
+                                    ModelAddress model = new ModelAddress();
+                                    JSONObject obj_add = add.getJSONObject(j);
+                                    System.out.println(obj_add.getString("location"));
+                                    model.location = obj_add.getString("location");
+                                    model.city = obj_add.getString("city");
+                                    model.state = obj_add.getString("state");
+                                    model.houseNo = obj_add.getString("houseNo");
+                                    model.localityName = obj_add.getString("localityName");
+                                    model.pincode = obj_add.getString("pincode");
+                                    model.others = obj_add.getString("others");
+                                    model.mobile_no = "";
+                                    if(obj.has("contactNos"))
+                                    {
+                                        System.out.println("Contact");
+                                        JSONArray contacts = obj.getJSONArray("contactNos");
+                                        //mobile = String.valueOf(contacts.getLong(0));
+                                        model.mobile_no = String.valueOf(contacts.getLong(0));
+
+                                    }
+                                    System.out.println("Contact"+model.mobile_no);
+
+                                    modelAddressArrayList.add(model);
+
+                                }
+
+
+                            }
+                        }
+                        if(!mobile.equals(""))
+                        {
+                            for(int i=0;i<modelAddressArrayList.size();i++)
+                            {
+                                if(modelAddressArrayList.get(i).mobile_no.equals(""))
+                                {
+                                    modelAddressArrayList.get(i).mobile_no = mobile;
+                                }
+                            }
+
+                        }
+
+
+
+
+                    }
+                    catch(Exception e)
+                    {
+
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+        }
     }
 
     private void refreshAdapter(ArrayList<ModelCart> result)
@@ -168,7 +330,6 @@ public class Checkout1 extends AppCompatActivity implements View.OnClickListener
         int to = 0,qu=0,sa=0;
         for (int i = 0; i < modelCartArrayList.size(); i++) {
             ModelCart modelCart = modelCartArrayList.get(i);
-
             int temp_amount = Integer.parseInt(modelCart.total_amount) - Integer.parseInt(modelCart.security_amount);
             int t1 = ((temp_amount * 80) / 100) + ((modelCart.quantity - 1) * (temp_amount));
             to = to + t1;

@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
+    android:layout_height="wrap_content"
     android:background="@color/white">
 
 
@@ -24,28 +24,81 @@
         android:layout_toEndOf="@+id/image">
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/houseNo"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:gravity="bottom"
-            android:text="Name"
-            android:layout_toLeftOf="@+id/detail"
+            android:padding="5dp"
+            android:text="Pending"
             android:textColor="#212121"
-            android:textSize="16sp"
             android:ellipsize="end"
+            android:textSize="16sp"
+            />
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:textColor="@color/cardtext"
+            android:gravity="bottom"
+            android:text="Location"
+            android:layout_toLeftOf="@+id/location"
+            android:textSize="14sp"
             android:singleLine="true"
             />
+        <TextView
+            android:id="@+id/localityName"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:textColor="@color/cardtext"
+            android:text="Pending"
+            android:textSize="14sp"
+            />
+        <TextView
+            android:id="@+id/others"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:textColor="@color/cardtext"
+            android:text="Pending"
+            android:textSize ="14sp" />
 
 
         <TextView
-            android:id="@+id/detail"
+            android:id="@+id/city"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:padding="5dp"
             android:textColor="@color/cardtext"
             android:text="Pending"
             android:textSize="14sp" />
+        <TextView
+            android:id="@+id/state"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="5dp"
+            android:layout_weight="1"
+            android:textColor="@color/cardtext"
+            android:text="Pending"
+            android:textSize="14sp"
+            />
+
+        <TextView
+            android:id="@+id/pinCode"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="5dp"
+            android:layout_weight="1"
+            android:textColor="@color/cardtext"
+            android:text="Pending"
+            android:textSize="14sp"
+            />
+
 
     </LinearLayout>
 

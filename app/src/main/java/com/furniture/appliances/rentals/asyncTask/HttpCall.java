@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.view.View;
 import android.widget.Toast;
 
 import com.dq.rocq.RocqAnalytics;
@@ -37,6 +39,8 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * Created by Infinia on 18-09-2015.
  */
@@ -51,8 +55,8 @@ public class HttpCall {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 result = new ParseApi().parseCategoryData(context, response);
-                for (int i = 0; i < Cart.category.size(); i++)
-                    new HttpCall().getSubCategories(context, Cart.category.get(i), null);
+                for (int i = 0; i < Cart.categoryIds.size(); i++)
+                    new HttpCall().getSubCategories(context, Cart.categoryIds.get(i), null);
                 if (mService != null)
                     mService.stopSelf();
             }
@@ -71,8 +75,8 @@ public class HttpCall {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 result = new ParseApi().parseSubCategoryData(context, category, response);
-                for (int i = 0; i < Cart.subcategory.size(); i++)
-                    new HttpCall().getProductList(context, Cart.subcategory.get(i), true, null);
+                for (int i = 0; i < Cart.subCategoryIds.size(); i++)
+                    new HttpCall().getProductList(context, Cart.subCategoryIds.get(i), true, null);
                 apref.setIsLogined(context, true);
                 if (mService != null)
                     mService.stopSelf();
@@ -81,11 +85,11 @@ public class HttpCall {
         });
         return result;
     }
-    public boolean getProductList(final Context context, final String category, final boolean isRequestedFromService, final Service mService)
+    public boolean getProductList(final Context context, final String subCategoryId, final boolean isRequestedFromService, final Service mService)
     {
         final ProgressDialog  progressDialog = new ProgressDialog(context);
         RequestParams params = new RequestParams();
-        params.put("subcategory", category);
+        params.put("subCategoryId", subCategoryId);
         EndPonits.getAllProducts(params, new JsonHttpResponseHandler() {
 
             @Override
@@ -101,8 +105,8 @@ public class HttpCall {
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 if (progressDialog != null && progressDialog.isShowing())
                     progressDialog.dismiss();
-                result = new ParseApi().parseProductList(context, response);
-                if (category.equals(Cart.subcategory.get(Cart.subcategory.size() - 1)))
+                //result = new ParseApi().parseProductList(context, response);
+                if (subCategoryId.equals(Cart.subCategoryIds.get(Cart.subCategoryIds.size() - 1)))
 
                 {
                     ((Welcome) context).removeDialog();
@@ -283,7 +287,7 @@ public class HttpCall {
                         if (modelUser.source.equals("permarent")) {
                             Toast.makeText(context, "Registration Successfull", Toast.LENGTH_SHORT).show();
                             DBInteraction dbInteraction = new DBInteraction(context);
-                            dbInteraction.insertUserDetail(modelUser);
+                            //dbInteraction.insertUserDetail(modelUser);
                             dbInteraction.close();
                             apref.writeString(context, "name", modelUser.firstname + "" + modelUser.lastname);
                             apref.writeString(context, "image", "");
@@ -297,7 +301,7 @@ public class HttpCall {
                                 ((SignUp) context).finish();
                         } else {
                             DBInteraction dbInteraction = new DBInteraction(context);
-                            dbInteraction.insertUserDetail(modelUser);
+                            //dbInteraction.insertUserDetail(modelUser);
                             dbInteraction.close();
                             apref.writeString(context, "name", modelUser.firstname);
                             apref.writeString(context, "image", modelUser.image);
@@ -353,7 +357,7 @@ public class HttpCall {
                     Toast.makeText(context, "Address successfully added!", Toast.LENGTH_SHORT).show();
                     DBInteraction dbInteraction = new DBInteraction(context);
                     modelAddress.mobile_no = modelUser.mobileno;
-                    dbInteraction.insertAddressDetail(modelAddress);
+                    //dbInteraction.insertAddressDetail(modelAddress);
                     dbInteraction.close();
                     if (apref.IsReadyForCheckout2(context)) {
                         Intent i = new Intent(context, Checkout2.class);
@@ -381,14 +385,14 @@ public class HttpCall {
         return result;
     }
 
-    public boolean verifyNumber(final Context context,final ModelUser modelUser,final ModelAddress modelAddress)
+    public boolean verifyNumber(final Context context,final String mobileno,final ModelAddress modelAddress)
     {
         final ProgressDialog  progressDialog = new ProgressDialog(context);
         final String otp = GenerateOTP.OTP(10000, 99999);
         RequestParams params = new RequestParams();
         params.put("method", "sms");
         params.put("api_key", Config.api_key);
-        params.put("to", modelUser.mobileno);
+        params.put("to", mobileno);
         params.put("sender",Config.SMS_SENDER);
         params.put("message","Dear Customer, Your one-time-password (OTP) for verification is "+otp+". Thanks for signing up with permarent.");
         params.put("format","json");
@@ -410,7 +414,8 @@ public class HttpCall {
                 if (result) {
                     Intent i = new Intent(context, OtpVerification.class);
                     i.putExtra("modelAddress", modelAddress);
-                    i.putExtra("modelUser", modelUser);
+                    i.putExtra("mobile",mobileno);
+                    //i.putExtra("modelUser", modelUser);
                     i.putExtra("otp", otp);
                     context.startActivity(i);
                     System.out.print("otp is " + otp);
@@ -429,7 +434,7 @@ public class HttpCall {
         final AppPreferences apref = new AppPreferences();
         final ProgressDialog  progressDialog = new ProgressDialog(context);
         RequestParams params = new RequestParams();
-        params.put("orderid", modelOrder.orderid);
+        /*params.put("orderid", modelOrder.orderid);
         params.put("productlist", modelOrder.productlist);
         params.put("paymentid", modelOrder.paymentid);
         params.put("email", modelOrder.email);
@@ -442,7 +447,27 @@ public class HttpCall {
         params.put("rentpaid", modelOrder.rentpaid);
         params.put("transactionstatus", modelOrder.transactionstatus);
         params.put("invoiceid", modelOrder.invoiceid);
-        params.put("deliverycharges",modelOrder.deliverycharges);
+        params.put("deliverycharges",modelOrder.deliverycharges);*/
+        params.put("productName",modelOrder.productName);
+        params.put("productQty",modelOrder.productQty);
+        params.put("perItemMonthlyRent",modelOrder.perItemMonthlyRent);
+        params.put("totalMonthlyRent",modelOrder.totalItemSecurity);
+        params.put("perItemSecurity",modelOrder.perItemSecurity);
+        params.put("totalItemSecurity",modelOrder.totalItemSecurity);
+        params.put("bookingDuration",modelOrder.bookingDuration);
+        params.put("email",modelOrder.email);
+        params.put("location",modelOrder.location);
+        params.put("city",modelOrder.city);
+        params.put("state",modelOrder.state);
+        params.put("houseNo",modelOrder.houseNo);
+        params.put("localityName",modelOrder.localityName);
+        params.put("pincode",modelOrder.pincode);
+        params.put("others",modelOrder.others);
+        params.put("shippingCharges",modelOrder.shippingCharges);
+        params.put("labourCharges",modelOrder.labourCharges);
+        params.put("totalRental",modelOrder.totalRental);
+        params.put("totalSecurity",modelOrder.totalSecurity);
+
         EndPonits.insertOrderDetails(params, new TextHttpResponseHandler() {
 
             @Override
@@ -454,11 +479,13 @@ public class HttpCall {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                System.out.println("Failure"+responseString);
 
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String response) {
+                System.out.println("Success"+response);
                 result = new ParseApi().parseInsertOrderData(context, response);
                 if (result) {
 
@@ -466,9 +493,9 @@ public class HttpCall {
                     Cart.QUANTITY = 0;
                     Cart.TOTAL_AMOUNT = 0;
                     DBInteraction dbInteraction = new DBInteraction(context);
-                    dbInteraction.resetProducts(0, 0, 0);
+                    //dbInteraction.resetProducts(0, 0, 0);
                     dbInteraction.resetCart(0);
-                    dbInteraction.insertMyOrdersDetail(modelOrder);
+                    //dbInteraction.insertMyOrdersDetail(modelOrder);
                     dbInteraction.close();
                     new HttpCall().sendOrderDetailsToUser(context, modelOrder);
                     new HttpCall().sendOrderDetailsToAdmin(context, modelOrder);
@@ -500,7 +527,7 @@ public class HttpCall {
         params.put("api_key", Config.api_key);
         params.put("to", modelOrder.mobileno);
         params.put("sender",Config.SMS_SENDER);
-        params.put("message","Hurray! Your order '"+modelOrder.orderid+"' has been successfully placed. Our representative will call you shortly. Happy Renting!");
+        params.put("message","Hurray! Your order '"+modelOrder.productName+"' has been successfully placed. Our representative will call you shortly. Happy Renting!");
         params.put("format","json");
         params.put("custom","1,2");
         params.put("flash","0");
@@ -511,6 +538,7 @@ public class HttpCall {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 result = new ParseApi().parseVerifyNumberData(context, response);
                 if (result) {
+
 
                 } else
                 {
@@ -530,7 +558,7 @@ public class HttpCall {
         params.put("api_key", Config.api_key);
         params.put("to", Config.adminNo);
         params.put("sender",Config.SMS_SENDER);
-        params.put("message","Order '" + modelOrder.orderid +" "+modelOrder.invoiceid+" "+modelOrder.productlist+ "' Received from "+modelOrder.name+" "+modelOrder.mobileno+" !");
+        params.put("message","Order '" + modelOrder.productName+ "' Received from "+modelOrder.name+" "+modelOrder.mobileno+" !");
         params.put("format","json");
         params.put("custom","1,2");
         params.put("flash","0");
@@ -543,7 +571,7 @@ public class HttpCall {
                 if (result) {
 
                 } else {
-                   // new HttpCall().sendOrderDetailsToAdmin(context, modelOrder);
+                   new HttpCall().sendOrderDetailsToAdmin(context, modelOrder);
                 }
 
             }
@@ -551,6 +579,37 @@ public class HttpCall {
         });
         return result;
     }
+
+    public void getAddresses(String email)
+    {
+
+       System.out.println("getAddresses");
+        int flag = 0;
+        final ArrayList<ModelAddress> list;
+        RequestParams params = new RequestParams();
+        params.put("email",email);
+        EndPonits.getUserInfo(params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                System.out.println("Failure in Addresses");
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    JSONArray array = new JSONArray(responseString);
+                    Config.Addresses = new ParseApi().getAddress(array);
+                }
+                catch (Exception e)
+                {
+
+                }
+
+            }
+        });
+    }
+
+
 
 
 

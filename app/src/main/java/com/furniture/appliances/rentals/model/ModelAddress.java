@@ -7,12 +7,19 @@ import java.io.Serializable;
  */
 public class ModelAddress implements Serializable{
 
-    public String city;
+   // public String city;
     public String area;
     public String house;
     public String street;
-    public String pincode;
+   // public String pincode;
     public String name;
     public String detail;
     public String mobile_no;
+    public String location;
+    public String city;
+    public String state;
+    public String houseNo;
+    public String localityName;
+    public String pincode;
+    public String others;
 }

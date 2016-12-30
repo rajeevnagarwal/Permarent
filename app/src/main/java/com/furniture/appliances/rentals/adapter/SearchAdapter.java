@@ -72,11 +72,11 @@ public class SearchAdapter extends BaseAdapter implements Filterable {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                apref.writeString(context, "city", temp);
+               /* apref.writeString(context, "city", temp);
                 Toast.makeText(context, "City changed to " + temp, Toast.LENGTH_LONG).show();
                 Intent i = new Intent(context, MainActivity.class);
                 context.startActivity(i);
-                ((SearchCity)context).finish();
+                ((SearchCity)context).finish();*/
             }
         });
         return view;

@@ -65,13 +65,15 @@ public class ReferEarn extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        View v = inflater.inflate(R.layout.fragment_refer, container, false);
+        View v=null;
         ((MainActivity) getActivity()).changeToolbar("Refer & Earn", false);
 
-        initialize(v);
+
         if (apref.IsLoginedByFb(getActivity()) || apref.IsLoginedByGoogle(getActivity()) || apref.IsLoginedByEmail(getActivity())) {
             if (apref.readString(getActivity(), "email", "") != null) {
                 if (new CheckInternetConnection(getActivity()).isConnectedToInternet()) {
+                    v = inflater.inflate(R.layout.fragment_refer, container, false);
+                    initialize(v);
                     fetch_code(apref.readString(getActivity(), "email", ""));
                 } else {
                     new CheckInternetConnection(getActivity()).showDialog();
@@ -89,7 +91,7 @@ public class ReferEarn extends Fragment {
     private void fetch_code(String mail) {
         RequestParams params = new RequestParams();
         params.put("email", mail);
-        EndPonits.getReferral(params, new TextHttpResponseHandler() {
+        EndPonits.getUserInfo(params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 System.out.println("Failure");
@@ -99,7 +101,33 @@ public class ReferEarn extends Fragment {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                setView("RajeevFG45");
+                System.out.println("Success"+responseString);
+                try {
+                    JSONArray array = new JSONArray(responseString);
+                    JSONObject object = array.getJSONObject(array.length()-1);
+                    if(object.has("userReferralCode"))
+                    {
+                        System.out.println("Refer"+object.get("userReferralCode"));
+                        if(!object.getString("userReferralCode").equals("null")) {
+                            System.out.println("OK");
+                            setView(object.getString("userReferralCode"));
+                        }
+                        else
+                        {
+                            setdefaultView();
+                        }
+
+                    }
+                    else {
+                        System.out.println("Not Refer");
+                        setdefaultView();
+                    }
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+
+                }
 
 
             }

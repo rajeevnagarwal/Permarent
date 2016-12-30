@@ -4,6 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +15,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.furniture.appliances.rentals.Category;
 import com.furniture.appliances.rentals.R;
+import com.furniture.appliances.rentals.fragment.CategoryFragment;
+import com.furniture.appliances.rentals.fragment.MyOrders;
 import com.furniture.appliances.rentals.model.Cat;
 import com.furniture.appliances.rentals.model.ModelReviews;
 import com.furniture.appliances.rentals.ui.RoundedBitmapView;
@@ -41,7 +47,7 @@ public class BrowseCategoryAdapter extends RecyclerView.Adapter<BrowseCategoryAd
         BrowseCategoryAdapter.ViewHolder vh = new BrowseCategoryAdapter.ViewHolder(v);
         return vh;
     }
-    public void onBindViewHolder(final BrowseCategoryAdapter.ViewHolder holder, int position)
+    public void onBindViewHolder(final BrowseCategoryAdapter.ViewHolder holder, final int position)
     {
        holder.name.setText(list.get(position).name);
        Picasso.with(ctx).load(R.drawable.user).into(holder.image,new com.squareup.picasso.Callback() {
@@ -56,6 +62,18 @@ public class BrowseCategoryAdapter extends RecyclerView.Adapter<BrowseCategoryAd
            public void onError() {
 
            }
+       });
+       holder.itemView.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Fragment fragment;
+                   fragment = ((AppCompatActivity)ctx).getSupportFragmentManager().findFragmentByTag(CategoryFragment.TAG);
+                   if(fragment==null) {
+                       fragment = new CategoryFragment();
+
+                   }
+               ((AppCompatActivity)ctx).getSupportFragmentManager().beginTransaction().replace(android.R.id.tabcontent,fragment,CategoryFragment.TAG).addToBackStack(CategoryFragment.TAG).commit();
+               }
        });
 
 

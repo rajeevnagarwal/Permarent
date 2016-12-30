@@ -21,8 +21,16 @@ import com.furniture.appliances.rentals.R;
 import com.furniture.appliances.rentals.adapter.AddressAdapter;
 import com.furniture.appliances.rentals.database.DBInteraction;
 import com.furniture.appliances.rentals.model.ModelAddress;
+import com.furniture.appliances.rentals.restApi.EndPonits;
 import com.furniture.appliances.rentals.util.AppPreferences;
+import com.furniture.appliances.rentals.util.Config;
 import com.github.clans.fab.FloatingActionButton;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -38,7 +46,7 @@ public class Addresses extends Fragment {
     FloatingActionButton add;
     AppPreferences apref = new AppPreferences();
     AddressAdapter addressAdapter;
-    ArrayList<ModelAddress> modelAddressArrayList = new ArrayList<ModelAddress>();
+    private ArrayList<ModelAddress> modelAddressArrayList = new ArrayList<ModelAddress>();
 
 
     @Nullable
@@ -70,15 +78,17 @@ public class Addresses extends Fragment {
 
     private void refreshAdapter(ArrayList<ModelAddress> result)
     {
+        System.out.println("Size"+result.size());
         addressAdapter = new AddressAdapter(getActivity(),result);
         lv.setAdapter(addressAdapter);
     }
 
     private void getDataFromDb()
     {
-        DBInteraction dbInteraction = new DBInteraction(getActivity());
-        modelAddressArrayList = dbInteraction.getAllAddress();
-        dbInteraction.close();
+       /* DBInteraction dbInteraction = new DBInteraction(getActivity());
+        //modelAddressArrayList = dbInteraction.getAllAddress();
+        dbInteraction.close();*/
+        //modelAddressArrayList = Config.Addresses;
         refreshAdapter(modelAddressArrayList);
     }
 
@@ -95,14 +105,78 @@ public class Addresses extends Fragment {
             rl1.setVisibility(View.GONE);
             rl2.setVisibility(View.VISIBLE);
             getDataFromDb();
-            if(modelAddressArrayList.size()!=0)
-            {
-                rl3.setVisibility(View.GONE);
-                lv.setVisibility(View.VISIBLE);
-            }
+            System.out.println("ListSize"+modelAddressArrayList.size());
+            fetchAddresses(apref.readString(getActivity(),"email",null));
+
+
         }
 
     }
+    private void fetchAddresses(String mail)
+    {
+        if(mail!=null)
+        {
+            RequestParams params = new RequestParams();
+            params.put("email",mail);
+            EndPonits.getUserInfo(params, new TextHttpResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    System.out.println("Failure in Addresses");
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    System.out.println("Success"+responseString);
+                    try {
+                        JSONArray array = new JSONArray(responseString);
+                        for(int i=0;i<array.length();i++)
+                        {
+
+                            JSONObject obj = array.getJSONObject(i);
+                            if(obj.has("shippingAddresses"))
+                            {
+                                System.out.println("Found");
+
+                                JSONArray add = obj.getJSONArray("shippingAddresses");
+                                for(int j=0;j<add.length();j++)
+                                {
+                                    ModelAddress model = new ModelAddress();
+                                    JSONObject obj_add = add.getJSONObject(j);
+                                    System.out.println(obj_add.getString("location"));
+                                    model.location = obj_add.getString("location");
+                                    model.city = obj_add.getString("city");
+                                    model.state = obj_add.getString("state");
+                                    model.houseNo = obj_add.getString("houseNo");
+                                    model.localityName = obj_add.getString("localityName");
+                                    model.pincode = obj_add.getString("pincode");
+                                    model.others = obj_add.getString("others");
+                                    modelAddressArrayList.add(model);
+
+                                }
+
+
+                            }
+                        }
+                        refreshAdapter(modelAddressArrayList);
+                        if(modelAddressArrayList.size()!=0)
+                        {
+                            rl3.setVisibility(View.GONE);
+                            lv.setVisibility(View.VISIBLE);
+                        }
+
+
+                    }
+                    catch(Exception e)
+                    {
+
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+        }
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

@@ -1,6 +1,7 @@
 package com.furniture.appliances.rentals.restApi;
 
 import android.os.Looper;
+import android.support.v7.widget.RecyclerView;
 
 import com.furniture.appliances.rentals.util.Config;
 import com.loopj.android.http.AsyncHttpClient;
@@ -130,15 +131,14 @@ public class EndPonits {
     {
         getClient().get(Config.checkUser,params,asyncHttpResponseHandler);
     }
-
-
-
-
-
-
-
-
-
+    public static void addContactNo(RequestParams params,AsyncHttpResponseHandler asyncHttpResponseHandler)
+    {
+        getClient().get(Config.addContactNo,params,asyncHttpResponseHandler);
+    }
+    public static void addAddress(RequestParams params,AsyncHttpResponseHandler asyncHttpResponseHandler)
+    {
+        getClient().get(Config.addAddress,params,asyncHttpResponseHandler);
+    }
     private static AsyncHttpClient getClient()
     {
         // Return the synchronous HTTP client when the thread is not prepared

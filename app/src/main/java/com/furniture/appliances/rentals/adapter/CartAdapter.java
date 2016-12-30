@@ -103,7 +103,7 @@ public class CartAdapter extends BaseAdapter {
             public void onClick(View v) {
                 DBInteraction dbInteraction = new DBInteraction(context);
                 model.quantity++;
-                dbInteraction.updateSubCategoryDetail(model.prod_id, model.quantity, Integer.parseInt(model.rent_type));
+               // dbInteraction.updateSubCategoryDetail(model.prod_id, model.quantity, Integer.parseInt(model.rent_type));
                 dbInteraction.updateCartDetail(model.item_id, model.quantity);
                 dbInteraction.close();
                 holder.quantity.setText(String.valueOf(model.quantity));
@@ -125,7 +125,7 @@ public class CartAdapter extends BaseAdapter {
                 if (Integer.parseInt(holder.quantity.getText().toString()) > 1) {
                     DBInteraction dbInteraction = new DBInteraction(context);
                     model.quantity--;
-                    dbInteraction.updateSubCategoryDetail(model.prod_id, model.quantity, Integer.parseInt(model.rent_type));
+                   // dbInteraction.updateSubCategoryDetail(model.prod_id, model.quantity, Integer.parseInt(model.rent_type));
                     dbInteraction.updateCartDetail(model.item_id, model.quantity);
                     dbInteraction.close();
                     holder.quantity.setText(String.valueOf(model.quantity));
@@ -140,7 +140,7 @@ public class CartAdapter extends BaseAdapter {
                 } else if (Integer.parseInt(holder.quantity.getText().toString()) == 1) {
                     DBInteraction dbInteraction = new DBInteraction(context);
                     model.quantity--;
-                    dbInteraction.updateSubCategoryDetail(model.prod_id, model.quantity, Integer.parseInt(model.rent_type));
+                   // dbInteraction.updateSubCategoryDetail(model.prod_id, model.quantity, Integer.parseInt(model.rent_type));
                     dbInteraction.updateCartDetail(model.item_id, model.quantity);
                     dbInteraction.close();
                     modelCartArrayList.remove(model);

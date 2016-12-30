@@ -10,6 +10,6 @@ public class Cart {
     public static int QUANTITY=0;
     public static int SECURITY_AMOUNT=0;
     public static int TOTAL_AMOUNT=0;
-    public static final ArrayList<String> category = new ArrayList<>();
-    public static final ArrayList<String> subcategory = new ArrayList<>();
+    public static final ArrayList<String> categoryIds = new ArrayList<>();
+    public static final ArrayList<String> subCategoryIds = new ArrayList<>();
 }

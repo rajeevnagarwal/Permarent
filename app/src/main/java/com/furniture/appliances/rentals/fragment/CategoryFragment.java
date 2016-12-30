@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +49,7 @@ public class CategoryFragment extends Fragment {
     public static String TAG = "CategoryFragment";
     RecyclerView recycle_category;
     ArrayList<Cat> categories;
+    ScrollView catscroll;
     public static boolean isFragmentOpened;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,10 +60,12 @@ public class CategoryFragment extends Fragment {
         fetchCategories();
 
 
+
         return v;
     }
     private void initialize(View v)
     {
+        catscroll = (ScrollView)v.findViewById(R.id.catscroll);
         categories = new ArrayList<>();
         recycle_category = (RecyclerView)v.findViewById(R.id.recycle_categories);
     }
@@ -101,6 +105,7 @@ public class CategoryFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         recycle_category.setLayoutManager(layoutManager);
         recycle_category.setAdapter(adapter);
+
 
     }
     @Override

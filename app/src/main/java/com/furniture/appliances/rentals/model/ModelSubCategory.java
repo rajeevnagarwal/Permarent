@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by Infinia on 9/16/2015.
  */
 public class ModelSubCategory implements Serializable{
-    public String prod_code;
+    /*public String prod_code;
     public String prod_id;
     public String prod_name;
     public String vendor_code;
@@ -51,8 +51,131 @@ public class ModelSubCategory implements Serializable{
     public String threeMo;
     public String sixMo;
     public String nineMo;
-    public String twelveMo;
-    public void setValues()
+    public String twelveMo;*/
+
+    public String productId;
+    public String productName;
+    public String vendorId;
+    public String categoryId;
+    public String categoryName;
+    public String subCategoryId;
+    public String subCategoryName;
+    public String smallImages;
+    public String largeImages;
+    public String rentToOwn;
+    public String briefDesc;
+    public String capacity;
+    public String weight;
+    public String dimensions;
+    public String material;
+    public String color;
+    public String type;
+    public String brand;
+    public String otherDesc;
+    public String max_quantity;
+    public String package_products;
+    public String rentalAmount;
+    public String securityAmount;
+    public String minRentalDuration;
+    public int quantity_sixMo;
+    public int quantity_nineMo;
+    public int quantity_twelveMo;
+    public int quantity_threeMo;
+
+    public Integer getThree()
+    {
+        try
+        {
+            JSONArray array = new JSONArray(this.rentalAmount);
+            return array.getJSONObject(0).getInt("threeMo");
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    public Integer getSix()
+    {
+        try
+        {
+            JSONArray array = new JSONArray(this.rentalAmount);
+            return array.getJSONObject(0).getInt("sixMo");
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    public Integer getNine()
+    {
+        try
+        {
+           JSONArray array = new JSONArray(this.rentalAmount);
+            return array.getJSONObject(0).getInt("nineMo");
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    public Integer getTwelve()
+    {
+        try
+        {
+            JSONArray array = new JSONArray(this.rentalAmount);
+            return array.getJSONObject(0).getInt("twelveMo");
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+
+
+
+    public String firstSmall()
+    {
+        try
+        {
+            JSONArray array = new JSONArray(this.smallImages);
+            return array.getString(0);
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return "";
+
+        }
+    }
+    public String firstLarge()
+    {
+        try
+        {
+            JSONArray array = new JSONArray(this.largeImages);
+            return array.getString(0);
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return "";
+
+        }
+    }
+
+
+
+
+
+    /*public void setValues()
     {
         try
         {
@@ -91,6 +214,6 @@ public class ModelSubCategory implements Serializable{
 
         }
 
-    }
+    }*/
 
 }

@@ -67,9 +67,11 @@ public class CheckoutAddressAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         final ModelAddress modelAddress = modelAddressArrayList.get(position);
-        holder.name.setText(modelAddress.detail);
+        holder.name.setText(modelAddress.house + ", "+modelAddress.houseNo + ", "+modelAddress.location+", "+modelAddress.street+", "+modelAddress.localityName);
         holder.detail.setText(modelAddress.pincode);
-        holder.mobile.setText(apref.readString(context,"mobile",null));
+        System.out.println("Mobile"+modelAddress.mobile_no);
+        holder.mobile.setText(modelAddress.mobile_no);
+        //holder.mobile.setText(apref.readString(context,"mobile",null));
         if(modelAddressArrayList.size()==1)
         {
             holder.cb.setChecked(true);

@@ -77,7 +77,7 @@ public class CheckOutAdapter extends BaseAdapter {
         }
         final ModelCart model = modelCartArrayList.get(position);
         final DBInteraction db = new DBInteraction(context);
-        if(db.checkWishProduct("P01"))
+        if(db.checkWishProduct(model.prod_id))
         {
             Picasso.with(context).load(R.drawable.ic_heart_disable).into(holder.wish);
             holder.wish.setClickable(false);
@@ -91,19 +91,22 @@ public class CheckOutAdapter extends BaseAdapter {
         if(model.rent_type.equals("0")){
             holder.type.setText("3 months");
             int temp = Integer.parseInt(model.rent_amount);
-            temp=temp+(temp*(Config.DISCOUNT_HALF_YEARLY)/100);
-            holder.rent.setText("Rent amount "+context.getResources().getString(R.string.Rs)+" "+String.valueOf(temp));
+            holder.rent.setText("Rent amount "+context.getResources().getString(R.string.Rs)+" "+temp);
         }
         else if(model.rent_type.equals("1")){
             holder.type.setText("6 months");
             int temp = Integer.parseInt(model.rent_amount);
-            holder.rent.setText("Rent amount "+context.getResources().getString(R.string.Rs)+" "+String.valueOf(temp));
+            holder.rent.setText("Rent amount "+context.getResources().getString(R.string.Rs)+" "+temp);
         }
         else if(model.rent_type.equals("2")){
-            holder.type.setText("12 months");
+            holder.type.setText("9 months");
             int temp = Integer.parseInt(model.rent_amount);
-            temp=temp-(temp*(Config.DISCOUNT_YEARLY)/100);
-            holder.rent.setText("Rent amount "+context.getResources().getString(R.string.Rs)+" "+String.valueOf(temp));
+            holder.rent.setText("Rent amount "+context.getResources().getString(R.string.Rs)+" "+temp);
+        }
+        else if(model.rent_type.equals("3"))
+        {
+            holder.type.setText("12 months");
+            holder.rent.setText("Rent amount "+context.getResources().getString(R.string.Rs)+" "+model.rent_amount);
         }
 
         holder.security.setText("Security amount "+context.getResources().getString(R.string.Rs)+" " + model.security_amount);
@@ -118,7 +121,7 @@ public class CheckOutAdapter extends BaseAdapter {
             public void onClick(View v) {
                 DBInteraction dbInteraction = new DBInteraction(context);
                 model.quantity++;
-                dbInteraction.updateSubCategoryDetail(model.prod_id, model.quantity, Integer.parseInt(model.rent_type));
+               // dbInteraction.updateSubCategoryDetail(model.prod_id, model.quantity, Integer.parseInt(model.rent_type));
                 dbInteraction.updateCartDetail(model.item_id, model.quantity);
                 dbInteraction.close();
                 holder.quantity.setText(String.valueOf(model.quantity));
@@ -136,7 +139,7 @@ public class CheckOutAdapter extends BaseAdapter {
         holder.wish.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v)
             {
-                if(db.insertWishItem("P01",apref.readString(context,"email",""),apref.readString(context,"name","")))
+                if(db.insertWishItem(model.prod_id,apref.readString(context,"email",""),apref.readString(context,"name","")))
                 {
                     Picasso.with(context).load(R.drawable.ic_heart_disable).into(holder.wish);
                     holder.wish.setClickable(false);
@@ -152,7 +155,7 @@ public class CheckOutAdapter extends BaseAdapter {
                 if (Integer.parseInt(holder.quantity.getText().toString()) > 1) {
                     DBInteraction dbInteraction = new DBInteraction(context);
                     model.quantity--;
-                    dbInteraction.updateSubCategoryDetail(model.prod_id, model.quantity, Integer.parseInt(model.rent_type));
+                    //dbInteraction.updateSubCategoryDetail(model.prod_id, model.quantity, Integer.parseInt(model.rent_type));
                     dbInteraction.updateCartDetail(model.item_id, model.quantity);
                     dbInteraction.close();
                     holder.quantity.setText(String.valueOf(model.quantity));
@@ -166,7 +169,7 @@ public class CheckOutAdapter extends BaseAdapter {
                 } else if (Integer.parseInt(holder.quantity.getText().toString()) == 1) {
                     DBInteraction dbInteraction = new DBInteraction(context);
                     model.quantity--;
-                    dbInteraction.updateSubCategoryDetail(model.prod_id, model.quantity, Integer.parseInt(model.rent_type));
+                    //dbInteraction.updateSubCategoryDetail(model.prod_id, model.quantity, Integer.parseInt(model.rent_type));
                     dbInteraction.updateCartDetail(model.item_id, model.quantity);
                     dbInteraction.close();
                     modelCartArrayList.remove(model);

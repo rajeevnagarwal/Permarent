@@ -1,6 +1,7 @@
 package com.furniture.appliances.rentals.fragment;
 
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,7 +21,15 @@ import com.furniture.appliances.rentals.R;
 import com.furniture.appliances.rentals.adapter.OrdersAdapter;
 import com.furniture.appliances.rentals.database.DBInteraction;
 import com.furniture.appliances.rentals.model.ModelOrder;
+import com.furniture.appliances.rentals.restApi.EndPonits;
 import com.furniture.appliances.rentals.util.AppPreferences;
+import com.furniture.appliances.rentals.util.CheckInternetConnection;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -56,6 +65,62 @@ public class MyOrders extends Fragment {
         });
         return v;
     }
+    private void fetchOrders()
+    {
+        if(new CheckInternetConnection(getActivity()).isConnectedToInternet())
+        {
+            RequestParams params = new RequestParams();
+            EndPonits.getOrderDetails(params, new TextHttpResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    System.out.println("Failure in Orders");
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    System.out.println("Success"+responseString);
+                    try {
+                        JSONArray array = new JSONArray(responseString);
+                        for(int i=0;i<array.length();i++)
+                        {
+                            JSONObject object = array.getJSONObject(i);
+                            if(apref.readString(getActivity(),"email",null).equals(object.getString("email")))
+                            {
+                                String orderId = object.getString("orderId");
+                                String amount = object.getString("totalRental");
+                               // String productName = object.getString("productName");
+                                ModelOrder order = new ModelOrder();
+                                order.orderid = orderId;
+                                order.totalRental = amount;
+                                order.totalSecurity = object.getString("totalSecurity");
+                                order.productName = object.getJSONArray("items").toString();
+                                //order.productName = productName;
+                                modelOrderArrayList.add(order);
+                            }
+                        }
+                        if(modelOrderArrayList.size()!=0)
+                        {
+                            rl3.setVisibility(View.GONE);
+                            lv.setVisibility(View.VISIBLE);
+                        }
+                        refreshAdapter(modelOrderArrayList);
+
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
+        }
+        else
+        {
+            new CheckInternetConnection(getActivity()).showDialog();
+        }
+    }
+
     private void initView(View v)
     {
         linearlayout = (LinearLayout)v.findViewById(R.id.lv_complaint);
@@ -68,12 +133,13 @@ public class MyOrders extends Fragment {
         {
             rl1.setVisibility(View.GONE);
             rl2.setVisibility(View.VISIBLE);
-            getDataFromDb();
-            if(modelOrderArrayList.size()!=0)
+            fetchOrders();
+            //getDataFromDb();
+            /*if(modelOrderArrayList.size()!=0)
             {
                 rl3.setVisibility(View.GONE);
                 lv.setVisibility(View.VISIBLE);
-            }
+            }*/
         }
         linearlayout.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v)
@@ -92,7 +158,7 @@ public class MyOrders extends Fragment {
     private void getDataFromDb()
     {
         DBInteraction dbInteraction = new DBInteraction(getActivity());
-        modelOrderArrayList = dbInteraction.getAllOrders();
+        //modelOrderArrayList = dbInteraction.getAllOrders();
         dbInteraction.close();
         refreshAdapter(modelOrderArrayList);
     }

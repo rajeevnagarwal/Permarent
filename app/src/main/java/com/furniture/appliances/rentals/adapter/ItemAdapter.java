@@ -3,6 +3,7 @@ package com.furniture.appliances.rentals.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,7 +99,7 @@ public class ItemAdapter extends BaseAdapter {
         }
         final ModelSubCategory model = modelSubCategoryArrayList.get(position);
         RequestParams params = new RequestParams();
-        params.put("productId",model.prod_id);
+        params.put("productId",model.productId);
         EndPonits.getProductDetails(params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -138,7 +139,7 @@ public class ItemAdapter extends BaseAdapter {
 
 
         final DBInteraction db = new DBInteraction(context);
-        if(db.checkWishProduct(model.prod_id))
+        if(db.checkWishProduct(model.productId))
         {
             Picasso.with(context).load(R.drawable.ic_heart_disable).into(holder.wish);
             holder.wish.setClickable(false);
@@ -148,17 +149,17 @@ public class ItemAdapter extends BaseAdapter {
             Picasso.with(context).load(R.drawable.ic_heart_selected).into(holder.wish);
             holder.wish.setClickable(true);
         }
-        if(model.prod_name.contains(model.subcategory_desc))
+        if(model.productName.contains(model.subCategoryName))
         {
-            model.prod_name = model.prod_name.replace(model.subcategory_desc,"");
+            model.productName = model.productName.replace(model.subCategoryName,"");
         }
-        holder.name.setText(model.prod_name);
-        System.out.println(model.prod_name);
-        System.out.println(model.subcategory_code);
-        System.out.println(model.subcategory_desc);
-        holder.price.setText(context.getResources().getString(R.string.Rs)+" " + model.rent_amount+"/"+model.rent_duration);
+        holder.name.setText(model.productName);
+        System.out.println(model.productName);
+        System.out.println(model.subCategoryId);
+        System.out.println(model.subCategoryName);
+        holder.price.setText(context.getResources().getString(R.string.Rs)+" " + model.getTwelve()+"/month");
         Picasso.with(holder.image.getContext())
-                .load(Config.subCategoryImage + parseImg(model.small_img))
+                .load(Config.subCategoryImage + parseImg(model.smallImages))
                         //.placeholder(R.drawable.dummy)
                         //.error(R.drawable.dummy)
                 .into(holder.image);
@@ -168,24 +169,25 @@ public class ItemAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 DBInteraction dbInteraction = new DBInteraction(context);
-                ModelSubCategory temp = dbInteraction.getSubCategoryItemById(model.prod_id);
+//              ModelSubCategory temp = dbInteraction.getSubCategoryItemById(model.prod_id);
+                ModelSubCategory temp = model;
                 dbInteraction.close();
-                if(temp.quantity ==0 && temp.quantity_quarterly==0 && temp.quantity_monthly==0) {
+                if(temp.quantity_threeMo == 0 && temp.quantity_sixMo==0 && temp.quantity_nineMo == 0 && temp.quantity_twelveMo==0) {
                     RocqAnalytics.initialize(context);
                     RocqAnalytics.trackEvent("6 month added", new ActionProperties(""), Position.LEFT);
-                    temp.quantity_quarterly++;
-                    model.quantity_quarterly++;
-                    dbInteraction.updateSubCategoryDetail(temp.prod_id, temp.quantity_quarterly, 1);
-                    dbInteraction.updateCartDetail(temp.prod_id + 1, temp.quantity_quarterly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(temp.prod_id + 1);
+                    temp.quantity_sixMo++;
+                    model.quantity_sixMo++;
+//                    dbInteraction.updateSubCategoryDetail(temp.prod_id, temp.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(temp.productId + 1, temp.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(temp.productId + 1);
                     dbInteraction.close();
                     Cart.QUANTITY++;
                     Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
                     Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
 
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    /*((MainActivity) Config.CURRENT_ACTIVITY_CONTEXT).setData();
                     ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
                 }
                 showAddView(temp);
             }
@@ -194,13 +196,13 @@ public class ItemAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 RocqAnalytics.initialize(context);
-                RocqAnalytics.trackEvent(model.subcategory_desc, new ActionProperties(""), Position.LEFT);
-                if (model.category_desc.equals("Packages")) {
+                RocqAnalytics.trackEvent(model.subCategoryName, new ActionProperties(""), Position.LEFT);
+                if (model.categoryName.equals("Packages")) {
                     Intent i = new Intent(context, PackageProductDetails.class);
                     i.putExtra("category",category);
                     i.putExtra("model", model);
                     context.startActivity(i);
-                    ((Category)context).finish();
+                    ((MainActivity)context).finish();
                 } else {
                     Intent i = new Intent(context, ProductDetails.class);
                     i.putExtra("category",category);
@@ -214,7 +216,7 @@ public class ItemAdapter extends BaseAdapter {
         {
             public void onClick(View v)
             {
-                if(db.insertWishItem(model.prod_id,apref.readString(context,"email",""),apref.readString(context,"name","")))
+                if(db.insertWishItem(model.productId,apref.readString(context,"email",""),apref.readString(context,"name","")))
                 {
                     Picasso.with(context).load(R.drawable.ic_heart_disable).into(holder.wish);
                     holder.wish.setClickable(false);
@@ -228,7 +230,7 @@ public class ItemAdapter extends BaseAdapter {
             public void onClick(View v)
             {
                 RequestParams params = new RequestParams();
-                params.put("productId",model.prod_id);
+                params.put("productId",model.productId);
                 params.put("firstName",apref.readString(context,"name",""));
                 params.put("lastName","");
                 params.put("email",apref.readString(context,"email",""));
@@ -270,10 +272,10 @@ public class ItemAdapter extends BaseAdapter {
 
     private void showAddView(final ModelSubCategory modelSubCategory)
     {
-        final TextView quantity_3,quantity_6,quantity_12,price_3,price_6,price_12;
-        final RadioButton radio_3,radio_6,radio_12;
-        ImageButton plus_3,minus_3,plus_6,minus_6,plus_12,minus_12;
-        final LinearLayout btn_3,btn_6,btn_12;
+        final TextView quantity_3,quantity_6,quantity_9,quantity_12,price_3,price_6,price_9,price_12;
+        final RadioButton radio_3,radio_6,radio_9,radio_12;
+        ImageButton plus_3,minus_3,plus_6,minus_6,plus_9,minus_9,plus_12,minus_12;
+        final LinearLayout btn_3,btn_6,btn_9,btn_12;
 
         MaterialDialog dialog = new MaterialDialog.Builder(context)
                 .title("Add products")
@@ -283,68 +285,101 @@ public class ItemAdapter extends BaseAdapter {
 
         btn_3 = (LinearLayout)dialog.getCustomView().findViewById(R.id.btn_3);
         btn_6 = (LinearLayout)dialog.getCustomView().findViewById(R.id.btn_6);
+        btn_9 = (LinearLayout)dialog.getCustomView().findViewById(R.id.btn_9);
         btn_12 = (LinearLayout)dialog.getCustomView().findViewById(R.id.btn_12);
         radio_3 = (RadioButton)dialog.getCustomView().findViewById(R.id.radio_3);
         radio_6 = (RadioButton)dialog.getCustomView().findViewById(R.id.radio_6);
+        radio_9 = (RadioButton)dialog.getCustomView().findViewById(R.id.radio_9);
         radio_12 = (RadioButton)dialog.getCustomView().findViewById(R.id.radio_12);
         quantity_3 = (TextView) dialog.getCustomView().findViewById(R.id.quantity_3);
         quantity_6 = (TextView) dialog.getCustomView().findViewById(R.id.quantity_6);
+        quantity_9 = (TextView) dialog.getCustomView().findViewById(R.id.quantity_9);
         quantity_12 = (TextView) dialog.getCustomView().findViewById(R.id.quantity_12);
         price_3 = (TextView) dialog.getCustomView().findViewById(R.id.price_3);
         price_6 = (TextView) dialog.getCustomView().findViewById(R.id.price_6);
+        price_9 = (TextView) dialog.getCustomView().findViewById(R.id.price_9);
         price_12 = (TextView) dialog.getCustomView().findViewById(R.id.price_12);
         plus_3 = (ImageButton)dialog.getCustomView().findViewById(R.id.plus_3);
         plus_6 = (ImageButton)dialog.getCustomView().findViewById(R.id.plus_6);
+        plus_9 = (ImageButton)dialog.getCustomView().findViewById(R.id.plus_9);
         plus_12 = (ImageButton)dialog.getCustomView().findViewById(R.id.plus_12);
         minus_3 = (ImageButton)dialog.getCustomView().findViewById(R.id.minus_3);
         minus_6 = (ImageButton)dialog.getCustomView().findViewById(R.id.minus_6);
+        minus_9 = (ImageButton)dialog.getCustomView().findViewById(R.id.minus_9);
         minus_12 = (ImageButton)dialog.getCustomView().findViewById(R.id.minus_12);
-        quantity_3.setText(String.valueOf(modelSubCategory.quantity));
-        quantity_6.setText(String.valueOf(modelSubCategory.quantity_quarterly));
-        quantity_12.setText(String.valueOf(modelSubCategory.quantity_monthly));
-        int temp = Integer.parseInt(modelSubCategory.rent_amount);
-        price_6.setText(context.getResources().getString(R.string.Rs)+" " +String.valueOf(temp));
-        temp = Integer.parseInt(modelSubCategory.rent_amount);
-        temp=temp+(temp*(Config.DISCOUNT_HALF_YEARLY)/100);
-        price_3.setText(context.getResources().getString(R.string.Rs)+" " +String.valueOf(temp));
-        temp = Integer.parseInt(modelSubCategory.rent_amount);
-        temp=temp-(temp*(Config.DISCOUNT_YEARLY)/100);
-        price_12.setText(context.getResources().getString(R.string.Rs)+" " +String.valueOf(temp));
-        if(modelSubCategory.quantity>0) {
+        quantity_3.setText(String.valueOf(modelSubCategory.quantity_threeMo));
+        quantity_6.setText(String.valueOf(modelSubCategory.quantity_sixMo));
+        quantity_9.setText(String.valueOf(modelSubCategory.quantity_nineMo));
+        quantity_12.setText(String.valueOf(modelSubCategory.quantity_twelveMo));
+        price_3.setText(context.getResources().getString(R.string.Rs)+" " +String.valueOf(modelSubCategory.getThree()));
+        price_6.setText(context.getResources().getString(R.string.Rs)+" " +String.valueOf(modelSubCategory.getSix()));
+        price_9.setText(context.getResources().getString(R.string.Rs)+" " +String.valueOf(modelSubCategory.getNine()));
+        price_12.setText(context.getResources().getString(R.string.Rs)+" " +String.valueOf(modelSubCategory.getTwelve()));
+        if(modelSubCategory.quantity_threeMo>0) {
             radio_3.setChecked(true);
             btn_3.setVisibility(View.VISIBLE);
             radio_6.setChecked(false);
             btn_6.setVisibility(View.GONE);
+            radio_9.setChecked(false);
+            btn_9.setVisibility(View.GONE);
             radio_12.setChecked(false);
             btn_12.setVisibility(View.GONE);
         }
-        else if(modelSubCategory.quantity_quarterly>0) {
+        else if(modelSubCategory.quantity_sixMo>0) {
             radio_3.setChecked(false);
             btn_3.setVisibility(View.GONE);
             radio_6.setChecked(true);
             btn_6.setVisibility(View.VISIBLE);
+            radio_9.setChecked(false);
+            btn_9.setVisibility(View.GONE);
             radio_12.setChecked(false);
             btn_12.setVisibility(View.GONE);
         }
-        else if(modelSubCategory.quantity_monthly>0) {
+        else if(modelSubCategory.quantity_nineMo>0) {
             radio_3.setChecked(false);
             btn_3.setVisibility(View.GONE);
             radio_6.setChecked(false);
             btn_6.setVisibility(View.GONE);
+            radio_9.setChecked(true);
+            btn_9.setVisibility(View.VISIBLE);
+            radio_12.setChecked(false);
+            btn_12.setVisibility(View.GONE);
+        }
+        else if(modelSubCategory.quantity_twelveMo>0) {
+            radio_3.setChecked(false);
+            btn_3.setVisibility(View.GONE);
+            radio_6.setChecked(false);
+            btn_6.setVisibility(View.GONE);
+            radio_9.setChecked(false);
+            btn_9.setVisibility(View.GONE);
             radio_12.setChecked(true);
             btn_12.setVisibility(View.VISIBLE);
         }
         radio_3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (Integer.parseInt(quantity_3.getText().toString()) == 0) {
+                    DBInteraction dbInteraction = new DBInteraction(context);
+                    modelSubCategory.quantity_threeMo++;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
+                    dbInteraction.close();
+                    quantity_3.setText(String.valueOf(modelCart.quantity));
+                    Cart.QUANTITY++;
+                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
+                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
+                }
                 if (Integer.parseInt(quantity_6.getText().toString()) > 0) {
                     int temp = Integer.parseInt(quantity_6.getText().toString());
                     DBInteraction dbInteraction = new DBInteraction(context);
-                    modelSubCategory.quantity_quarterly = 0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 1, modelSubCategory.quantity_quarterly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 1);
+                    modelSubCategory.quantity_sixMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
                     dbInteraction.close();
                     quantity_6.setText("0");
                     for (int i = 0; i < temp; i++) {
@@ -352,17 +387,37 @@ public class ItemAdapter extends BaseAdapter {
                         Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
                         Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
                     }
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
                     ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
+
+                }
+                if (Integer.parseInt(quantity_9.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_9.getText().toString());
+                    DBInteraction dbInteraction = new DBInteraction(context);
+                    modelSubCategory.quantity_nineMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
+                    dbInteraction.close();
+                    quantity_9.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                   /* ((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
+
                 }
                 if (Integer.parseInt(quantity_12.getText().toString()) > 0) {
                     int temp = Integer.parseInt(quantity_12.getText().toString());
                     DBInteraction dbInteraction = new DBInteraction(context);
-                    modelSubCategory.quantity_monthly=0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 2, modelSubCategory.quantity_monthly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 2);
+                    modelSubCategory.quantity_twelveMo=0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 3, modelSubCategory.quantity_twelveMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
                     dbInteraction.close();
                     quantity_12.setText("0");
                     for (int i = 0; i < temp; i++) {
@@ -370,32 +425,19 @@ public class ItemAdapter extends BaseAdapter {
                         Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
                         Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
                     }
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
                     ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();
-                }
-                if (Integer.parseInt(quantity_3.getText().toString()) == 0) {
-                    DBInteraction dbInteraction = new DBInteraction(context);
-                    modelSubCategory.quantity++;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 0, modelSubCategory.quantity);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 0);
-                    dbInteraction.close();
-                    quantity_3.setText(String.valueOf(modelCart.quantity));
-                    Cart.QUANTITY++;
-                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
-                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
 
-
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();
                 }
+
 
                 radio_3.setChecked(true);
                 btn_3.setVisibility(View.VISIBLE);
                 radio_6.setChecked(false);
                 btn_6.setVisibility(View.GONE);
+                radio_9.setChecked(false);
+                btn_9.setVisibility(View.GONE);
                 radio_12.setChecked(false);
                 btn_12.setVisibility(View.GONE);
 
@@ -404,13 +446,73 @@ public class ItemAdapter extends BaseAdapter {
         radio_6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (Integer.parseInt(quantity_3.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_3.getText().toString());
+                    /*RocqAnalytics.initialize(context);
+                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);*/
+                    DBInteraction dbInteraction = new DBInteraction(context);
+                    modelSubCategory.quantity_threeMo=0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
+                    dbInteraction.close();
+                    quantity_3.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
+
+                }
+                if (Integer.parseInt(quantity_6.getText().toString()) == 0) {
+                    /*RocqAnalytics.initialize(context);
+                    RocqAnalytics.trackEvent("6 month added", new ActionProperties(""), Position.LEFT);*/
+                    DBInteraction dbInteraction = new DBInteraction(context);
+                    modelSubCategory.quantity_sixMo++;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
+                    dbInteraction.close();
+                    quantity_6.setText(String.valueOf(modelCart.quantity));
+                    Cart.QUANTITY++;
+                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
+                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
+
+                }
+                if (Integer.parseInt(quantity_9.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_9.getText().toString());
+                    /*RocqAnalytics.initialize(context);
+                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);*/
+                    DBInteraction dbInteraction = new DBInteraction(context);
+                    modelSubCategory.quantity_nineMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
+                    dbInteraction.close();
+                    quantity_9.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
+
+                }
                 if (Integer.parseInt(quantity_12.getText().toString()) > 0) {
                     int temp = Integer.parseInt(quantity_12.getText().toString());
                     DBInteraction dbInteraction = new DBInteraction(context);
-                    modelSubCategory.quantity_monthly=0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 2, modelSubCategory.quantity_monthly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 2);
+                    modelSubCategory.quantity_twelveMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 3 , modelSubCategory.quantity_twelveMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
                     dbInteraction.close();
                     quantity_12.setText("0");
                     for (int i = 0; i < temp; i++) {
@@ -418,19 +520,34 @@ public class ItemAdapter extends BaseAdapter {
                         Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
                         Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
                     }
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
                     ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
+
                 }
+
+                radio_3.setChecked(false);
+                btn_3.setVisibility(View.GONE);
+                radio_6.setChecked(true);
+                btn_6.setVisibility(View.VISIBLE);
+                radio_9.setChecked(false);
+                btn_9.setVisibility(View.GONE);
+                radio_12.setChecked(false);
+                btn_12.setVisibility(View.GONE);
+            }
+        });
+        radio_9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if (Integer.parseInt(quantity_3.getText().toString()) > 0) {
                     int temp = Integer.parseInt(quantity_3.getText().toString());
-                    RocqAnalytics.initialize(context);
-                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);
+                    /*RocqAnalytics.initialize(context);
+                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);*/
                     DBInteraction dbInteraction = new DBInteraction(context);
-                    modelSubCategory.quantity=0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 0, modelSubCategory.quantity);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 0);
+                    modelSubCategory.quantity_threeMo=0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
                     dbInteraction.close();
                     quantity_3.setText("0");
                     for (int i = 0; i < temp; i++) {
@@ -438,47 +555,18 @@ public class ItemAdapter extends BaseAdapter {
                         Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
                         Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
                     }
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
                     ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
 
                 }
-                if (Integer.parseInt(quantity_6.getText().toString()) == 0) {
-                    RocqAnalytics.initialize(context);
-                    RocqAnalytics.trackEvent("6 month added", new ActionProperties(""), Position.LEFT);
-                    DBInteraction dbInteraction = new DBInteraction(context);
-                    modelSubCategory.quantity_quarterly++;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 1, modelSubCategory.quantity_quarterly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 1);
-                    dbInteraction.close();
-                    quantity_6.setText(String.valueOf(modelCart.quantity));
-                    Cart.QUANTITY++;
-                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
-                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
-
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();
-                }
-                radio_3.setChecked(false);
-                btn_3.setVisibility(View.GONE);
-                radio_6.setChecked(true);
-                btn_6.setVisibility(View.VISIBLE);
-                radio_12.setChecked(false);
-                btn_12.setVisibility(View.GONE);
-            }
-        });
-        radio_12.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 if (Integer.parseInt(quantity_6.getText().toString()) > 0) {
                     int temp = Integer.parseInt(quantity_6.getText().toString());
                     DBInteraction dbInteraction = new DBInteraction(context);
-                    modelSubCategory.quantity_quarterly = 0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 1, modelSubCategory.quantity_quarterly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 1);
+                    modelSubCategory.quantity_sixMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
                     dbInteraction.close();
                     quantity_6.setText("0");
                     for (int i = 0; i < temp; i++) {
@@ -486,19 +574,68 @@ public class ItemAdapter extends BaseAdapter {
                         Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
                         Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
                     }
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
                     ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
+
                 }
+                if (Integer.parseInt(quantity_9.getText().toString()) == 0) {
+                    /*RocqAnalytics.initialize(context);
+                    RocqAnalytics.trackEvent("6 month added", new ActionProperties(""), Position.LEFT);*/
+                    DBInteraction dbInteraction = new DBInteraction(context);
+                    modelSubCategory.quantity_nineMo++;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
+                    dbInteraction.close();
+                    quantity_9.setText(String.valueOf(modelCart.quantity));
+                    Cart.QUANTITY++;
+                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
+                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
+
+                }
+                if (Integer.parseInt(quantity_12.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_12.getText().toString());
+                    DBInteraction dbInteraction = new DBInteraction(context);
+                    modelSubCategory.quantity_twelveMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 3 , modelSubCategory.quantity_twelveMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
+                    dbInteraction.close();
+                    quantity_12.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
+
+                }
+
+                radio_3.setChecked(false);
+                btn_3.setVisibility(View.GONE);
+                radio_6.setChecked(false);
+                btn_6.setVisibility(View.GONE);
+                radio_9.setChecked(true);
+                btn_9.setVisibility(View.VISIBLE);
+                radio_12.setChecked(false);
+                btn_12.setVisibility(View.GONE);
+            }
+        });
+        radio_12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if (Integer.parseInt(quantity_3.getText().toString()) > 0) {
                     int temp = Integer.parseInt(quantity_3.getText().toString());
-                    RocqAnalytics.initialize(context);
-                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);
+                    /*RocqAnalytics.initialize(context);
+                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);*/
                     DBInteraction dbInteraction = new DBInteraction(context);
-                    modelSubCategory.quantity=0;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 0, modelSubCategory.quantity);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 0);
+                    modelSubCategory.quantity_threeMo=0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
                     dbInteraction.close();
                     quantity_3.setText("0");
                     for (int i = 0; i < temp; i++) {
@@ -506,80 +643,117 @@ public class ItemAdapter extends BaseAdapter {
                         Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
                         Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
                     }
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
                     ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
+
+                }
+                if (Integer.parseInt(quantity_6.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_6.getText().toString());
+                    DBInteraction dbInteraction = new DBInteraction(context);
+                    modelSubCategory.quantity_sixMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
+                    dbInteraction.close();
+                    quantity_6.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
+
+                }
+                if (Integer.parseInt(quantity_9.getText().toString()) > 0) {
+                    int temp = Integer.parseInt(quantity_9.getText().toString());
+                    /*RocqAnalytics.initialize(context);
+                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);*/
+                    DBInteraction dbInteraction = new DBInteraction(context);
+                    modelSubCategory.quantity_nineMo = 0;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
+                    dbInteraction.close();
+                    quantity_9.setText("0");
+                    for (int i = 0; i < temp; i++) {
+                        Cart.QUANTITY--;
+                        Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                        Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    }
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
 
                 }
                 if (Integer.parseInt(quantity_12.getText().toString()) == 0) {
                     DBInteraction dbInteraction = new DBInteraction(context);
-                    modelSubCategory.quantity_monthly++;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 2, modelSubCategory.quantity_monthly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 2);
+                    modelSubCategory.quantity_twelveMo++;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 3, modelSubCategory.quantity_twelveMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
                     dbInteraction.close();
                     quantity_12.setText(String.valueOf(modelCart.quantity));
                     Cart.QUANTITY++;
                     Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
                     Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
-
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
                     ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
+
+
+
                 }
 
                 radio_3.setChecked(false);
                 btn_3.setVisibility(View.GONE);
                 radio_6.setChecked(false);
                 btn_6.setVisibility(View.GONE);
+                radio_9.setChecked(false);
+                btn_9.setVisibility(View.GONE);
                 radio_12.setChecked(true);
                 btn_12.setVisibility(View.VISIBLE);
             }
         });
+
         plus_3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RocqAnalytics.initialize(context);
-                RocqAnalytics.trackEvent("3 month added", new ActionProperties(""), Position.LEFT);
                 DBInteraction dbInteraction = new DBInteraction(context);
-                modelSubCategory.quantity++;
-                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
-                dbInteraction.updateCartDetail(modelSubCategory.prod_id + 0, modelSubCategory.quantity);
-                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 0);
+                modelSubCategory.quantity_threeMo++;
+                //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
                 dbInteraction.close();
-                quantity_3.setText(String.valueOf(modelCart.quantity));
+                quantity_3.setText(String.valueOf(modelSubCategory.quantity_threeMo));
                 Cart.QUANTITY++;
                 Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
                 Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
-
-
-                ((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
                 ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
-                ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();
-
+                ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
 
             }
         });
-
         minus_3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Integer.parseInt(quantity_3.getText().toString()) > 0) {
-                    RocqAnalytics.initialize(context);
-                    RocqAnalytics.trackEvent("3 month removed", new ActionProperties(""), Position.LEFT);
                     DBInteraction dbInteraction = new DBInteraction(context);
-                    modelSubCategory.quantity--;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 0, modelSubCategory.quantity);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 0);
+                    modelSubCategory.quantity_threeMo--;
+                    //dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity, 0);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 0, modelSubCategory.quantity_threeMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 0);
                     dbInteraction.close();
-                    quantity_3.setText(String.valueOf(modelCart.quantity));
+                    quantity_3.setText(String.valueOf(modelSubCategory.quantity_threeMo));
                     Cart.QUANTITY--;
                     Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
                     Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
                     ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
 
                 }
             }
@@ -588,91 +762,122 @@ public class ItemAdapter extends BaseAdapter {
         plus_6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RocqAnalytics.initialize(context);
-                RocqAnalytics.trackEvent("6 month added", new ActionProperties(""), Position.LEFT);
                 DBInteraction dbInteraction = new DBInteraction(context);
-                modelSubCategory.quantity_quarterly++;
-                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
-                dbInteraction.updateCartDetail(modelSubCategory.prod_id + 1, modelSubCategory.quantity_quarterly);
-                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 1);
+                modelSubCategory.quantity_sixMo++;
+//                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
                 dbInteraction.close();
-                quantity_6.setText(String.valueOf(modelCart.quantity));
+                quantity_6.setText(String.valueOf(modelSubCategory.quantity_sixMo));
                 Cart.QUANTITY++;
                 Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
                 Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
-
-                ((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
                 ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
-                ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();
-
+                ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
 
             }
         });
-
         minus_6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RocqAnalytics.initialize(context);
-                RocqAnalytics.trackEvent("6 month removed", new ActionProperties(""), Position.LEFT);
                 if (Integer.parseInt(quantity_6.getText().toString()) > 0) {
                     DBInteraction dbInteraction = new DBInteraction(context);
-                    modelSubCategory.quantity_quarterly--;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 1, modelSubCategory.quantity_quarterly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 1);
+                    modelSubCategory.quantity_sixMo--;
+//                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 1, modelSubCategory.quantity_sixMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 1);
                     dbInteraction.close();
-                    quantity_6.setText(String.valueOf(modelCart.quantity));
+                    quantity_6.setText(String.valueOf(modelSubCategory.quantity_sixMo));
                     Cart.QUANTITY--;
                     Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
                     Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
                     ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
+
                 }
             }
         });
-        plus_12.setOnClickListener(new View.OnClickListener() {
+
+        plus_9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RocqAnalytics.initialize(context);
-                RocqAnalytics.trackEvent("12 month added", new ActionProperties(""), Position.LEFT);
                 DBInteraction dbInteraction = new DBInteraction(context);
-                modelSubCategory.quantity_monthly++;
-                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
-                dbInteraction.updateCartDetail(modelSubCategory.prod_id + 2, modelSubCategory.quantity_monthly);
-                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 2);
+                modelSubCategory.quantity_nineMo++;
+//                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
                 dbInteraction.close();
-                quantity_12.setText(String.valueOf(modelCart.quantity));
+                quantity_9.setText(String.valueOf(modelSubCategory.quantity_nineMo));
                 Cart.QUANTITY++;
                 Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
                 Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
-
-                ((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
                 ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
-                ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();
+                ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
 
             }
         });
-
-        minus_12.setOnClickListener(new View.OnClickListener() {
+        minus_9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RocqAnalytics.initialize(context);
-                RocqAnalytics.trackEvent("12 month removed", new ActionProperties(""), Position.LEFT);
-                if (Integer.parseInt(quantity_12.getText().toString()) > 0) {
+                if (Integer.parseInt(quantity_9.getText().toString()) > 0) {
                     DBInteraction dbInteraction = new DBInteraction(context);
-                    modelSubCategory.quantity_monthly--;
-                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
-                    dbInteraction.updateCartDetail(modelSubCategory.prod_id + 2, modelSubCategory.quantity_monthly);
-                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.prod_id + 2);
+                    modelSubCategory.quantity_nineMo--;
+//                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_quarterly, 1);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 2, modelSubCategory.quantity_nineMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 2);
                     dbInteraction.close();
-                    quantity_12.setText(String.valueOf(modelCart.quantity));
+                    quantity_9.setText(String.valueOf(modelSubCategory.quantity_sixMo));
                     Cart.QUANTITY--;
                     Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
                     Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
                     ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
-                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
+
+                }
+            }
+        });
+
+        plus_12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DBInteraction dbInteraction = new DBInteraction(context);
+                modelSubCategory.quantity_twelveMo++;
+//                dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                dbInteraction.updateCartDetail(modelSubCategory.productId + 3, modelSubCategory.quantity_twelveMo);
+                ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
+                dbInteraction.close();
+                quantity_12.setText(String.valueOf(modelSubCategory.quantity_twelveMo));
+                Cart.QUANTITY++;
+                Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT + Integer.valueOf(modelCart.security_amount);
+                Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT + Integer.valueOf(modelCart.total_amount);
+                /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
+                ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
+
+            }
+        });
+        minus_12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Integer.parseInt(quantity_12.getText().toString()) > 0) {
+                    DBInteraction dbInteraction = new DBInteraction(context);
+                    modelSubCategory.quantity_twelveMo--;
+//                    dbInteraction.updateSubCategoryDetail(modelSubCategory.prod_id, modelSubCategory.quantity_monthly, 2);
+                    dbInteraction.updateCartDetail(modelSubCategory.productId + 3, modelSubCategory.quantity_twelveMo);
+                    ModelCart modelCart = dbInteraction.getCartItemById(modelSubCategory.productId + 3);
+                    dbInteraction.close();
+                    quantity_12.setText(String.valueOf(modelSubCategory.quantity_twelveMo));
+                    Cart.QUANTITY--;
+                    Cart.SECURITY_AMOUNT = Cart.SECURITY_AMOUNT - Integer.valueOf(modelCart.security_amount);
+                    Cart.TOTAL_AMOUNT = Cart.TOTAL_AMOUNT - Integer.valueOf(modelCart.total_amount);
+                    /*((Category) Config.CURRENT_ACTIVITY_CONTEXT).setData();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).getDataFromDb();
+                    ((Category) Config.CURRENT_ACTIVITY_CONTEXT).updateMenu();*/
+
                 }
             }
         });

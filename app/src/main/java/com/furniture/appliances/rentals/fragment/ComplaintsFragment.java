@@ -97,7 +97,7 @@ public class ComplaintsFragment extends Fragment {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                //System.out.println(responseString);
+                System.out.println("Success"+responseString);
                 try {
 
 
@@ -106,12 +106,17 @@ public class ComplaintsFragment extends Fragment {
                     for(int i=0;i<array.length();i++)
                     {
                         JSONObject order = (JSONObject) array.get(i);
-                        String complaints = order.getString("complaintDetails");
-                        System.out.println(complaints);
-                        Integer complaint_count = (order.getInt("totalComplaintsCount"));
-                        String orderId = (order.getString("orderId"));
-                        String orderDate = (order.getString("orderDate"));
-                        list.add(new ModelComplaintOrder(orderId,complaints,complaint_count,orderDate));
+                        if(apref.readString(getActivity(),"email",null).equals(order.getString("email"))) {
+                            if(order.has("complaintDetails")) {
+                                String complaints = order.getString("complaintDetails");
+                                System.out.println(complaints);
+                                Integer complaint_count = (order.getInt("totalComplaintsCount"));
+                                String orderId = (order.getString("orderId"));
+                                String orderDate = (order.getString("orderDate"));
+
+                                list.add(new ModelComplaintOrder(orderId, complaints, complaint_count, orderDate));
+                            }
+                        }
                         System.out.println("Hello 2"+list.size());
                         setView();
                     }

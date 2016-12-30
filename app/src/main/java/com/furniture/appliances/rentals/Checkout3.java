@@ -30,9 +30,9 @@ public class Checkout3 extends AppCompatActivity implements View.OnClickListener
     Button submit;
     AppPreferences apref = new AppPreferences();
     ModelOrder modelOrder = new ModelOrder();
-    TextView payNow,cod;
+    TextView payNow,cod,code;
     int method=0;
-
+    String couponCode;
     Activity activity;
     CheckoutFragment co;
 
@@ -40,7 +40,7 @@ public class Checkout3 extends AppCompatActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         modelOrder = (ModelOrder)getIntent().getSerializableExtra("modelOrder");
-
+        couponCode = getIntent().getStringExtra("couponCode");
         activity = this;
         co = new CheckoutFragment();
         co.setPublicKey(Config.RAZORPAY_KEY);
@@ -58,6 +58,7 @@ public class Checkout3 extends AppCompatActivity implements View.OnClickListener
         total = (TextView)findViewById(R.id.total);
         payNow = (TextView)findViewById(R.id.payNow);
         cod = (TextView)findViewById(R.id.cod);
+        code = (TextView)findViewById(R.id.code);
         submit.setOnClickListener(this);
         payNow.setOnClickListener(this);
         cod.setOnClickListener(this);
@@ -66,6 +67,10 @@ public class Checkout3 extends AppCompatActivity implements View.OnClickListener
     private void setView()
     {
         total.setText(getResources().getString(R.string.Rs) + " " + String.valueOf(Cart.TOTAL_AMOUNT));
+        if(couponCode!=null)
+        {
+            code.setText(couponCode);
+        }
     }
 
     private void setUpToolbar() {
@@ -89,9 +94,9 @@ public class Checkout3 extends AppCompatActivity implements View.OnClickListener
                                 "currency: 'INR'}"
                         );
 
-                        options.put("amount", modelOrder.amountpaid + "00");
+                        options.put("amount", modelOrder.totalRental + "00");
                         options.put("name", "Permarent");
-                        options.put("prefill", new JSONObject("{email: '" + modelOrder.email + "' , contact: '" + modelOrder.mobileno + "', name: '" + modelOrder.name + "'}"));
+                        options.put("prefill", new JSONObject("{email: '" + modelOrder.email + "' , contact: '" + modelOrder.mobileno + "', name: '" + apref.readString(this,"name",null) + "'}"));
 
                         co.open(activity, options);
 

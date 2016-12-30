@@ -93,11 +93,12 @@ public class SubCategory extends Fragment {
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 System.out.println("Success"+responseString);
                 if (!responseString.equals("\"Sub Category Id Invalid\"")) {
+
                     try {
                         JSONArray array = new JSONArray(responseString);
-                        modelSubCategoryArrayList = new ParseApi().parselistproduct(getActivity(), array);
+                        modelSubCategoryArrayList = new ParseApi().parseProductList(getActivity(), array);
                         for (int i = 0; i < modelSubCategoryArrayList.size(); i++) {
-                            System.out.println("Product " + modelSubCategoryArrayList.get(i).big_img);
+                           // System.out.println("Product " + modelSubCategoryArrayList.get(i).big_img);
                         }
                         addCarsToList(modelSubCategoryArrayList);
 
@@ -115,7 +116,7 @@ public class SubCategory extends Fragment {
     public void getDataFromDb(String category) {
 
         DBInteraction dbInteraction = new DBInteraction(getActivity());
-        modelSubCategoryArrayList = dbInteraction.getSubCategories(category);
+        //modelSubCategoryArrayList = dbInteraction.getSubCategories(category);
         dbInteraction.close();
         addCarsToList(modelSubCategoryArrayList);
     }

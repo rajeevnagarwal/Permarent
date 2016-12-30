@@ -17,4 +17,5 @@
         <item>Ghaziabad</item>
         <item>Noida</item>
     </string-array>
+    <string name="title_activity_profile">ProfileActivity</string>
 </resources>

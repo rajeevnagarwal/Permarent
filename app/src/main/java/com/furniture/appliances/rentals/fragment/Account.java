@@ -131,6 +131,7 @@ public class Account extends Fragment {
         options.add(new ModelOptions("Notifications",R.drawable.ic_home));
         options.add(new ModelOptions("Our Policies",R.mipmap.ic_star_grey600_24dp));
         options.add(new ModelOptions("Documents Required",R.drawable.ic_doc));
+        options.add(new ModelOptions("Track Order",R.drawable.ic_track_order));
         if(apref.IsLoginedByGoogle(getActivity())||apref.IsLoginedByEmail(getActivity())||apref.IsLoginedByFb(getActivity())) {
 
             options.add(new ModelOptions("Logout", R.mipmap.drawer_login_icon));
@@ -283,12 +284,21 @@ public class Account extends Fragment {
                 }
                 else if(position==12)
                 {
+                    fragment = getActivity().getSupportFragmentManager().findFragmentByTag(Track.TAG);
+                    if(fragment==null)
+                    {
+                        fragment = new Track();
+                    }
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(android.R.id.tabcontent,fragment,Track.TAG).addToBackStack(Track.TAG).commit();
+                }
+                else if(position==13)
+                {
                     if(apref.IsLoginedByEmail(getActivity()))
                     {
                         Cart.QUANTITY=0;
                         Cart.TOTAL_AMOUNT=0;
                         DBInteraction dbInteraction = new DBInteraction(getActivity());
-                        dbInteraction.resetProducts(0, 0, 0);
+                        //dbInteraction.resetProducts(0, 0, 0);
                         dbInteraction.resetCart(0);
                         dbInteraction.clearDatabase();
                         dbInteraction.close();
@@ -302,7 +312,7 @@ public class Account extends Fragment {
                         Cart.QUANTITY=0;
                         Cart.TOTAL_AMOUNT=0;
                         DBInteraction dbInteraction = new DBInteraction(getActivity());
-                        dbInteraction.resetProducts(0, 0, 0);
+                        //dbInteraction.resetProducts(0, 0, 0);
                         dbInteraction.resetCart(0);
                         dbInteraction.clearDatabase();
                         dbInteraction.close();
@@ -321,7 +331,7 @@ public class Account extends Fragment {
                         Cart.QUANTITY=0;
                         Cart.TOTAL_AMOUNT=0;
                         DBInteraction dbInteraction = new DBInteraction(getActivity());
-                        dbInteraction.resetProducts(0, 0, 0);
+                        //dbInteraction.resetProducts(0, 0, 0);
                         dbInteraction.resetCart(0);
                         dbInteraction.clearDatabase();
                         dbInteraction.close();

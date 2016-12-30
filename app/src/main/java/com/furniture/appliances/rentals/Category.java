@@ -131,7 +131,7 @@ public class Category extends AppCompatActivity {
     private void setUpToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         title = (TextView) findViewById(R.id.title);
-        spinner = (ImageView) findViewById(R.id.spinner);
+       // spinner = (ImageView) findViewById(R.id.spinner);
         title.setText(modelCategory.categoryName);
         spinner.setVisibility(View.INVISIBLE);
         if (mToolbar != null) {

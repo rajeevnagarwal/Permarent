@@ -1,9 +1,11 @@
 package com.furniture.appliances.rentals.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Infinia on 21-09-2015.
  */
-public class ModelCart {
+public class ModelCart implements Serializable {
     public int quantity=0;
     public String prod_id;
     public String small_img;

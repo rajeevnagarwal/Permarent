@@ -137,7 +137,7 @@ public class DBInteraction extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
         db.execSQL("create table wishlist "+"(_id integer primary key,pid text,email text,name text)");
-        db.execSQL(
+       /* db.execSQL(
                 "create table category " +
                         "(_id integer primary key,heading_name text unique,img_name text,subcategory text)"
         );
@@ -148,13 +148,13 @@ public class DBInteraction extends SQLiteOpenHelper {
                         "small_img text,big_img text,material text,package_products text,dimensions text,color text,rent_to_own text" +
                         ",type text,brand text,other_description text,max_quantity text,rent_amount text,rent_duration text,security_deposit text," +
                         "min_rent_period text,shipping_charges text,created_on text,quantity int,quantity_quarterly int,quantity_monthly int)"
-        );
+        );*/
         db.execSQL(
                 "create table cart " +
                         "(_id integer primary key,small_img text,rent_amount text,prod_id text,quantity int,item_name text," +
                         "rent_type text,item_id text unique,total_amount text,security_amount text)"
         );
-        db.execSQL(
+        /*db.execSQL(
                 "create table user " +
                         "(_id integer primary key,firstname text,lastname text,email text," +
                         "mobileno text,address text,pincode text,image text,source text)"
@@ -170,7 +170,7 @@ public class DBInteraction extends SQLiteOpenHelper {
                             "(_id integer primary key,order_id text,product_list text,payment_id text," +
                             "email text,name text,address text,pincode text,mobile_no text,amount_paid text," +
                             "security_paid text,rent_paid text,transaction_status text,invoice_id text,delivery_charges text)"
-            );
+            );*/
 
 
 
@@ -185,9 +185,9 @@ public class DBInteraction extends SQLiteOpenHelper {
 
     public boolean clearDatabase() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_ADDRESS, null, null);
+/*        db.delete(TABLE_ADDRESS, null, null);
         db.delete(TABLE_USER, null, null);
-        db.delete(TABLE_MY_ORDERS,null,null);
+        db.delete(TABLE_MY_ORDERS,null,null);*/
         return true;
     }
 
@@ -207,7 +207,7 @@ public class DBInteraction extends SQLiteOpenHelper {
             return false;
         }
     }
-    public boolean insertSubCategoryDetail(ArrayList<ModelSubCategory> modelSubCategoryArrayList) {
+   /* public boolean insertSubCategoryDetail(ArrayList<ModelSubCategory> modelSubCategoryArrayList) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         for (int i = 0; i < modelSubCategoryArrayList.size(); i++) {
@@ -220,7 +220,7 @@ public class DBInteraction extends SQLiteOpenHelper {
         return true;
 
 
-    }
+    }*/
 
     public boolean insertCartDetail(ArrayList<ModelCart> modelCartArrayList) {
 
@@ -234,16 +234,16 @@ public class DBInteraction extends SQLiteOpenHelper {
 
     }
 
-    public boolean insertMyOrdersDetail(ModelOrder modelOrder) {
+   /* public boolean insertMyOrdersDetail(ModelOrder modelOrder) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         long a = db.insert("myorders", null, addOrderDetailFields(modelOrder));
         return true;
 
 
-    }
+    }*/
 
-    public boolean insertCategoryDetail(ArrayList<ModelCategory> modelCategoryArrayList) {
+    /*public boolean insertCategoryDetail(ArrayList<ModelCategory> modelCategoryArrayList) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         for (int i = 0; i < modelCategoryArrayList.size(); i++) {
@@ -253,23 +253,23 @@ public class DBInteraction extends SQLiteOpenHelper {
         return true;
 
 
-    }
+    }*/
 
-    public boolean insertUserDetail(ModelUser modelUser) {
+    /*public boolean insertUserDetail(ModelUser modelUser) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         long a = db.insert("user", null, addUserDetailFields(modelUser));
         return true;
-    }
+    }*/
 
-    public boolean insertAddressDetail(ModelAddress modelAddress) {
+    /*public boolean insertAddressDetail(ModelAddress modelAddress) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         long a = db.insert("address", null, addAddressDetailFields(modelAddress));
         return true;
-    }
+    }*/
 
-    public boolean updateCategoryDetail(String heading_name, String subcategory) {
+    /*public boolean updateCategoryDetail(String heading_name, String subcategory) {
 
         ContentValues values = new ContentValues();
         values.put(FIELD_TABLE_CATEGORY_SUBCATEGORY, subcategory);
@@ -292,7 +292,7 @@ public class DBInteraction extends SQLiteOpenHelper {
         long a = db.update("subcategory", values, FIELD_TABLE_SUBCATEGORY_PROD_ID + " = ?",
                 new String[]{prod_id});
         return true;
-    }
+    }*/
 
     public boolean updateCartDetail(String item_id, int quantity) {
 
@@ -304,7 +304,7 @@ public class DBInteraction extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean resetProducts(int quantity, int quantity_quarterly, int quantity_monthly) {
+   /* public boolean resetProducts(int quantity, int quantity_quarterly, int quantity_monthly) {
 
         ContentValues values = new ContentValues();
         values.put(FIELD_TABLE_SUBCATEGORY_QUANTITY, quantity);
@@ -313,7 +313,7 @@ public class DBInteraction extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         long a = db.update("subcategory", values, null, null);
         return true;
-    }
+    }*/
 
     public boolean resetCart(int quantity) {
 
@@ -325,7 +325,7 @@ public class DBInteraction extends SQLiteOpenHelper {
     }
 
 
-    private ContentValues addSubCategoryDetailFields(ModelSubCategory modelSubCategory) {
+   /* private ContentValues addSubCategoryDetailFields(ModelSubCategory modelSubCategory) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(FIELD_TABLE_SUBCATEGORY_PROD_CODE, modelSubCategory.prod_code);
         contentValues.put(FIELD_TABLE_SUBCATEGORY_PROD_ID, modelSubCategory.prod_id);
@@ -391,7 +391,7 @@ public class DBInteraction extends SQLiteOpenHelper {
         contentValues.put(FIELD_TABLE_ADDRESS_NAME, modelAddress.name);
         contentValues.put(FIELD_TABLE_ADDRESS_MOBILE_NO, modelAddress.mobile_no);
         return contentValues;
-    }
+    }*/
 
     private ContentValues addCartDetailFields(ModelCart modelCart) {
         ContentValues contentValues = new ContentValues();
@@ -410,7 +410,7 @@ public class DBInteraction extends SQLiteOpenHelper {
     }
 
 
-    private ContentValues addOrderDetailFields(ModelOrder modelOrder) {
+    /*private ContentValues addOrderDetailFields(ModelOrder modelOrder) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(FIELD_TABLE_ORDER_ORDER_ID, modelOrder.orderid);
         contentValues.put(FIELD_TABLE_ORDER_PRODUCT_LIST, modelOrder.productlist);
@@ -428,7 +428,7 @@ public class DBInteraction extends SQLiteOpenHelper {
         contentValues.put(FIELD_TABLE_ORDER_DELIVERY_CHARGES, modelOrder.deliverycharges);
         return contentValues;
 
-    }
+    }*/
     public boolean checkWishProduct(String pid)
     {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -468,7 +468,7 @@ public class DBInteraction extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<ModelSubCategory> getSubCategories(String category) {
+    /*public ArrayList<ModelSubCategory> getSubCategories(String category) {
         ArrayList<ModelSubCategory> modelSubCategoryList = new ArrayList<ModelSubCategory>();
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -679,7 +679,7 @@ public class DBInteraction extends SQLiteOpenHelper {
         }
         return null;
 
-    }
+    }*/
 
 
     public ArrayList<ModelCart> getCart() {
@@ -779,7 +779,7 @@ public class DBInteraction extends SQLiteOpenHelper {
     }
 
 
-    public ModelUser getUserById(String emailid) {
+   /* public ModelUser getUserById(String emailid) {
         ModelUser modelUser = new ModelUser();
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -1097,6 +1097,6 @@ public class DBInteraction extends SQLiteOpenHelper {
         }
         return null;
 
-    }
+    }*/
 
 }

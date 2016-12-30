@@ -33,6 +33,8 @@ import com.furniture.appliances.rentals.adapter.SuggestionAdapter;
 import com.furniture.appliances.rentals.adapter.WishListAdapter;
 import com.furniture.appliances.rentals.model.Cat;
 import com.furniture.appliances.rentals.model.ModelProduct;
+import com.furniture.appliances.rentals.model.ModelSubCategory;
+import com.furniture.appliances.rentals.parser.ParseApi;
 import com.furniture.appliances.rentals.restApi.EndPonits;
 import com.furniture.appliances.rentals.util.AppPreferences;
 import com.furniture.appliances.rentals.util.Config;
@@ -136,7 +138,6 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
     private void fetchCategories()
     {
         EndPonits.getCategories(null, new TextHttpResponseHandler() {
@@ -195,7 +196,10 @@ public class HomeFragment extends Fragment {
         list.setAdapter(searchAdapter);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(String query)
+            {
+                searchView.setQuery(query,false);
+                System.out.println(query);
                 return false;
             }
 

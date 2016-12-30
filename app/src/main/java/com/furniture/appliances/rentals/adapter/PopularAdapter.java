@@ -10,9 +10,15 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.dq.rocq.RocqAnalytics;
+import com.dq.rocq.models.ActionProperties;
+import com.dq.rocq.models.Position;
+import com.furniture.appliances.rentals.Cart;
 import com.furniture.appliances.rentals.R;
 import com.furniture.appliances.rentals.database.DBInteraction;
+import com.furniture.appliances.rentals.model.ModelCart;
 import com.furniture.appliances.rentals.model.ModelProduct;
+import com.furniture.appliances.rentals.model.ModelSubCategory;
 import com.furniture.appliances.rentals.util.AppPreferences;
 import com.squareup.picasso.Picasso;
 
@@ -93,6 +99,11 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.MyViewHo
 
             }
 
+        });
+        holder.popular_cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
         });
 
     }

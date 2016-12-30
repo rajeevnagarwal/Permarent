@@ -92,7 +92,7 @@
             android:textStyle="bold"
             android:gravity="center|center_vertical|center_horizontal"
             android:padding="30dp"
-            android:textSize="40dp"
+            android:textSize="30dp"
             android:text="Rent to Own"/>
         <TextView
             android:layout_width="match_parent"
@@ -115,8 +115,8 @@
             android:background="@color/darkerteal"
             android:orientation="horizontal">
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_margin = "20dp"
                 android:background="@drawable/ic_select"
 
@@ -131,14 +131,14 @@
                     android:layout_height="wrap_content"
                     android:text="1.Select"
                     android:textStyle="bold"
-                    android:textSize="30sp"
+                    android:textSize="25sp"
                     android:textColor="@color/white"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Select from a wide range of products on permarent"
                     android:textColor="@color/white"
-                    android:textSize="20sp"/>
+                    android:textSize="15sp"/>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -148,8 +148,8 @@
             android:orientation="horizontal">
             <ImageView
                 android:background="@drawable/ic_rent"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_margin = "20dp"
                 />
             <LinearLayout
@@ -162,14 +162,14 @@
                     android:layout_height="wrap_content"
                     android:text="2.Rent"
                     android:textStyle="bold"
-                    android:textSize="30sp"
+                    android:textSize="25sp"
                     android:textColor="@color/white"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Make payment for months of renting"
                     android:textColor="@color/white"
-                    android:textSize="20sp"/>
+                    android:textSize="15sp"/>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -178,8 +178,8 @@
             android:background="@color/darkerteal"
             android:orientation="horizontal">
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_margin = "20dp"
                 android:background="@drawable/ic_own"
                 />
@@ -193,14 +193,14 @@
                     android:layout_height="wrap_content"
                     android:text="3.Own"
                     android:textStyle="bold"
-                    android:textSize="30sp"
+                    android:textSize="25sp"
                     android:textColor="@color/white"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="You will become the owner if keep this item for a minimum 18 months"
                     android:textColor="@color/white"
-                    android:textSize="20sp"/>
+                    android:textSize="15sp"/>
             </LinearLayout>
         </LinearLayout>
         
@@ -217,7 +217,7 @@
                  android:textStyle="bold"
                  android:gravity="center|center_horizontal|center_vertical"
                  android:padding="30dp"
-                 android:textSize="40dp"
+                 android:textSize="30dp"
                  android:text="New Products" />
          </LinearLayout>
          <LinearLayout
@@ -277,7 +277,7 @@
                 android:textStyle="bold"
                 android:gravity="center|center_vertical|center_horizontal"
                 android:padding="30dp"
-                android:textSize="40dp"
+                android:textSize="30dp"
                 android:text="How it Works"/>
             <TextView
                 android:layout_width="match_parent"
@@ -318,7 +318,7 @@
                         android:text="Selection"
                         android:gravity="center|center_horizontal|center_vertical"
                         android:textStyle="bold"
-                        android:textSize="30sp"
+                        android:textSize="25sp"
                         android:textColor="@color/white"/>
                     <TextView
                         android:layout_width="match_parent"
@@ -326,7 +326,7 @@
                         android:gravity="center|center_horizontal|center_vertical"
                         android:text="Easy selection from the wide range of products available."
                         android:textColor="@color/white"
-                        android:textSize="20sp"/>
+                        android:textSize="15sp"/>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -355,7 +355,7 @@
                             android:text="Flexible Duration"
                             android:gravity="center|center_horizontal|center_vertical"
                             android:textStyle="bold"
-                            android:textSize="30sp"
+                            android:textSize="25sp"
                             android:textColor="@color/white"/>
                         <TextView
                             android:layout_width="match_parent"
@@ -363,7 +363,7 @@
                             android:gravity="center|center_horizontal|center_vertical"
                             android:text="Choose from our unique 4 flexible booking duration offers."
                             android:textColor="@color/white"
-                            android:textSize="20sp"/>
+                            android:textSize="15sp"/>
                     </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -391,7 +391,7 @@
                                         android:text="Easy Documentation"
                                         android:gravity="center|center_horizontal|center_vertical"
                                         android:textStyle="bold"
-                                        android:textSize="30sp"
+                                        android:textSize="25sp"
                                         android:textColor="@color/white"/>
                                     <TextView
                                         android:layout_width="match_parent"
@@ -399,7 +399,7 @@
                                         android:text="One Click Upload of your documents."
                                         android:gravity="center|center_horizontal|center_vertical"
                                         android:textColor="@color/white"
-                                        android:textSize="20sp"/>
+                                        android:textSize="15sp"/>
                                 </LinearLayout>
                             </LinearLayout>
                             <LinearLayout
@@ -428,7 +428,7 @@
                                             android:gravity="center|center_horizontal|center_vertical"
                                             android:text="Express Delivery"
                                             android:textStyle="bold"
-                                            android:textSize="30sp"
+                                            android:textSize="25sp"
                                             android:textColor="@color/white"/>
                                         <TextView
                                             android:layout_width="match_parent"
@@ -436,7 +436,7 @@
                                             android:gravity="center|center_horizontal|center_vertical"
                                             android:text="Choose a Delivery Slot as per your convenience and experience 96hr Express Delivery."
                                             android:textColor="@color/white"
-                                            android:textSize="20sp"/>
+                                            android:textSize="15sp"/>
                                     </LinearLayout>
                                 </LinearLayout>
                                 </LinearLayout>

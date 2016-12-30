@@ -40,8 +40,8 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
     private PlaceAdapter placeAdapter;
     private Toolbar mToolbar;
-    MaterialEditText city,area,house,street,pincode;
-    String value_city,value_area,value_house,value_street,value_pincode;
+    MaterialEditText city,area,house,street,pincode,state,others;
+    String value_city,value_area,value_house,value_street,value_pincode,add_state,add_other;
     Button submit;
     ModelAddress modelAddress = new ModelAddress();
     ModelAddress received = new ModelAddress();
@@ -56,12 +56,13 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_address);
         received = (ModelAddress) getIntent().getSerializableExtra("modelAddress");
+        //System.out.println("CITY"+received.city);
         setUpToolbar();
         initView();
         setView();
         setGoogleCLient();
         setPlaceAdapter();
-        getDataFromDb();
+       // getDataFromDb();
     }
 
     private void setUpToolbar() {
@@ -106,7 +107,7 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
     private void getDataFromDb()
     {
         DBInteraction dbInteraction = new DBInteraction(AddNewAddress.this);
-        modelUser = dbInteraction.getUserById(apref.readString(AddNewAddress.this,"email",null));
+        //modelUser = dbInteraction.getUserById(apref.readString(AddNewAddress.this,"email",null));
         dbInteraction.close();
     }
 
@@ -138,6 +139,8 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
         value_house = house.getText().toString();
         value_street = street.getText().toString();
         value_pincode = pincode.getText().toString();
+        add_state = state.getText().toString();
+        add_other = others.getText().toString();
     }
 
     private void initView()
@@ -148,23 +151,34 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
         house = (MaterialEditText) findViewById(R.id.house);
         street = (MaterialEditText) findViewById(R.id.street);
         pincode = (MaterialEditText) findViewById(R.id.pincode);
+        state = (MaterialEditText)findViewById(R.id.add_state);
+        others = (MaterialEditText)findViewById(R.id.add_other);
         submit = (Button)findViewById(R.id.submit);
         autoCompleteTextView = (ClearableAutoCompleteTextView) findViewById(R.id.searchPlaces);
         autoCompleteTextView.setThreshold(3);
         submit.setOnClickListener(this);
+        add_other="";
+        add_state ="";
     }
 
     private boolean createAddress()
     {
         if (validations()) {
-            modelAddress.city = value_city;
+           /* modelAddress.city = value_city;
             modelAddress.area = value_area;
             modelAddress.house = value_house;
             modelAddress.street=value_street;
             modelAddress.name="";
             modelAddress.pincode = value_pincode;
             modelAddress.detail =modelAddress.house + ", " + modelAddress.street + ", " + modelAddress.area + ", " + modelAddress.city;
-            modelAddress.mobile_no="";
+            modelAddress.mobile_no="";*/
+            modelAddress.city =value_city;
+            modelAddress.others = add_other;
+            modelAddress.pincode = value_pincode;
+            modelAddress.state = add_state;
+            modelAddress.houseNo = value_house;
+            modelAddress.localityName = value_area;
+            modelAddress.location = value_street;
             return true;
         }
         return false;
@@ -185,6 +199,10 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
             return false;
         }
         if (Miscellaneous.checkEmptyEditext(AddNewAddress.this, value_pincode, "PinCode")) {
+            return false;
+        }
+        if(Miscellaneous.checkEmptyEditext(AddNewAddress.this,add_state,"State"))
+        {
             return false;
         }
         if (value_pincode != null && value_pincode.length() < 5) {
@@ -211,7 +229,7 @@ public class AddNewAddress extends AppCompatActivity implements View.OnClickList
                     if (new CheckInternetConnection(AddNewAddress.this).isConnectedToInternet()) {
                             Intent i = new Intent(AddNewAddress.this,MobileVerification.class);
                             i.putExtra("modelAddress",modelAddress);
-                            i.putExtra("modelUser",modelUser);
+                            //i.putExtra("modelUser",modelUser);
                             startActivity(i);
                             finish();
                     } else {

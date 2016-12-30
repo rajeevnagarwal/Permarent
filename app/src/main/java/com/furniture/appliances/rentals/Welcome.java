@@ -54,6 +54,7 @@ public class Welcome extends Activity implements GoogleApiClient.ConnectionCallb
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("Welcome");
         super.onCreate(savedInstanceState);
         RocqAnalytics.initialize(this);
         RocqAnalytics.registerPush(this);
@@ -163,6 +164,14 @@ public class Welcome extends Activity implements GoogleApiClient.ConnectionCallb
                 showDialog("Loading");
                 if (new CheckInternetConnection(Welcome.this).isConnectedToInternet()) {
                     new HttpCall().getAllCategory(Welcome.this, null);
+                    if(apref.readString(this,"email",null)!=null) {
+                        System.out.println("Addresses");
+                        new HttpCall().getAddresses(apref.readString(this, "email", null));
+                    }
+                    else
+                    {
+                        System.out.println("SystemNULL");
+                    }
 
                 } else {
                     new CheckInternetConnection(Welcome.this).showDialog();
@@ -184,6 +193,14 @@ public class Welcome extends Activity implements GoogleApiClient.ConnectionCallb
                     if (new CheckInternetConnection(Welcome.this).isConnectedToInternet()) {
                         showDialog("Loading");
                         new HttpCall().getAllCategory(Welcome.this, null);
+                        if(apref.readString(this,"email",null)!=null) {
+                            System.out.println("Addresses");
+                            new HttpCall().getAddresses(apref.readString(this, "email", null));
+                        }
+                        else
+                        {
+                            System.out.println("SystemNULL");
+                        }
 
                     } else {
                         new CheckInternetConnection(Welcome.this).showDialog();

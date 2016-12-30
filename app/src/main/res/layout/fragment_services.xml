@@ -30,8 +30,8 @@
            android:background="@color/darkerteal"
            android:orientation="horizontal">
            <ImageView
-               android:layout_width="100dp"
-               android:layout_height="100dp"
+               android:layout_width="80dp"
+               android:layout_height="80dp"
                android:layout_margin = "20dp"
                android:background="@drawable/ic_select"
 
@@ -46,14 +46,14 @@
                    android:layout_height="wrap_content"
                    android:text="1.Select"
                    android:textStyle="bold"
-                   android:textSize="30sp"
+                   android:textSize="25sp"
                    android:textColor="@color/white"/>
                <TextView
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:text="Select from a wide range of products on permarent"
                    android:textColor="@color/white"
-                   android:textSize="20sp"/>
+                   android:textSize="15sp"/>
            </LinearLayout>
        </LinearLayout>
        <LinearLayout
@@ -63,8 +63,8 @@
            android:orientation="horizontal">
            <ImageView
                android:background="@drawable/ic_rent"
-               android:layout_width="100dp"
-               android:layout_height="100dp"
+               android:layout_width="80dp"
+               android:layout_height="80dp"
                android:layout_margin = "20dp"
                />
            <LinearLayout
@@ -77,14 +77,14 @@
                    android:layout_height="wrap_content"
                    android:text="2.Rent"
                    android:textStyle="bold"
-                   android:textSize="30sp"
+                   android:textSize="25sp"
                    android:textColor="@color/white"/>
                <TextView
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:text="Make payment for months of renting."
                    android:textColor="@color/white"
-                   android:textSize="20sp"/>
+                   android:textSize="15sp"/>
            </LinearLayout>
        </LinearLayout>
        <LinearLayout
@@ -93,8 +93,8 @@
            android:background="@color/darkerteal"
            android:orientation="horizontal">
            <ImageView
-               android:layout_width="100dp"
-               android:layout_height="100dp"
+               android:layout_width="80dp"
+               android:layout_height="80dp"
                android:layout_margin = "20dp"
                android:background="@drawable/ic_own"
                />
@@ -108,14 +108,14 @@
                    android:layout_height="wrap_content"
                    android:text="3.Own"
                    android:textStyle="bold"
-                   android:textSize="30sp"
+                   android:textSize="25sp"
                    android:textColor="@color/white"/>
                <TextView
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:text="You will become the owner if keep this item for a minimum 18 months."
                    android:textColor="@color/white"
-                   android:textSize="20sp"/>
+                   android:textSize="15sp"/>
            </LinearLayout>
 
        </LinearLayout>
@@ -128,7 +128,7 @@
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:textColor="@color/black"
-               android:textSize="40dp"
+               android:textSize="30sp"
                android:gravity = "center|center_horizontal"
                android:textStyle="bold"
                android:text="&quot;Rent to Own &quot; Categories"/>
@@ -150,7 +150,7 @@
            <TextView
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:textSize="40dp"
+               android:textSize="30sp"
                android:textColor="@color/black"
                android:textStyle="bold"
                android:gravity="center|center_horizontal"

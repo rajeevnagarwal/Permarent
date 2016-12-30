@@ -61,7 +61,7 @@ public class OrdersAdapter extends BaseAdapter {
         }
         final ModelOrder model = modelOrderArrayList.get(position);
         holder.orderId.setText(model.orderid);
-        holder.amountpaid.setText(context.getResources().getString(R.string.Rs)+model.amountpaid);
+        holder.amountpaid.setText(context.getResources().getString(R.string.Rs)+model.totalRental);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

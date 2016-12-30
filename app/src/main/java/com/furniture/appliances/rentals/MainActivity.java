@@ -57,8 +57,6 @@ import com.google.android.gms.plus.model.people.Person;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements /*NavigationDrawerCallbacks,*/GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-
-
     private Toolbar mToolbar;
     TextView title,menu_quantity;
     ImageView spinner;
@@ -107,12 +105,14 @@ public class MainActivity extends AppCompatActivity implements /*NavigationDrawe
 
     }
 
+
     private void setUpToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         title = (TextView)findViewById(R.id.title);
-        spinner = (ImageView)findViewById(R.id.spinner);
-        location = (LinearLayout)findViewById(R.id.location);
-        location.setOnClickListener(new View.OnClickListener() {
+        //title.setText(Config.AppName);
+        //spinner = (ImageView)findViewById(R.id.spinner);
+        //location = (LinearLayout)findViewById(R.id.location);
+        /*location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Config.OPENED_FRAGMENT != null) {
@@ -128,8 +128,11 @@ public class MainActivity extends AppCompatActivity implements /*NavigationDrawe
 
                 }
             }
-        });
+        });*/
         if (mToolbar != null) {
+           // title.setText(Config.AppName);
+            mToolbar.setTitle(Config.AppName);
+            mToolbar.setLogo(R.drawable.ic_logo);
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
@@ -138,10 +141,10 @@ public class MainActivity extends AppCompatActivity implements /*NavigationDrawe
     public void changeToolbar(String name,boolean isFragmentHome)
     {
         title.setText(name);
-        if(isFragmentHome)
+        /*if(isFragmentHome)
             spinner.setVisibility(View.VISIBLE);
         else
-            spinner.setVisibility(View.INVISIBLE);
+            spinner.setVisibility(View.INVISIBLE);*/
     }
 
     private void initView()

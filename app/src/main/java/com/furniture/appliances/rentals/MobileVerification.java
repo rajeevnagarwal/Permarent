@@ -82,7 +82,7 @@ public class MobileVerification extends AppCompatActivity {
     {
         if (validations()) {
             RequestParams params = new RequestParams();
-            params.put("email",apref.readString(this,"email",null));
+            params.put("email", AppPreferences.readString(this,"email",null));
             params.put("contactNo",value_mobile);
             EndPonits.addContactNo(params, new TextHttpResponseHandler() {
                 @Override
@@ -121,13 +121,7 @@ public class MobileVerification extends AppCompatActivity {
           // modelUser.mobileno=value_mobile;
 
         }
-        if(flag==0) {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return flag != 0;
     }
 
     private boolean validations() {

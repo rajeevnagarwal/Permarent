@@ -2,6 +2,8 @@ package com.furniture.appliances.rentals.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,8 @@ import android.widget.Toast;
 import com.furniture.appliances.rentals.MainActivity;
 import com.furniture.appliances.rentals.R;
 import com.furniture.appliances.rentals.SearchCity;
+import com.furniture.appliances.rentals.fragment.Account;
+import com.furniture.appliances.rentals.fragment.CategoryFragment;
 import com.furniture.appliances.rentals.util.AppPreferences;
 
 import java.util.ArrayList;
@@ -73,6 +77,8 @@ public class SuggestionAdapter extends BaseAdapter implements Filterable {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MainActivity.tabhost.setCurrentTab(1);
+
 
             }
         });

@@ -79,7 +79,6 @@ public class Category extends AppCompatActivity {
         {
             titlecode.add(temp[i]);
         }
-
         adapter = new SubCategoryAdapter(getSupportFragmentManager(),titles,titlecode,modelCategory);
         pager.setAdapter(adapter);
         pager.setCurrentItem(defaultFragment);

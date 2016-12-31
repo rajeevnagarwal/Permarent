@@ -1,6 +1,7 @@
 package com.furniture.appliances.rentals.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.dq.rocq.RocqAnalytics;
 import com.dq.rocq.models.ActionProperties;
 import com.dq.rocq.models.Position;
 import com.furniture.appliances.rentals.Cart;
+import com.furniture.appliances.rentals.ProductDetails;
 import com.furniture.appliances.rentals.R;
 import com.furniture.appliances.rentals.database.DBInteraction;
 import com.furniture.appliances.rentals.model.ModelCart;
@@ -90,7 +92,7 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.MyViewHo
         {
             public void onClick(View v)
             {
-                if(db.insertWishItem(model.id,apref.readString(context,"email",""),apref.readString(context,"name","")))
+                if(db.insertWishItem(model.id, AppPreferences.readString(context,"email",""), AppPreferences.readString(context,"name","")))
                 {
                     Picasso.with(context).load(R.drawable.ic_heart_disable).into(holder.popular_wish);
                     holder.popular_wish.setClickable(false);
@@ -103,6 +105,12 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.MyViewHo
         holder.popular_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent i = new Intent(context, ProductDetails.class);
+                i.putExtra("productId",model.id);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+
+
             }
         });
 

@@ -53,7 +53,7 @@ public class ComplaintActivity extends AppCompatActivity {
     private EditText edit_description;
     private ImageView img_item;
     private String def_quantity="",category="",desc="";
-    private ProgressDialog progressDialog;;
+    private ProgressDialog progressDialog;
     private String orderId;
     private Integer counter;
     @Override
@@ -79,7 +79,7 @@ public class ComplaintActivity extends AppCompatActivity {
         submit_complaint = (Button)findViewById(R.id.submit_complaint);
         edit_description= (EditText)findViewById(R.id.edit_desc);
         item = (ModelSubCategory) getIntent().getSerializableExtra("item");
-        orderId = (String)getIntent().getStringExtra("orderId");
+        orderId = getIntent().getStringExtra("orderId");
         Picasso.with(this)
                 .load(Config.subCategoryImage + item.firstSmall())
                 .into(img_item);

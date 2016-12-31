@@ -70,18 +70,18 @@ public class Account extends Fragment {
             if(apref.IsLoginedByFb(getActivity()))
             {
                 System.out.println("Facebook");
-                String name = apref.readString(getActivity(),"name","");
+                String name = AppPreferences.readString(getActivity(),"name","");
                 if(name!=null) {
                     welcome_text.setText(name);
-                    welcome_mail.setText(apref.readString(getActivity(),"email",""));
+                    welcome_mail.setText(AppPreferences.readString(getActivity(),"email",""));
                 }
                 else {
                     welcome_text.setText("Please Login!!");
                 }
-                System.out.println("Image"+apref.readString(getActivity(),"image",null));
-                if (apref.readString(getActivity(), "image", null).contains("http") || apref.readString(getActivity(), "image", null).contains("https")) {
+                System.out.println("Image"+ AppPreferences.readString(getActivity(),"image",null));
+                if (AppPreferences.readString(getActivity(), "image", null).contains("http") || AppPreferences.readString(getActivity(), "image", null).contains("https")) {
                     Picasso.with(context)
-                            .load(apref.readString(getActivity(), "image", null))
+                            .load(AppPreferences.readString(getActivity(), "image", null))
                             .placeholder(R.drawable.user)
                             .error(R.drawable.user)
                             .into(user_image,new com.squareup.picasso.Callback() {

@@ -40,6 +40,7 @@ import com.furniture.appliances.rentals.model.ModelCart;
 import com.furniture.appliances.rentals.model.ModelCategory;
 import com.furniture.appliances.rentals.model.ModelReviews;
 import com.furniture.appliances.rentals.model.ModelSubCategory;
+import com.furniture.appliances.rentals.parser.ParseApi;
 import com.furniture.appliances.rentals.restApi.EndPonits;
 import com.furniture.appliances.rentals.util.AppPreferences;
 import com.furniture.appliances.rentals.util.Config;
@@ -77,6 +78,7 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
     private EditText edit_review;
     Button button_review;
     ReviewAdapter adapter;
+    String pid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,16 +86,30 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
         model = (ModelSubCategory) getIntent().getSerializableExtra("model");
         //modelCategory = (ModelCategory)getIntent().getSerializableExtra("category");
         setContentView(R.layout.activity_product_details);
-        parseImages(model.largeImages);
-        //IMAGE_NAME[0] = model.big_img;
-        System.out.println("Image"+model.largeImages);
-        //IMAGE_NAME[1] = "singlebed000003_big.jpg";
-        initView();
-        fetchproduct(model.productId);
-        setData();
-       // getDataFromDb();
-        setUpToolbar();
-        viewPager.setAdapter(imageFragmentPagerAdapter);
+        if(model==null)
+        {
+            pid = getIntent().getStringExtra("productId");
+            initView();
+            fetchproduct(pid);
+            setUpToolbar();
+
+
+        }
+        else
+        {
+            parseImages(model.largeImages);
+            //IMAGE_NAME[0] = model.big_img;
+            System.out.println("Image"+model.largeImages);
+            //IMAGE_NAME[1] = "singlebed000003_big.jpg";
+            initView();
+            fetchproduct(model.productId);
+            setData();
+            // getDataFromDb();
+            setUpToolbar();
+            viewPager.setAdapter(imageFragmentPagerAdapter);
+
+        }
+
     }
     private void parseImages(String json)
     {
@@ -124,49 +140,52 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                try {
-                    JSONArray array = new JSONArray(responseString);
-                    JSONObject object = array.getJSONObject(0);
-                    JSONArray users = object.getJSONArray("productUserLikesList");
-                    for(int i=0;i<users.length();i++)
-                    {
-                        JSONObject obj = users.getJSONObject(i);
-                        if(obj.getString("email").equals(apref.readString(getApplicationContext(),"email","")))
+                if (!responseString.equals("\"Product Id Invalid\"")) {
+                    try {
+                        JSONArray array = new JSONArray(responseString);
+                        if(model==null)
                         {
-                            liked = true;
-                            break;
+                            model = new ParseApi().parseProduct(getApplicationContext(),array);
+                            if(model!=null)
+                            {
+                                parseImages(model.largeImages);
+                                setData();
+                                viewPager.setAdapter(imageFragmentPagerAdapter);
+                            }
+                        }
+                        JSONObject object = array.getJSONObject(0);
+                        JSONArray users = object.getJSONArray("productUserLikesList");
+                        for (int i = 0; i < users.length(); i++) {
+                            JSONObject obj = users.getJSONObject(i);
+                            if (obj.getString("email").equals(AppPreferences.readString(getApplicationContext(), "email", ""))) {
+                                liked = true;
+                                break;
+
+                            }
+                        }
+                        JSONArray r = object.getJSONArray("productReviews");
+                        for (int i = 0; i < r.length(); i++) {
+                            JSONObject obj = r.getJSONObject(i);
+                            System.out.println(obj);
+                            reviews.add(new ModelReviews(obj.getString("firstName"), obj.getString("lastName"), obj.getString("email"), String.valueOf(obj.getInt("rating")), obj.getString("review")));
 
                         }
-                    }
-                    JSONArray r = object.getJSONArray("productReviews");
-                    for(int i=0;i<r.length();i++)
-                    {
-                        JSONObject obj = r.getJSONObject(i);
-                        System.out.println(obj);
-                        reviews.add(new ModelReviews(obj.getString("firstName"),obj.getString("lastName"),obj.getString("email"),String.valueOf(obj.getInt("rating")),obj.getString("review")));
+                        System.out.println(reviews.size());
+                        setlist(reviews);
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
 
                     }
-                    System.out.println(reviews.size());
-                    setlist(reviews);
-
-
-
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
+                    if (liked) {
+                        Picasso.with(getApplicationContext()).load(R.drawable.ic_dislike).into(like);
+                        like.setClickable(false);
+                    } else {
+                        Picasso.with(getApplicationContext()).load(R.drawable.ic_likes).into(like);
+                    }
 
                 }
-                if(liked)
-                {
-                    Picasso.with(getApplicationContext()).load(R.drawable.ic_dislike).into(like);
-                    like.setClickable(false);
-                }
-                else
-                {
-                    Picasso.with(getApplicationContext()).load(R.drawable.ic_likes).into(like);
-                }
-
             }
         });
 
@@ -306,9 +325,9 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
             final String rev = edit_review.getText().toString();
             RequestParams params = new RequestParams();
             params.put("productId",model.productId);
-            params.put("firstName",apref.readString(this,"name",""));
+            params.put("firstName", AppPreferences.readString(this,"name",""));
             params.put("lastName","");
-            params.put("email",apref.readString(this,"email",""));
+            params.put("email", AppPreferences.readString(this,"email",""));
             params.put("rating",r);
             params.put("review",rev);
             EndPonits.insertRating(params, new TextHttpResponseHandler() {
@@ -323,7 +342,7 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
                         JSONObject obj = new JSONObject(responseString);
                         if(obj.getString("success").equals("true"))
                         {
-                            reviews.add(new ModelReviews(apref.readString(getApplicationContext(),"name",""),"",apref.readString(getApplicationContext(),"email",""),r,rev));
+                            reviews.add(new ModelReviews(AppPreferences.readString(getApplicationContext(),"name",""),"", AppPreferences.readString(getApplicationContext(),"email",""),r,rev));
                             edit_review.setText("");
                             adapter.notifyDataSetChanged();
                         }
@@ -345,9 +364,9 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
     {
         if(apref.IsLoginedByEmail(this)||apref.IsLoginedByGoogle(this)||apref.IsLoginedByFb(this)) {
             DBInteraction db = new DBInteraction(this);
-            System.out.println(apref.readString(this, "email", ""));
-            System.out.println(apref.readString(this, "name", ""));
-            if (db.insertWishItem(model.productId, apref.readString(this, "email", ""), apref.readString(this, "name", ""))) {
+            System.out.println(AppPreferences.readString(this, "email", ""));
+            System.out.println(AppPreferences.readString(this, "name", ""));
+            if (db.insertWishItem(model.productId, AppPreferences.readString(this, "email", ""), AppPreferences.readString(this, "name", ""))) {
                 //Toast.makeText(this, "Product added to wishlist", Toast.LENGTH_SHORT).show();
                 Picasso.with(this).load(R.drawable.ic_heart_disable).into(wish);
                 wish.setClickable(false);
@@ -365,9 +384,9 @@ public class ProductDetails extends AppCompatActivity implements View.OnClickLis
     {
         RequestParams params = new RequestParams();
         params.put("productId",model.productId);
-        params.put("firstName",apref.readString(this,"name",""));
+        params.put("firstName", AppPreferences.readString(this,"name",""));
         params.put("lastName","");
-        params.put("email",apref.readString(this,"email",""));
+        params.put("email", AppPreferences.readString(this,"email",""));
         EndPonits.incrementLikes(params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

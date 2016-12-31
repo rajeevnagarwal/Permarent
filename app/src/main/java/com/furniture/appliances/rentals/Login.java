@@ -118,9 +118,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
                                     modelUser.image = "https://graph.facebook.com/"+json.getString("id")+"/picture?type=large";
                                     modelUser.source = "facebook";
                                     apref.setIsLoginedByFb(Login.this, true);
-                                    apref.writeString(Login.this, "name", modelUser.firstname);
-                                    apref.writeString(Login.this, "image", modelUser.image);
-                                    apref.writeString(Login.this, "email", modelUser.email);
+                                    AppPreferences.writeString(Login.this, "name", modelUser.firstname);
+                                    AppPreferences.writeString(Login.this, "image", modelUser.image);
+                                    AppPreferences.writeString(Login.this, "email", modelUser.email);
                                     Intent serviceIntent = new Intent(Login.this, SyncService.class);
                                     (Login.this).startService(serviceIntent);
                                     Intent i = new Intent(Login.this, MainActivity.class);
@@ -179,7 +179,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
                 if (progressDialog != null && progressDialog.isShowing())
                     progressDialog.dismiss();
                 RocqAnalytics.initialize(Login.this);
-                RocqAnalytics.identity(apref.readString(Login.this, "name",""), new
+                RocqAnalytics.identity(AppPreferences.readString(Login.this, "name",""), new
                         ActionProperties("Email",email));
                 if (responseString.charAt(0) == '[') {
                     Intent serviceIntent = new Intent(Login.this, SyncService.class);
@@ -296,10 +296,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
             Toast.makeText(Login.this, "E Mail address is not valid", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (Miscellaneous.checkEmptyEditext(Login.this, value_password, "Password")) {
-            return false;
-        } else
-            return true;
+        return !Miscellaneous.checkEmptyEditext(Login.this, value_password, "Password");
     }
 
 
@@ -459,12 +456,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
                 modelUser.pincode = "";
                 modelUser.image = personPhotoUrl;
                 modelUser.source = "google";
-                apref.writeString(Login.this, "name", modelUser.firstname + "" + modelUser.lastname);
-                apref.writeString(Login.this, "image", modelUser.image);
-                apref.writeString(Login.this, "email", modelUser.email);
+                AppPreferences.writeString(Login.this, "name", modelUser.firstname + "" + modelUser.lastname);
+                AppPreferences.writeString(Login.this, "image", modelUser.image);
+                AppPreferences.writeString(Login.this, "email", modelUser.email);
                 apref.setIsLoginedByGoogle(Login.this, true);
                 if (new CheckInternetConnection(Login.this).isConnectedToInternet()) {
-                    getUserData(apref.readString(getApplicationContext(), "email", null));
+                    getUserData(AppPreferences.readString(getApplicationContext(), "email", null));
                 } else {
                     if (mGoogleApiClient.isConnected()) {
                         Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);

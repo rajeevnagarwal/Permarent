@@ -106,7 +106,7 @@ public class Addresses extends Fragment {
             rl2.setVisibility(View.VISIBLE);
             getDataFromDb();
             System.out.println("ListSize"+modelAddressArrayList.size());
-            fetchAddresses(apref.readString(getActivity(),"email",null));
+            fetchAddresses(AppPreferences.readString(getActivity(),"email",null));
 
 
         }

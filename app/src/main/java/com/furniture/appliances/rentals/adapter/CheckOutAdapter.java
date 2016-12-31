@@ -139,7 +139,7 @@ public class CheckOutAdapter extends BaseAdapter {
         holder.wish.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v)
             {
-                if(db.insertWishItem(model.prod_id,apref.readString(context,"email",""),apref.readString(context,"name","")))
+                if(db.insertWishItem(model.prod_id, AppPreferences.readString(context,"email",""), AppPreferences.readString(context,"name","")))
                 {
                     Picasso.with(context).load(R.drawable.ic_heart_disable).into(holder.wish);
                     holder.wish.setClickable(false);

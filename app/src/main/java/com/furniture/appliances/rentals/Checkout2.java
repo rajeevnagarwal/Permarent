@@ -57,7 +57,7 @@ public class Checkout2 extends AppCompatActivity {
         setContentView(R.layout.activity_checkout2);
         list = (ArrayList<ModelCart>)getIntent().getSerializableExtra("cartarray");
         modelAddressArrayList = (ArrayList<ModelAddress>)getIntent().getSerializableExtra("arrayList");
-        position = (Integer)getIntent().getIntExtra("position",-1);
+        position = getIntent().getIntExtra("position",-1);
         offers = (ArrayList<ModelOffer>)getIntent().getSerializableExtra("offers");
         if(offers!=null)
         {
@@ -160,14 +160,14 @@ public class Checkout2 extends AppCompatActivity {
             modelOrder.deliverycharges = "0";*/
 
             modelOrder.productName = productList;
-            modelOrder.name = apref.readString(this, "name", null);
+            modelOrder.name = AppPreferences.readString(this, "name", null);
             modelOrder.productQty = productQty;
             modelOrder.perItemMonthlyRent = perItemMonthlyRent;
             modelOrder.totalMonthlyRent = totalMonthlyRent;
             modelOrder.perItemSecurity = perItemSecurity;
             modelOrder.totalItemSecurity = totalItemSecurity;
             modelOrder.bookingDuration = bookingDuration;
-            modelOrder.email = apref.readString(this, "email", null);
+            modelOrder.email = AppPreferences.readString(this, "email", null);
             modelOrder.city = modelAddress.city;
             modelOrder.location = modelAddress.location;
             modelOrder.state = modelAddress.state;
@@ -240,7 +240,7 @@ public class Checkout2 extends AppCompatActivity {
     }
 
     private void setView() {
-        userName.setText(apref.readString(Checkout2.this, "name", ""));
+        userName.setText(AppPreferences.readString(Checkout2.this, "name", ""));
         //email.setText(apref.readString(Checkout2.this,"email",""));
 
     }

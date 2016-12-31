@@ -435,12 +435,7 @@ public class DBInteraction extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("select * from "+TABLE_MY_WISHLIST+" where "+FIELD_TABLE_WISHLIST_PID+" = "+"'"+pid+"'",null);
         if(cursor!=null&&cursor.getColumnCount()>0)
         {
-            if(cursor.getCount()>0)
-            {
-                return true;
-            }
-            else
-                return false;
+            return cursor.getCount() > 0;
         }
         return false;
 

@@ -53,7 +53,7 @@ public class Home extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View v = inflater.inflate(R.layout.fragment_home, container, false);
-        currentCity = apref.readString(getActivity(), "city", "Gurgaon");
+        currentCity = AppPreferences.readString(getActivity(), "city", "Gurgaon");
         ((MainActivity) getActivity()).changeToolbar(currentCity, true);
         initView(v);
         getDataFromDb();

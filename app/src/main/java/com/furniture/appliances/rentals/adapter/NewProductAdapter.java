@@ -1,6 +1,7 @@
 package com.furniture.appliances.rentals.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.furniture.appliances.rentals.ProductDetails;
 import com.furniture.appliances.rentals.R;
 import com.furniture.appliances.rentals.database.DBInteraction;
 import com.furniture.appliances.rentals.model.ModelProduct;
@@ -78,13 +80,24 @@ public class NewProductAdapter extends RecyclerView.Adapter<NewProductAdapter.Vi
         {
             public void onClick(View v)
             {
-                if(db.insertWishItem(model.id,apref.readString(context,"email",""),apref.readString(context,"name","")))
+                if(db.insertWishItem(model.id, AppPreferences.readString(context,"email",""), AppPreferences.readString(context,"name","")))
                 {
                     Picasso.with(context).load(R.drawable.ic_heart_disable).into(holder.new_wish);
                     holder.new_wish.setClickable(false);
 
                 }
 
+            }
+
+        });
+        holder.new_cart.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Intent i = new Intent(context, ProductDetails.class);
+                i.putExtra("productId",model.id);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
             }
 
         });

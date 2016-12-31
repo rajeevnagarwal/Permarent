@@ -52,7 +52,7 @@ public class MyWallet extends Fragment {
             if(new CheckInternetConnection(getActivity()).isConnectedToInternet()) {
 
 
-                fetch_amount(apref.readString(getActivity(), "email", ""));
+                fetch_amount(AppPreferences.readString(getActivity(), "email", ""));
             }
             else
             {

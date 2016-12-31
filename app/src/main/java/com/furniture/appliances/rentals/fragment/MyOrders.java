@@ -84,7 +84,7 @@ public class MyOrders extends Fragment {
                         for(int i=0;i<array.length();i++)
                         {
                             JSONObject object = array.getJSONObject(i);
-                            if(apref.readString(getActivity(),"email",null).equals(object.getString("email")))
+                            if(AppPreferences.readString(getActivity(),"email",null).equals(object.getString("email")))
                             {
                                 String orderId = object.getString("orderId");
                                 String amount = object.getString("totalRental");

@@ -96,7 +96,7 @@ public class Checkout3 extends AppCompatActivity implements View.OnClickListener
 
                         options.put("amount", modelOrder.totalRental + "00");
                         options.put("name", "Permarent");
-                        options.put("prefill", new JSONObject("{email: '" + modelOrder.email + "' , contact: '" + modelOrder.mobileno + "', name: '" + apref.readString(this,"name",null) + "'}"));
+                        options.put("prefill", new JSONObject("{email: '" + modelOrder.email + "' , contact: '" + modelOrder.mobileno + "', name: '" + AppPreferences.readString(this,"name",null) + "'}"));
 
                         co.open(activity, options);
 

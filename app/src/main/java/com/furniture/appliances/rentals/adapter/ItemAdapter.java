@@ -115,7 +115,7 @@ public class ItemAdapter extends BaseAdapter {
                     for(int i=0;i<users.length();i++)
                     {
                         JSONObject obj = users.getJSONObject(i);
-                        if(obj.getString("email").equals(apref.readString(context,"email","")))
+                        if(obj.getString("email").equals(AppPreferences.readString(context,"email","")))
                         {
                             Picasso.with(context).load(R.drawable.ic_dislike).into(holder.like);
                             holder.like.setClickable(false);
@@ -216,7 +216,7 @@ public class ItemAdapter extends BaseAdapter {
         {
             public void onClick(View v)
             {
-                if(db.insertWishItem(model.productId,apref.readString(context,"email",""),apref.readString(context,"name","")))
+                if(db.insertWishItem(model.productId, AppPreferences.readString(context,"email",""), AppPreferences.readString(context,"name","")))
                 {
                     Picasso.with(context).load(R.drawable.ic_heart_disable).into(holder.wish);
                     holder.wish.setClickable(false);
@@ -231,9 +231,9 @@ public class ItemAdapter extends BaseAdapter {
             {
                 RequestParams params = new RequestParams();
                 params.put("productId",model.productId);
-                params.put("firstName",apref.readString(context,"name",""));
+                params.put("firstName", AppPreferences.readString(context,"name",""));
                 params.put("lastName","");
-                params.put("email",apref.readString(context,"email",""));
+                params.put("email", AppPreferences.readString(context,"email",""));
                 EndPonits.incrementLikes(params, new TextHttpResponseHandler() {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

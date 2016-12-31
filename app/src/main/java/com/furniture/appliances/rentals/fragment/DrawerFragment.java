@@ -256,11 +256,11 @@ public class DrawerFragment extends Fragment implements NavigationDrawerCallback
             ImageView avatarContainer = (ImageView) mFragmentContainerView.findViewById(R.id.imgAvatar);
             TextView email = (TextView) mFragmentContainerView.findViewById(R.id.txtUserEmail);
             TextView name = (TextView) mFragmentContainerView.findViewById(R.id.txtUsername);
-            email.setText(apref.readString(getActivity(), "email", null));
-            name.setText(apref.readString(getActivity(), "name", null));
-            if (apref.readString(getActivity(), "image", null).contains("http") || apref.readString(getActivity(), "image", null).contains("https")) {
+            email.setText(AppPreferences.readString(getActivity(), "email", null));
+            name.setText(AppPreferences.readString(getActivity(), "name", null));
+            if (AppPreferences.readString(getActivity(), "image", null).contains("http") || AppPreferences.readString(getActivity(), "image", null).contains("https")) {
                 Picasso.with(context)
-                        .load(apref.readString(getActivity(), "image", null))
+                        .load(AppPreferences.readString(getActivity(), "image", null))
                         .placeholder(R.drawable.user)
                         .error(R.drawable.user)
                         .into(avatarContainer);
@@ -270,8 +270,8 @@ public class DrawerFragment extends Fragment implements NavigationDrawerCallback
         }
         if ((apref.IsLoginedByEmail(context) && !apref.IsLoginedByGoogle(context)) || apref.IsLoginedByFb(context)) {
             ImageView avatarContainer = (ImageView) mFragmentContainerView.findViewById(R.id.imgAvatar);
-            ((TextView) mFragmentContainerView.findViewById(R.id.txtUserEmail)).setText(apref.readString(getActivity(), "email", null));
-            ((TextView) mFragmentContainerView.findViewById(R.id.txtUsername)).setText(apref.readString(getActivity(), "name", null));
+            ((TextView) mFragmentContainerView.findViewById(R.id.txtUserEmail)).setText(AppPreferences.readString(getActivity(), "email", null));
+            ((TextView) mFragmentContainerView.findViewById(R.id.txtUsername)).setText(AppPreferences.readString(getActivity(), "name", null));
             avatarContainer.setImageResource(R.drawable.user);
 
         } if(!apref.IsLoginedByEmail(context) && !apref.IsLoginedByGoogle(context) && !apref.IsLoginedByFb(context)) {

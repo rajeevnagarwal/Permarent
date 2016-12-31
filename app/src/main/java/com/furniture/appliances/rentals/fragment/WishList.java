@@ -91,7 +91,7 @@ public class WishList extends Fragment {
     {
 
         DBInteraction db = new DBInteraction(getActivity());
-        String result =  db.getWishProducts(apref.readString(getActivity(),"email",""));
+        String result =  db.getWishProducts(AppPreferences.readString(getActivity(),"email",""));
         result = result.trim();
         String[] p = result.split(" ");
         for(int i=0;i<p.length;i++) {

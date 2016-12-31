@@ -111,7 +111,7 @@ public class Checkout1 extends AppCompatActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.submit:
-                if(apref.readString(this,"email",null)!=null) {
+                if(AppPreferences.readString(this,"email",null)!=null) {
                     if (modelAddressArrayList.size() != 0) {
                         if(!isCouponApplied) {
                             Intent i = new Intent(Checkout1.this, Checkout2.class);
@@ -204,7 +204,7 @@ public class Checkout1 extends AppCompatActivity implements View.OnClickListener
         DBInteraction dbInteraction = new DBInteraction(Checkout1.this);
         modelCartArrayList = dbInteraction.getCart();
         //modelAddressArrayList = dbInteraction.getAllAddress();
-        fetchAddresses(apref.readString(this,"email",null));
+        fetchAddresses(AppPreferences.readString(this,"email",null));
         dbInteraction.close();
         refreshAdapter(modelCartArrayList);
     }

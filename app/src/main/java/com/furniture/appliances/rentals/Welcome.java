@@ -135,8 +135,8 @@ public class Welcome extends Activity implements GoogleApiClient.ConnectionCallb
         //Toast.makeText(Welcome.this,"Resume",Toast.LENGTH_SHORT).show();
         Config.IS_APP_IN_FOREGROUND = true;
         Config.CURRENT_ACTIVITY_CONTEXT = this;
-        String lat = apref.readString(Welcome.this, "latitude", null);
-        String longi = apref.readString(Welcome.this, "longitude", null);
+        String lat = AppPreferences.readString(Welcome.this, "latitude", null);
+        String longi = AppPreferences.readString(Welcome.this, "longitude", null);
         if (apref.IsLogined(Welcome.this)) {
 
             if (lat != null && longi != null) {
@@ -145,12 +145,12 @@ public class Welcome extends Activity implements GoogleApiClient.ConnectionCallb
 
             } else {
                 if (checkLocationService(Welcome.this)) {
-                    apref.writeString(Welcome.this, "latitude", Double.toString(latitude));
-                    apref.writeString(Welcome.this, "longitude", Double.toString(longitude));
+                    AppPreferences.writeString(Welcome.this, "latitude", Double.toString(latitude));
+                    AppPreferences.writeString(Welcome.this, "longitude", Double.toString(longitude));
                     String city[] = getLocationName(latitude, longitude, Welcome.this);
-                    apref.writeString(Welcome.this, "city", city[1]);
-                    apref.writeString(Welcome.this, "area", city[2]);
-                    apref.writeString(Welcome.this, "pincode", city[3]);
+                    AppPreferences.writeString(Welcome.this, "city", city[1]);
+                    AppPreferences.writeString(Welcome.this, "area", city[2]);
+                    AppPreferences.writeString(Welcome.this, "pincode", city[3]);
                     removeDialog();
                     Timer t = new Timer();
                     t.schedule(new splash(), 2000);
@@ -164,9 +164,9 @@ public class Welcome extends Activity implements GoogleApiClient.ConnectionCallb
                 showDialog("Loading");
                 if (new CheckInternetConnection(Welcome.this).isConnectedToInternet()) {
                     new HttpCall().getAllCategory(Welcome.this, null);
-                    if(apref.readString(this,"email",null)!=null) {
+                    if(AppPreferences.readString(this,"email",null)!=null) {
                         System.out.println("Addresses");
-                        new HttpCall().getAddresses(apref.readString(this, "email", null));
+                        new HttpCall().getAddresses(AppPreferences.readString(this, "email", null));
                     }
                     else
                     {
@@ -183,19 +183,19 @@ public class Welcome extends Activity implements GoogleApiClient.ConnectionCallb
                     progressDialog.setMessage("Fetching Location");
                     progressDialog.setCancelable(false);
                     progressDialog.show();
-                    apref.writeString(Welcome.this, "latitude", Double.toString(latitude));
-                    apref.writeString(Welcome.this, "longitude", Double.toString(longitude));
+                    AppPreferences.writeString(Welcome.this, "latitude", Double.toString(latitude));
+                    AppPreferences.writeString(Welcome.this, "longitude", Double.toString(longitude));
                     String city[] = getLocationName(latitude, longitude, Welcome.this);
-                    apref.writeString(Welcome.this, "city", city[1]);
-                    apref.writeString(Welcome.this, "area", city[2]);
-                    apref.writeString(Welcome.this, "pincode", city[3]);
+                    AppPreferences.writeString(Welcome.this, "city", city[1]);
+                    AppPreferences.writeString(Welcome.this, "area", city[2]);
+                    AppPreferences.writeString(Welcome.this, "pincode", city[3]);
                     progressDialog.dismiss();
                     if (new CheckInternetConnection(Welcome.this).isConnectedToInternet()) {
                         showDialog("Loading");
                         new HttpCall().getAllCategory(Welcome.this, null);
-                        if(apref.readString(this,"email",null)!=null) {
+                        if(AppPreferences.readString(this,"email",null)!=null) {
                             System.out.println("Addresses");
-                            new HttpCall().getAddresses(apref.readString(this, "email", null));
+                            new HttpCall().getAddresses(AppPreferences.readString(this, "email", null));
                         }
                         else
                         {

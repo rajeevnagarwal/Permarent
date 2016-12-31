@@ -73,14 +73,14 @@ public class SyncService extends Service {
     public void insertUser()
     {
         ModelUser modelUser = new ModelUser();
-        modelUser.firstname = apref.readString(getApplicationContext(),"name",null);
+        modelUser.firstname = AppPreferences.readString(getApplicationContext(),"name",null);
         modelUser.lastname = "";
-        modelUser.email = apref.readString(getApplicationContext(),"email",null);
+        modelUser.email = AppPreferences.readString(getApplicationContext(),"email",null);
         modelUser.mobileno = "";
         modelUser.password="";
         modelUser.address="";
         modelUser.pincode="";
-        modelUser.image=apref.readString(getApplicationContext(),"image",null);
+        modelUser.image= AppPreferences.readString(getApplicationContext(),"image",null);
         if(apref.IsLoginedByFb(getApplicationContext()))
             modelUser.source = "facebook";
         if(apref.IsLoginedByGoogle(getApplicationContext()))

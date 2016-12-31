@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements /*NavigationDrawe
     boolean mSignInClicked;
     ArrayList<ModelCart> modelCartArrayList = new ArrayList<>();
     public static int openFragment;
-    private FragmentTabHost tabhost;
+    public static FragmentTabHost tabhost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,6 +250,7 @@ public class MainActivity extends AppCompatActivity implements /*NavigationDrawe
     public void openSpecifiedFragment(int no)
     {
        // drawerFragment.selectItem(no);
+        tabhost.setCurrentTab(no);
     }
 
 

@@ -1,6 +1,7 @@
 package com.furniture.appliances.rentals.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.furniture.appliances.rentals.ProductDetails;
 import com.furniture.appliances.rentals.R;
 import com.furniture.appliances.rentals.database.DBInteraction;
 import com.furniture.appliances.rentals.model.ModelProduct;
@@ -64,7 +66,7 @@ public class RPAdapter extends RecyclerView.Adapter<RPAdapter.ViewHolder> {
         {
             public void onClick(View v)
             {
-                if(db.insertWishItem(model.id,apref.readString(context,"email",""),apref.readString(context,"name","")))
+                if(db.insertWishItem(model.id, AppPreferences.readString(context,"email",""), AppPreferences.readString(context,"name","")))
                 {
                     Picasso.with(context).load(R.drawable.ic_heart_disable).into(holder.wish);
                     holder.wish.setClickable(false);
@@ -86,6 +88,16 @@ public class RPAdapter extends RecyclerView.Adapter<RPAdapter.ViewHolder> {
             public void onError() {
 
             }
+        });
+        holder.add.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v)
+            {
+                Intent i = new Intent(context, ProductDetails.class);
+                i.putExtra("productId",model.id);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+            }
+
         });
 
     }
@@ -116,6 +128,7 @@ public class RPAdapter extends RecyclerView.Adapter<RPAdapter.ViewHolder> {
             sec = (TextView)v.findViewById(R.id.rp_sec);
             image = (ImageView)v.findViewById(R.id.rp_img);
             wish = (ImageView)v.findViewById(R.id.rp_wish);
+            add = (Button)v.findViewById(R.id.rp_add);
 
         }
 

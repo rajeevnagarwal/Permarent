@@ -109,14 +109,14 @@ public class MyOrderDetails extends AppCompatActivity {
                     {
                         model.quantity_threeMo = 0;
                         model.quantity_nineMo = 0;
-                        model.quantity_sixMo = Integer.parseInt(obj.getString("quantity"));;
+                        model.quantity_sixMo = Integer.parseInt(obj.getString("quantity"));
                         model.quantity_twelveMo = 0;
 
                     }
                     else if(obj.getString("bookingDuration").equals("9 months"))
                     {
                         model.quantity_threeMo = 0;
-                        model.quantity_nineMo = Integer.parseInt(obj.getString("quantity"));;
+                        model.quantity_nineMo = Integer.parseInt(obj.getString("quantity"));
                         model.quantity_sixMo = 0;
                         model.quantity_twelveMo = 0;
 
@@ -126,7 +126,7 @@ public class MyOrderDetails extends AppCompatActivity {
                         model.quantity_threeMo = 0;
                         model.quantity_nineMo = 0;
                         model.quantity_sixMo = 0;
-                        model.quantity_twelveMo = Integer.parseInt(obj.getString("quantity"));;
+                        model.quantity_twelveMo = Integer.parseInt(obj.getString("quantity"));
 
                     }
                     fetchImage(model);

@@ -95,12 +95,12 @@ public class SearchCity extends AppCompatActivity implements GoogleApiClient.Con
             public void onClick(View v) {
                 boolean temp = checkLocationService(SearchCity.this);
                 if (temp) {
-                    apref.writeString(SearchCity.this, "latitude", Double.toString(latitude));
-                    apref.writeString(SearchCity.this, "longitude", Double.toString(longitude));
+                    AppPreferences.writeString(SearchCity.this, "latitude", Double.toString(latitude));
+                    AppPreferences.writeString(SearchCity.this, "longitude", Double.toString(longitude));
                     String city[] = getLocationName(latitude, longitude, SearchCity.this);
-                    apref.writeString(SearchCity.this, "city", city[1]);
-                    apref.writeString(SearchCity.this, "area", city[2]);
-                    apref.writeString(SearchCity.this, "pincode", city[3]);
+                    AppPreferences.writeString(SearchCity.this, "city", city[1]);
+                    AppPreferences.writeString(SearchCity.this, "area", city[2]);
+                    AppPreferences.writeString(SearchCity.this, "pincode", city[3]);
                     if (city[1] != null)
                         Toast.makeText(SearchCity.this, "City changed to " + city[1], Toast.LENGTH_LONG).show();
                     else

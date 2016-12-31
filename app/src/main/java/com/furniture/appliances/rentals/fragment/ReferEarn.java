@@ -70,11 +70,11 @@ public class ReferEarn extends Fragment {
 
 
         if (apref.IsLoginedByFb(getActivity()) || apref.IsLoginedByGoogle(getActivity()) || apref.IsLoginedByEmail(getActivity())) {
-            if (apref.readString(getActivity(), "email", "") != null) {
+            if (AppPreferences.readString(getActivity(), "email", "") != null) {
                 if (new CheckInternetConnection(getActivity()).isConnectedToInternet()) {
                     v = inflater.inflate(R.layout.fragment_refer, container, false);
                     initialize(v);
-                    fetch_code(apref.readString(getActivity(), "email", ""));
+                    fetch_code(AppPreferences.readString(getActivity(), "email", ""));
                 } else {
                     new CheckInternetConnection(getActivity()).showDialog();
                 }
@@ -133,7 +133,6 @@ public class ReferEarn extends Fragment {
             }
         });
     }
-
     private void setdefaultView() {
         //invite.setClickable(false);
         code.setText("RajeevPo45");

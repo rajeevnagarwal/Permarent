@@ -43,7 +43,7 @@ public class Track extends Fragment {
         View v = inflater.inflate(R.layout.fragment_track, container, false);
         ((MainActivity) getActivity()).changeToolbar("Track Your Order", false);
         getActivity().setTitle("Track Your Orders");
-        if(apref.readString(getActivity(),"email",null)==null)
+        if(AppPreferences.readString(getActivity(),"email",null)==null)
         {
             Toast.makeText(getActivity(),"Please login first",Toast.LENGTH_SHORT).show();
         }
@@ -86,7 +86,7 @@ public class Track extends Fragment {
                         for(int i=0;i<array.length();i++)
                         {
                             JSONObject obj = array.getJSONObject(i);
-                            if(apref.readString(getActivity(),"email",null).equals(obj.getString("email")))
+                            if(AppPreferences.readString(getActivity(),"email",null).equals(obj.getString("email")))
                             {
                                 String orderId = obj.getString("orderId");
                                 String productName = obj.getJSONArray("items").toString();

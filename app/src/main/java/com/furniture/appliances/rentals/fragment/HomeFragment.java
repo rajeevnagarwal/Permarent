@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -79,7 +80,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View v = inflater.inflate(R.layout.fragment_homepage, container, false);
-        currentCity = apref.readString(getActivity(), "city", "Gurgaon");
+        currentCity = AppPreferences.readString(getActivity(), "city", "Gurgaon");
         ((MainActivity) getActivity()).changeToolbar(currentCity, true);
         initialize(v);
         fetchNames();
@@ -292,6 +293,7 @@ public class HomeFragment extends Fragment {
         image_gallery = (RecyclerView)v.findViewById(R.id.image_gallery);
         list = (ListView)v.findViewById(R.id.suggestions);
         searchView = (SearchView)v.findViewById(R.id.simpleSearchView);
+        searchView.setSubmitButtonEnabled(true);
         product_recyclerview = (RecyclerView)v.findViewById(R.id.product_recyclerview);
         glidelist = new ArrayList<String>();
         glidelist.add("CONTROL. NAVIGATE. BE ORGANIZED");

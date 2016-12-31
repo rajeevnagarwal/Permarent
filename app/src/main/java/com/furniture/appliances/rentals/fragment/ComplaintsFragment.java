@@ -106,7 +106,7 @@ public class ComplaintsFragment extends Fragment {
                     for(int i=0;i<array.length();i++)
                     {
                         JSONObject order = (JSONObject) array.get(i);
-                        if(apref.readString(getActivity(),"email",null).equals(order.getString("email"))) {
+                        if(AppPreferences.readString(getActivity(),"email",null).equals(order.getString("email"))) {
                             if(order.has("complaintDetails")) {
                                 String complaints = order.getString("complaintDetails");
                                 System.out.println(complaints);

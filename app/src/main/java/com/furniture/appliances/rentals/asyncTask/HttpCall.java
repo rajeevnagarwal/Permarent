@@ -289,9 +289,9 @@ public class HttpCall {
                             DBInteraction dbInteraction = new DBInteraction(context);
                             //dbInteraction.insertUserDetail(modelUser);
                             dbInteraction.close();
-                            apref.writeString(context, "name", modelUser.firstname + "" + modelUser.lastname);
-                            apref.writeString(context, "image", "");
-                            apref.writeString(context, "email", modelUser.email);
+                            AppPreferences.writeString(context, "name", modelUser.firstname + "" + modelUser.lastname);
+                            AppPreferences.writeString(context, "image", "");
+                            AppPreferences.writeString(context, "email", modelUser.email);
                             apref.setIsLoginedByEmail(context, true);
                             Intent i = new Intent(context, MainActivity.class);
                             context.startActivity(i);
@@ -303,9 +303,9 @@ public class HttpCall {
                             DBInteraction dbInteraction = new DBInteraction(context);
                             //dbInteraction.insertUserDetail(modelUser);
                             dbInteraction.close();
-                            apref.writeString(context, "name", modelUser.firstname);
-                            apref.writeString(context, "image", modelUser.image);
-                            apref.writeString(context, "email", modelUser.email);
+                            AppPreferences.writeString(context, "name", modelUser.firstname);
+                            AppPreferences.writeString(context, "image", modelUser.image);
+                            AppPreferences.writeString(context, "email", modelUser.email);
                             if (modelUser.source.equals("google"))
                                 apref.setIsLoginedByGoogle(context, true);
                             if (modelUser.source.equals("facebook"))

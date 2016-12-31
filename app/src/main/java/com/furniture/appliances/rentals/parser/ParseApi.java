@@ -91,6 +91,117 @@ public class ParseApi {
         }
         return list;
     }
+    public ModelSubCategory parseProduct(Context context,JSONArray response)
+    {
+        try {
+            JSONObject child = response.getJSONObject(0);
+            ArrayList<ModelCart> modelCartArrayList = new ArrayList<>();
+            ModelSubCategory modelSubCategory = new ModelSubCategory();
+            //modelSubCategory.prod_code = child.getString("prod_code");
+            modelSubCategory.productId = child.getString("productId");
+            modelSubCategory.productName = child.getString("productName");
+            modelSubCategory.vendorId = child.getJSONArray("vendorIds").toString();
+            modelSubCategory.categoryId = child.getString("categoryId");
+            modelSubCategory.categoryName = child.getString("categoryName");
+            modelSubCategory.subCategoryId = child.getString("subCategoryId");
+            modelSubCategory.subCategoryName = child.getString("subCategoryName");
+            modelSubCategory.smallImages = child.getJSONArray("smallImages").toString();
+            modelSubCategory.largeImages = child.getJSONArray("largeImages").toString();
+            modelSubCategory.rentToOwn = child.getString("rentToOwn");
+            JSONArray productDesc = child.getJSONArray("productDesc");
+            if (modelSubCategory.categoryName.equals("Packages")) {   //Later
+                String temp_capacity = "", temp_briefDesc = "", temp_weight = "", temp_quantity = "", temp_material = "", temp_dimensions = "", temp_color = "", temp_type = "", temp_brand = "", temp_other = "";
+                //JSONArray temp = new JSONArray(description.substring(description.indexOf("["), description.lastIndexOf("]") + 1));
+                for (int j = 0; j < productDesc.length(); j++) {
+                    JSONObject jsonObject = productDesc.getJSONObject(j);
+                    temp_briefDesc = temp_briefDesc + jsonObject.getString("briefDesc") + "%";
+                    temp_quantity = temp_quantity + jsonObject.getString("quantity") + "%";
+                    temp_material = temp_material + jsonObject.getString("material") + "%";
+                    temp_dimensions = temp_dimensions + jsonObject.getString("dimensions") + "%";
+                    temp_color = temp_color + jsonObject.getString("color") + "%";
+                    temp_weight = temp_weight + jsonObject.getString("weight") + "%";
+                    temp_type = temp_type + jsonObject.getString("type") + "%";
+                    if (jsonObject.has("capacity"))
+                        temp_capacity = temp_capacity + jsonObject.getString("capacity") + "%";
+                    if (jsonObject.has("brand"))
+                        temp_brand = temp_brand + jsonObject.getString("brand") + "%";
+                    if (jsonObject.has("otherDesc"))
+                        temp_other = temp_other + jsonObject.getString("otherDesc") + "%";
+
+                }
+                modelSubCategory.briefDesc = temp_briefDesc;
+                modelSubCategory.capacity = temp_capacity;
+                modelSubCategory.weight = temp_weight;
+                modelSubCategory.material = temp_material;
+                modelSubCategory.dimensions = temp_dimensions;
+                modelSubCategory.color = temp_color;
+                modelSubCategory.type = temp_type;
+                modelSubCategory.brand = temp_brand;
+                modelSubCategory.otherDesc = temp_other;
+                modelSubCategory.max_quantity = temp_quantity;
+                modelSubCategory.package_products = String.valueOf(productDesc.length());
+
+            } else {
+                //JSONObject temp = new JSONObject(description.substring(description.indexOf("{"), description.lastIndexOf("}") + 1));
+                JSONObject temp = productDesc.getJSONObject(0);
+                modelSubCategory.briefDesc = temp.getString("briefDesc");
+                modelSubCategory.dimensions = temp.getString("dimensions");
+                modelSubCategory.color = temp.getString("color");
+                modelSubCategory.type = temp.getString("type");
+                if (temp.has("weight"))
+                    modelSubCategory.weight = temp.getString("weight");
+                if (temp.has("material"))
+                    modelSubCategory.material = temp.getString("material");
+                if (temp.has("capacity"))
+                    modelSubCategory.capacity = temp.getString("capacity");
+                if (temp.has("brand"))
+                    modelSubCategory.brand = temp.getString("brand");
+                if (temp.has("otherDesc"))
+                    modelSubCategory.otherDesc = temp.getString("otherDesc");
+                modelSubCategory.max_quantity = "0";
+                modelSubCategory.package_products = "0";
+            }
+            modelSubCategory.rentalAmount = child.getJSONArray("rentalAmount").toString();
+            //modelSubCategory.min = child.getString("rent_duration");
+            modelSubCategory.securityAmount = child.getString("securityAmount");
+            modelSubCategory.minRentalDuration = child.getString("minRentalDuration");
+            //modelSubCategory.shipping_charges = child.getString("shipping_charges");
+            //modelSubCategory.created_on = child.getString("created_on");
+            //modelSubCategory.quantity = 0;
+            for (int j = 0; j < 4; j++) {
+                ModelCart modelCart = new ModelCart();
+                modelCart.quantity = 0;
+                modelCart.prod_id = modelSubCategory.productId;
+                modelCart.small_img = modelSubCategory.firstSmall();
+                modelCart.item_name = modelSubCategory.productName;
+                modelCart.rent_type = String.valueOf(j);
+                modelCart.item_id = modelSubCategory.productId + j;
+                modelCart.security_amount = modelSubCategory.securityAmount;
+                if (j == 0)
+                    modelCart.rent_amount = String.valueOf(modelSubCategory.getThree());
+                else if (j == 1)
+                    modelCart.rent_amount = String.valueOf(modelSubCategory.getSix());
+                else if (j == 2)
+                    modelCart.rent_amount = String.valueOf(modelSubCategory.getNine());
+                else
+                    modelCart.rent_amount = String.valueOf(modelSubCategory.getTwelve());
+                modelCart.total_amount = String.valueOf(Integer.parseInt(modelCart.rent_amount) + Integer.parseInt(modelCart.security_amount));
+                modelCartArrayList.add(modelCart);
+
+            }
+            DBInteraction dbInteraction = new DBInteraction(context);
+            //dbInteraction.insertSubCategoryDetail(modelSubCategoryArrayList);
+            dbInteraction.insertCartDetail(modelCartArrayList);
+            dbInteraction.close();
+            return modelSubCategory;
+        }
+        catch(Exception e)
+        {
+
+        }
+        return null;
+    }
+
 
     public ArrayList<ModelSubCategory> parseProductList(Context context, JSONArray response) {
         ArrayList<ModelSubCategory> modelSubCategoryArrayList = new ArrayList<>();
@@ -249,10 +360,7 @@ public class ParseApi {
     public boolean parseInsertUserData(Context context, String response) {
         try {
             JSONObject obj = new JSONObject(response);
-            if (obj.getString("message").equals("Registered Successfully"))
-                return true;
-            else
-                return false;
+            return obj.getString("message").equals("Registered Successfully");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -261,10 +369,7 @@ public class ParseApi {
 
     public boolean parseInsertAddressData(Context context, String response) {
         try {
-            if (response.contains("New record created successfully"))
-                return true;
-            else
-                return false;
+            return response.contains("New record created successfully");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -284,10 +389,7 @@ public class ParseApi {
     public boolean parseInsertOrderData(Context context, String response) {
         try {
             JSONObject obj = new JSONObject(response);
-            if(obj.getString("success").equals("true"))
-                return true;
-            else
-                return false;
+            return obj.getString("success").equals("true");
            // return response.equals("New record created successfully");
         } catch (Exception e) {
             e.printStackTrace();
@@ -342,9 +444,9 @@ public class ParseApi {
             RocqAnalytics.initialize(context);
             RocqAnalytics.identity(modelUser.firstname + " " + modelUser.lastname, new
                     ActionProperties("Email", modelUser.email));
-            apref.writeString(context, "name", modelUser.firstname + " " + modelUser.lastname);
-            apref.writeString(context, "image", "");
-            apref.writeString(context, "email", modelUser.email);
+            AppPreferences.writeString(context, "name", modelUser.firstname + " " + modelUser.lastname);
+            AppPreferences.writeString(context, "image", "");
+            AppPreferences.writeString(context, "email", modelUser.email);
             /*DBInteraction dbInteraction = new DBInteraction(context);
             dbInteraction.insertUserDetail(modelUser);
             for (int i = 0; i < modelAddresses.size(); i++)
@@ -361,11 +463,7 @@ public class ParseApi {
         try {
             System.out.println("Verify"+response);
             String status = response.getString("status");
-            if (status != null && status.equals("OK")) {
-                return true;
-            } else {
-                return false;
-            }
+            return status != null && status.equals("OK");
         } catch (Exception e) {
             e.printStackTrace();
         }

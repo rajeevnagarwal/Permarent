@@ -113,11 +113,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         if (Miscellaneous.checkEmptyEditext(SignUp.this, value_lname, "Last Name")) {
             return false;
         }
-        if (Miscellaneous.checkEmptyEditext(SignUp.this, value_password, "Password")) {
-            return false;
-        }
-         else
-            return true;
+        return !Miscellaneous.checkEmptyEditext(SignUp.this, value_password, "Password");
     }
 
     @Override

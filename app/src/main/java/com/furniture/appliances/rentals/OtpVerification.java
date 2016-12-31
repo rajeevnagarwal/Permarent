@@ -92,7 +92,7 @@ public class OtpVerification extends AppCompatActivity {
                 {
                     if (new CheckInternetConnection(OtpVerification.this).isConnectedToInternet()) {
                         RequestParams params = new RequestParams();
-                        params.put("email",apref.readString(getApplicationContext(),"email",null));
+                        params.put("email", AppPreferences.readString(getApplicationContext(),"email",null));
                         params.put("location",modelAddress.location);
                         params.put("city",modelAddress.city);
                         params.put("state",modelAddress.state);

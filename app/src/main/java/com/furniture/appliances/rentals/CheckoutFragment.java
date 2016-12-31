@@ -31,4 +31,4 @@ public class CheckoutFragment extends Checkout {
   public void onError(int code, String response){
     Toast.makeText(getActivity(), "Error " + Integer.toString(code) + ": " + response, Toast.LENGTH_SHORT).show();
   }
-};
+}

@@ -33,7 +33,7 @@ public class CustomTextView extends TextView {
     }
 
     private void setFont() {
-        Typeface font = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Regular.ttf");;
+        Typeface font = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Regular.ttf");
         if(type.equals("bold")){
             font = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Bold.ttf");}
         if(type.equals("regular")){

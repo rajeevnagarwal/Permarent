@@ -22,7 +22,8 @@
             android:background="@drawable/price_drawable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="25dp"
+            android:padding="20dp"
+            android:textColor="@color/white"
             android:id="@+id/popular_price"
             android:layout_marginLeft="152dp"
             android:layout_marginStart="152dp"
@@ -73,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:background="@color/colorNewPrimary"
+        android:background="@drawable/button_drawable"
         android:id="@+id/popular_cart" />
     <ImageView
         android:layout_width="50dp"

@@ -19,6 +19,7 @@ import com.furniture.appliances.rentals.fragment.SubCategory;
 import com.furniture.appliances.rentals.model.Cat;
 import com.furniture.appliances.rentals.model.Subcategory;
 import com.furniture.appliances.rentals.restApi.EndPonits;
+import com.furniture.appliances.rentals.ui.DividerItemDecoration;
 import com.furniture.appliances.rentals.ui.RoundedBitmapView;
 import com.furniture.appliances.rentals.util.SubCategoryUtil;
 import com.loopj.android.http.RequestParams;
@@ -115,6 +116,8 @@ public class  CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyVie
             holder.sub_recycle.setLayoutManager(layoutManager);
             SubCategoryRecycle adapter = new SubCategoryRecycle(context, data);
             System.out.println("Adapter");
+            //DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context.getResources().getDrawable(R.drawable.line_divider),context.getResources().getDrawable(R.drawable.line_divider),3);
+            //holder.sub_recycle.addItemDecoration(dividerItemDecoration);
             holder.sub_recycle.setAdapter(adapter);
 
 

@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/logo" />
+            android:background="@drawable/logo1"/>
 
        <!-- <com.pnikosis.materialishprogress.ProgressWheel
             android:id="@+id/progressWheel"

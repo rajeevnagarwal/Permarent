@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -57,6 +58,7 @@ public class Account extends Fragment {
     ImageView user_image;
     TextView welcome_text;
     TextView welcome_mail;
+    Button ac_login;
     private AppPreferences apref = new AppPreferences();
     GoogleApiClient mGoogleApiClient;
     private ArrayList<ModelOptions> options;
@@ -69,6 +71,7 @@ public class Account extends Fragment {
             initialize(v);
             if(apref.IsLoginedByFb(getActivity()))
             {
+                ac_login.setText("Logout");
                 System.out.println("Facebook");
                 String name = AppPreferences.readString(getActivity(),"name","");
                 if(name!=null) {
@@ -104,6 +107,7 @@ public class Account extends Fragment {
             }
             else
                 {
+                    ac_login.setText("Login");
                     welcome_text.setText("Please Login!!");
                     user_image.setImageResource(R.drawable.user);
 
@@ -113,6 +117,7 @@ public class Account extends Fragment {
     }
     private void initialize(View v)
     {
+        ac_login = (Button)v.findViewById(R.id.ac_login);
         list = (ListView)v.findViewById(R.id.list_account);
         welcome_text = (TextView)v.findViewById(R.id.text_welcome);
         welcome_mail = (TextView)v.findViewById(R.id.welcome_mail);
@@ -132,6 +137,33 @@ public class Account extends Fragment {
         options.add(new ModelOptions("Our Policies",R.mipmap.ic_star_grey600_24dp));
         options.add(new ModelOptions("Documents Required",R.drawable.ic_doc));
         options.add(new ModelOptions("Track Order",R.drawable.ic_track_order));
+        ac_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(apref.IsLoginedByFb(getActivity()))
+                {
+                    Cart.QUANTITY=0;
+                    Cart.TOTAL_AMOUNT=0;
+                    DBInteraction dbInteraction = new DBInteraction(getActivity());
+                    //dbInteraction.resetProducts(0, 0, 0);
+                    dbInteraction.resetCart(0);
+                    dbInteraction.clearDatabase();
+                    dbInteraction.close();
+                    getActivity().getSharedPreferences("permarent", 0).edit().clear().commit();
+                    LoginManager.getInstance().logOut();
+                    Intent i = new Intent(getActivity(), MainActivity.class);
+                    startActivity(i);
+                    getActivity().finish();
+
+
+                }
+                else
+                {
+                    Intent i = new Intent(getActivity(), Login.class);
+                    startActivity(i);
+                }
+            }
+        });
         if(apref.IsLoginedByGoogle(getActivity())||apref.IsLoginedByEmail(getActivity())||apref.IsLoginedByFb(getActivity())) {
 
             options.add(new ModelOptions("Logout", R.mipmap.drawer_login_icon));

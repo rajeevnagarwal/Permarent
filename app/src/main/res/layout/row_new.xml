@@ -22,7 +22,10 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:text="New"
-            android:padding="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
             android:background="@color/colorNewPrimary"/>
 
         <TextView
@@ -30,7 +33,9 @@
             android:background="@drawable/price_drawable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="25dp"
+            android:padding="20dp"
+            android:gravity="center"
+            android:textColor="@color/white"
             android:id="@+id/new_price"
             android:layout_marginLeft="152dp"
             android:layout_marginStart="152dp"
@@ -81,7 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:background="@color/colorNewPrimary"
+            android:background="@drawable/button_drawable"
             android:id="@+id/new_cart" />
         <ImageView
             android:layout_width="50dp"

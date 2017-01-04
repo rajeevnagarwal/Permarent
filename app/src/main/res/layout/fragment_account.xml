@@ -18,7 +18,7 @@
                 android:layout_height="70dp"
                 android:id="@+id/user_image"/>
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:layout_gravity="center|center_horizontal"
@@ -36,6 +36,19 @@
                  android:textColor="@color/white"
                  android:id="@+id/welcome_mail"/>
             </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:orientation="vertical">
+        <Button
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:id="@+id/ac_login"
+            android:textColor="@color/white"
+            android:background="@drawable/login_drawable"
+            android:text="Login"/>
+        </LinearLayout>
 
     </LinearLayout>
     <LinearLayout

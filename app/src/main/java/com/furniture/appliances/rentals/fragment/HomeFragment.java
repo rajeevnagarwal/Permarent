@@ -2,6 +2,7 @@ package com.furniture.appliances.rentals.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -294,6 +295,7 @@ public class HomeFragment extends Fragment {
         list = (ListView)v.findViewById(R.id.suggestions);
         searchView = (SearchView)v.findViewById(R.id.simpleSearchView);
         searchView.setSubmitButtonEnabled(true);
+        //searchView.setBackgroundColor(getResources().getColor(R.color.white));
         product_recyclerview = (RecyclerView)v.findViewById(R.id.product_recyclerview);
         glidelist = new ArrayList<String>();
         glidelist.add("CONTROL. NAVIGATE. BE ORGANIZED");

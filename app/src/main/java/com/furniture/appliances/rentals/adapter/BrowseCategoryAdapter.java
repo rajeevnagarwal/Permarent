@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.furniture.appliances.rentals.Category;
+import com.furniture.appliances.rentals.MainActivity;
 import com.furniture.appliances.rentals.R;
 import com.furniture.appliances.rentals.fragment.CategoryFragment;
 import com.furniture.appliances.rentals.fragment.MyOrders;
@@ -66,13 +67,14 @@ public class BrowseCategoryAdapter extends RecyclerView.Adapter<BrowseCategoryAd
        holder.itemView.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               Fragment fragment;
+              /* Fragment fragment;
                    fragment = ((AppCompatActivity)ctx).getSupportFragmentManager().findFragmentByTag(CategoryFragment.TAG);
                    if(fragment==null) {
                        fragment = new CategoryFragment();
 
                    }
-               ((AppCompatActivity)ctx).getSupportFragmentManager().beginTransaction().replace(android.R.id.tabcontent,fragment,CategoryFragment.TAG).addToBackStack(CategoryFragment.TAG).commit();
+               ((AppCompatActivity)ctx).getSupportFragmentManager().beginTransaction().replace(android.R.id.tabcontent,fragment,CategoryFragment.TAG).addToBackStack(CategoryFragment.TAG).commit();*/
+               MainActivity.tabhost.setCurrentTab(1);
                }
        });
 

@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-            <shape android:shape="oval">
+            <shape>
             <solid android:color="@color/darkerteal"/>
+                <size
+                    android:height="80dp"
+                    android:width="80dp"/>
                 <corners
-                    android:bottomLeftRadius="20dp"
-                    android:bottomRightRadius="20dp"
-                    android:topLeftRadius="20dp"
-                    android:topRightRadius="20dp" />
+                    android:bottomLeftRadius="65dp"
+                    android:bottomRightRadius="65dp"
+                    android:topLeftRadius="65dp"
+                    android:topRightRadius="65dp" />
             </shape>
     </item>
 

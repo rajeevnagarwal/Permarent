@@ -54,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center"
             android:theme="@style/RatingBar"
+            style = "?android:attr/ratingBarStyleSmall"
             android:id="@+id/new_rating"
             android:isIndicator="true"
             android:numStars = "5"/>

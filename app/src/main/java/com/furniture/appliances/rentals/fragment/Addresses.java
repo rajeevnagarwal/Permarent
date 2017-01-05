@@ -8,11 +8,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 
 import com.furniture.appliances.rentals.AddNewAddress;
 import com.furniture.appliances.rentals.Login;
@@ -57,6 +59,7 @@ public class Addresses extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View v = inflater.inflate(R.layout.fragment_addresses, container, false);
+        showBackButton();
         ((MainActivity)getActivity()).changeToolbar("Addresses",false);
         initView(v);
         login.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +115,26 @@ public class Addresses extends Fragment {
         }
 
     }
+    public void showBackButton()
+    {
+        if (getActivity() instanceof AppCompatActivity) {
+            System.out.println("YES");
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayUseLogoEnabled(false);
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId())
+        {
+            case android.R.id.home:
+                ((AppCompatActivity)getActivity()).getSupportFragmentManager().popBackStack();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void fetchAddresses(String mail)
     {
         if(mail!=null)

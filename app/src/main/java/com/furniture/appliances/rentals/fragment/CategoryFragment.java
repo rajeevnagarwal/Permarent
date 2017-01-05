@@ -135,6 +135,9 @@ public class CategoryFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.ab_cart).setVisible(true).setEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayUseLogoEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setLogo(R.drawable.ic_logo);
     }
 
 

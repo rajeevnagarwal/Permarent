@@ -3,6 +3,7 @@ package com.furniture.appliances.rentals.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,6 +64,7 @@ public class SubCategory extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View v = inflater.inflate(R.layout.fragment, container, false);
+        showBackButton();
         System.out.println("SubCategory"+code+title);
         ((MainActivity)getActivity()).changeToolbar("Products",false);
         initView(v);
@@ -75,6 +77,15 @@ public class SubCategory extends Fragment {
 
         return v;
     }
+    public void showBackButton()
+    {
+        if (getActivity() instanceof AppCompatActivity) {
+            System.out.println("YES");
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayUseLogoEnabled(false);
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
     private void initView(View v)
     {
         lv = (ListView)v.findViewById(R.id.lv);
@@ -135,7 +146,12 @@ public class SubCategory extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                ((AppCompatActivity) getActivity()).getSupportFragmentManager().popBackStack();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

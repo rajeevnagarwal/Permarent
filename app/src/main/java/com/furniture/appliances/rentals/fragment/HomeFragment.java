@@ -7,6 +7,7 @@ import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -81,8 +82,9 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View v = inflater.inflate(R.layout.fragment_homepage, container, false);
-        currentCity = AppPreferences.readString(getActivity(), "city", "Gurgaon");
-        ((MainActivity) getActivity()).changeToolbar(currentCity, true);
+        /*currentCity = AppPreferences.readString(getActivity(), "city", "Gurgaon");
+        ((MainActivity) getActivity()).changeToolbar(currentCity, true);*/
+        ((MainActivity)getActivity()).changeToolbar("Permarent",true);
         initialize(v);
         fetchNames();
         fetchpopular();
@@ -367,6 +369,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.ab_cart).setVisible(true).setEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayUseLogoEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setLogo(R.drawable.ic_logo);
     }
 
 }

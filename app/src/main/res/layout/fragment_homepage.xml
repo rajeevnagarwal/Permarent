@@ -20,6 +20,8 @@
             android:layout_height="wrap_content"
             android:queryHint="Search Here"
             android:background="@drawable/custom_searchview"
+            android:queryBackground="@android:color/transparent"
+            android:submitBackground="@android:color/transparent"
             android:id="@+id/simpleSearchView"
             android:iconifiedByDefault="false"/>
         <LinearLayout

@@ -116,8 +116,8 @@ public class  CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyVie
             holder.sub_recycle.setLayoutManager(layoutManager);
             SubCategoryRecycle adapter = new SubCategoryRecycle(context, data);
             System.out.println("Adapter");
-            //DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context.getResources().getDrawable(R.drawable.line_divider),context.getResources().getDrawable(R.drawable.line_divider),3);
-            //holder.sub_recycle.addItemDecoration(dividerItemDecoration);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context.getResources().getDrawable(R.drawable.line_divider),context.getResources().getDrawable(R.drawable.line_divider),3);
+            holder.sub_recycle.addItemDecoration(dividerItemDecoration);
             holder.sub_recycle.setAdapter(adapter);
 
 

@@ -222,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements /*NavigationDrawe
                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(WishList.TAG);
                     if(fragment==null)
                     {
+                        System.out.println("WishtList1");
                         fragment = new WishList();
                     }
                     getSupportFragmentManager().beginTransaction().replace(android.R.id.tabcontent,fragment,WishList.TAG).addToBackStack(WishList.TAG).commit();
@@ -231,12 +232,15 @@ public class MainActivity extends AppCompatActivity implements /*NavigationDrawe
                 }
                 else if(tabId.equals(Account.TAG))
                 {
+                    System.out.println("Account");
                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(Account.TAG);
+                    fragment=null;
                     if(fragment==null)
                     {
+                        System.out.println("Account1");
                         fragment = new Account();
                     }
-                    getSupportFragmentManager().beginTransaction().replace(android.R.id.tabcontent,fragment,Account.TAG ).addToBackStack(Account.TAG).commit();
+                    getSupportFragmentManager().beginTransaction().replace(android.R.id.tabcontent,fragment,Account.TAG).addToBackStack(Account.TAG).commit();
 
 
                 }
